@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Diagnostics;
 using System.Windows.Forms;
 
 namespace AutoBrowser
@@ -16,7 +14,8 @@ namespace AutoBrowser
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            Classes.WebTools.ConfigureIEBrowserEmulator(Process.GetCurrentProcess().ProcessName);
+            Application.Run(new Tester());
         }
     }
 }
