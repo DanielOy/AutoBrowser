@@ -4,14 +4,16 @@ using System.Windows.Forms;
 
 namespace AutoBrowser.Actions
 {
-    public class Click : BaseAction
+    public class Click : WebAction
     {
-        public override WebAction Action => WebAction.Click;
+        private readonly string _originalVariable;
+
+        public override Action Action => Action.Click;
         public string Variable { get; set; }
 
         public Click(string variable)
         {
-            Variable = variable;
+            Variable = _originalVariable = variable;
         }
 
         public override object Perform(WebBrowser browser)
@@ -43,10 +45,20 @@ namespace AutoBrowser.Actions
                 return;
             }
 
+            ResetValues();
+
             foreach (var item in savedValues)
             {
-                Variable = Variable.Replace($"[{item.Key}]", item.Value.ToString());
+                if (Variable.Contains($"[{item.Key}]"))
+                {
+                    Variable = Variable.Replace($"[{item.Key}]", item.Value.ToString());
+                }
             }
+        }
+
+        protected override void ResetValues()
+        {
+            Variable = _originalVariable;
         }
     }
 }

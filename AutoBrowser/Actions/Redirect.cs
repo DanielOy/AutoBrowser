@@ -4,15 +4,17 @@ using System.Windows.Forms;
 
 namespace AutoBrowser.Actions
 {
-    public class Redirect : BaseAction
+    public class Redirect : WebAction
     {
-        public override WebAction Action => WebAction.Redirect;
+        private readonly string _originalUrl;
+
+        public override Action Action => Action.Redirect;
 
         public string Url { get; set; }
 
         public Redirect(string url)
         {
-            Url = url;
+            Url = _originalUrl = url;
         }
 
         public override object Perform(WebBrowser browser)
@@ -63,10 +65,20 @@ namespace AutoBrowser.Actions
                 return;
             }
 
+            ResetValues();
+
             foreach (var item in savedValues)
             {
-                Url = Url.Replace($"[{item.Key}]", item.Value.ToString());
+                if (Url.Contains($"[{item.Key}]"))
+                {
+                    Url = Url.Replace($"[{item.Key}]", item.Value.ToString());
+                }
             }
+        }
+
+        protected override void ResetValues()
+        {
+            Url = _originalUrl;
         }
     }
 }

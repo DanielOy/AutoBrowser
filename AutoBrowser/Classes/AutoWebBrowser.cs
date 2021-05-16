@@ -1,4 +1,5 @@
 ﻿using AutoBrowser.Actions;
+using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
@@ -40,15 +41,20 @@ namespace AutoBrowser.Classes
 
         public void Run(List<BaseAction> steps)
         {
-            object result = null;
+            PerformActions(steps);
+            PerformProgressChangedEvent("Process fished.");
+        }
+
+        public void PerformActions(List<BaseAction> steps)
+        {
             foreach (var step in steps)
             {
-
+                object result = null;
                 switch (step)
                 {
                     case Redirect redirect:
                         redirect.ReplaceVariables(_savedValues);
-                        PerformProgressChangedEvent($"Going to {redirect.Url}");
+                        PerformProgressChangedEvent($"Navigating to {redirect.Url}");
                         redirect.Perform(_browser);
                         break;
                     case Download download:
@@ -58,11 +64,13 @@ namespace AutoBrowser.Classes
                         break;
                     case ExtractAttribute attribute:
                         PerformProgressChangedEvent($"Getting {attribute.AttributeName} from {attribute.Variable}");
+                        attribute.ReplaceVariables(_savedValues);
                         result = attribute.Perform(GetElement(attribute.Variable));
                         SaveAttribute(attribute.Name, result);
                         break;
                     case ExtractElement element:
                         PerformProgressChangedEvent($"Getting {element.Name}");
+                        element.ReplaceVariables(_savedValues);
                         result = element.Perform(_browser);
                         SaveElement(element.Name, result);
                         break;
@@ -71,14 +79,23 @@ namespace AutoBrowser.Classes
                         PerformProgressChangedEvent($"Perform click on {click.Variable} element");
                         click.Perform(GetElement(click.Variable));
                         break;
-                    default:
-                        PerformProgressChangedEvent($"Executing {step.Action.ToString()}");
-                        result = step.Perform(_browser);
+                    case WebAction web:
+                        PerformProgressChangedEvent($"Executing {web.Action.ToString()}");
+                        result = web.Perform(_browser);
+                        break;
+                    case ForStructure f:
+                        f.ReplaceVariables(_savedValues);
+                        int times = Convert.ToInt32(f.Times);
+                        for (int i = 0; i < times; i++)
+                        {
+                            SaveAttribute(f.Name, i);
+                            PerformActions(f.Actions);
+                        }
                         break;
                 }
             }
-            PerformProgressChangedEvent("Process Finished.");
         }
+
 
         private HtmlElement GetElement(string name)
         {
