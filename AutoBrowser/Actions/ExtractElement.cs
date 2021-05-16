@@ -10,6 +10,12 @@ namespace AutoBrowser.Actions
         public List<Node> NodePath { get; set; }
         public string Name { get; set; }
 
+        public ExtractElement(string name, List<Node> nodePath)
+        {
+            Name = name;
+            NodePath = nodePath;
+        }
+
         public override object Perform(WebBrowser browser)
         {
             if (browser == null)

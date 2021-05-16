@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace AutoBrowser.Actions
@@ -52,6 +53,19 @@ namespace AutoBrowser.Actions
             while (finalTime > DateTime.Now)
             {
                 Application.DoEvents();
+            }
+        }
+
+        public override void ReplaceVariables(Dictionary<string, object> savedValues)
+        {
+            if (savedValues == null)
+            {
+                return;
+            }
+
+            foreach (var item in savedValues)
+            {
+                Url = Url.Replace($"[{item.Key}]", item.Value.ToString());
             }
         }
     }

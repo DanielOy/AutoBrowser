@@ -53,6 +53,7 @@
     <Compile Include="Actions\Redirect.cs" />
     <Compile Include="Classes\AutoWebBrowser.cs" />
     <Compile Include="Actions\BaseAction.cs" />
+    <Compile Include="Classes\ProgressChangedArgs.cs" />
     <Compile Include="Classes\WebTools.cs" />
     <Compile Include="Tester.cs">
       <SubType>Form</SubType>

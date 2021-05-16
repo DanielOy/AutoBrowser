@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace AutoBrowser.Actions
@@ -33,6 +34,19 @@ namespace AutoBrowser.Actions
 
             element.InvokeMember("Click");
             return true;
+        }
+
+        public override void ReplaceVariables(Dictionary<string, object> savedValues)
+        {
+            if (savedValues == null)
+            {
+                return;
+            }
+
+            foreach (var item in savedValues)
+            {
+                Variable = Variable.Replace($"[{item.Key}]", item.Value.ToString());
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Windows.Forms;
@@ -42,6 +43,21 @@ namespace AutoBrowser.Actions
 
             wc.DownloadFile(Url, Path.Combine(DownloadFolder, FileName));
             return true;
+        }
+
+        public override void ReplaceVariables(Dictionary<string, object> savedValues)
+        {
+            if (savedValues == null)
+            {
+                return;
+            }
+
+            foreach (var item in savedValues)
+            {
+                Url = Url.Replace($"[{item.Key}]", item.Value.ToString());
+                DownloadFolder = DownloadFolder.Replace($"[{item.Key}]", item.Value.ToString());
+                FileName = FileName.Replace($"[{item.Key}]", item.Value.ToString());
+            }
         }
     }
 }
