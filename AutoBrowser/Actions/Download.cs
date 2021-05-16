@@ -53,7 +53,7 @@ namespace AutoBrowser.Actions
             }
 
             WebClient wc = new WebClient();
-            wc.Headers.Add(HttpRequestHeader.Cookie, Classes.WebTools.GetCookie(browser.Url.AbsoluteUri));
+            wc.Headers.Add(HttpRequestHeader.Cookie, Classes.WebTools.GetCookie(browser?.Url?.AbsoluteUri));
             wc.Headers.Add(HttpRequestHeader.UserAgent, "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:88.0) Gecko/20100101 Firefox/88.0");
 
             if (!Directory.Exists(DownloadFolder))
@@ -61,7 +61,11 @@ namespace AutoBrowser.Actions
                 Directory.CreateDirectory(DownloadFolder);
             }
 
-            wc.DownloadFile(Url, Path.Combine(DownloadFolder, FileName));
+            try
+            {
+                wc.DownloadFile(Url, Path.Combine(DownloadFolder, FileName));
+            }
+            catch { }
             return true;
         }
 

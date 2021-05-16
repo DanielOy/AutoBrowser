@@ -88,14 +88,28 @@ namespace AutoBrowser.Classes
                         int times = Convert.ToInt32(f.Times);
                         for (int i = 0; i < times; i++)
                         {
-                            SaveAttribute(f.Name, i);
+                            SaveAttribute(f.Name, f.Calculate(i));
                             PerformActions(f.Actions);
                         }
+                        RemoveAttribute(f.Name);
                         break;
                 }
             }
         }
 
+        private void RemoveAttribute(string name)
+        {
+            if (_savedValues == null || _savedValues.Count == 0)
+            {
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                return;
+            }
+            _savedValues.Remove(name);
+        }
 
         private HtmlElement GetElement(string name)
         {
