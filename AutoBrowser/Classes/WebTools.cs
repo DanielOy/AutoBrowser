@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Net;
 using System.Text;
 
@@ -56,13 +57,13 @@ namespace AutoBrowser.Classes
         {
 
             // Set the actual key                        
-            Microsoft.Win32.RegistryKey Key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION", true);
+            var Key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION", true);
             if (Key == null)
             {
-                Key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION");
+                Key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION");
             }
 
-            Key.SetValue($"{applicationName}.exe", "11001", Microsoft.Win32.RegistryValueKind.DWord);
+            Key.SetValue($"{applicationName}.exe", "11001", RegistryValueKind.DWord);
             Key.Close();
         }
     }

@@ -5,10 +5,13 @@ using System.Windows.Forms;
 
 namespace AutoBrowser.Classes
 {
-    //TODO: Add conditions if and for
-    //TODO: Allow to download files with jdownloader.
+    //TODO: Make the process async
+    //TODO: Add wait action dynamically 
+    //TODO: Add conditions if 
+    //TODO: Implements notifications and write on file
+    //TODO: Allow to download files with jdownloader and IDM. 
     //TODO: Create a forms to configure steps.
-    //TODO: Implements sqlite.
+    //TODO: Implements sqlite or nosql
 
     public class AutoWebBrowser
     {
@@ -65,7 +68,9 @@ namespace AutoBrowser.Classes
                     case ExtractAttribute attribute:
                         PerformProgressChangedEvent($"Getting {attribute.AttributeName} from {attribute.Variable}");
                         attribute.ReplaceVariables(_savedValues);
-                        result = attribute.Perform(GetElement(attribute.Variable));
+                        result = IsElementCollection(attribute.Variable) ?
+                            attribute.Perform(GetElementCollection(attribute.Variable)) :
+                            attribute.Perform(GetElement(attribute.Variable));
                         SaveAttribute(attribute.Name, result);
                         break;
                     case ExtractElement element:
@@ -83,7 +88,7 @@ namespace AutoBrowser.Classes
                         PerformProgressChangedEvent($"Executing {web.Action.ToString()}");
                         result = web.Perform(_browser);
                         break;
-                    case ForStructure f:
+                    case Repeat f:
                         f.ReplaceVariables(_savedValues);
                         int times = Convert.ToInt32(f.Times);
                         for (int i = 0; i < times; i++)
@@ -95,6 +100,16 @@ namespace AutoBrowser.Classes
                         break;
                 }
             }
+        }
+
+        private HtmlElementCollection GetElementCollection(string name)
+        {
+            return _savedElements[name] as HtmlElementCollection;
+        }
+
+        private bool IsElementCollection(string name)
+        {
+            return _savedElements[name] is HtmlElementCollection;
         }
 
         private void RemoveAttribute(string name)

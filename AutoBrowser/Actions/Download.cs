@@ -61,6 +61,10 @@ namespace AutoBrowser.Actions
                 Directory.CreateDirectory(DownloadFolder);
             }
 
+            if (File.Exists(Path.Combine(DownloadFolder, FileName)))
+            {
+                return true;
+            }
             try
             {
                 wc.DownloadFile(Url, Path.Combine(DownloadFolder, FileName));
@@ -82,17 +86,17 @@ namespace AutoBrowser.Actions
             {
                 if (Url.Contains($"[{item.Key}]"))
                 {
-                    Url = _originalUrl.Replace($"[{item.Key}]", item.Value.ToString());
+                    Url = Url.Replace($"[{item.Key}]", item.Value.ToString());
                 }
 
                 if (DownloadFolder.Contains($"[{item.Key}]"))
                 {
-                    DownloadFolder = _originalDownloadFolder.Replace($"[{item.Key}]", item.Value.ToString());
+                    DownloadFolder = DownloadFolder.Replace($"[{item.Key}]", item.Value.ToString());
                 }
 
                 if (FileName.Contains($"[{item.Key}]"))
                 {
-                    FileName = _originalfileName.Replace($"[{item.Key}]", item.Value.ToString());
+                    FileName = FileName.Replace($"[{item.Key}]", item.Value.ToString());
                 }
             }
         }

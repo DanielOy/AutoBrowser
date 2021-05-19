@@ -32,7 +32,7 @@ namespace AutoBrowser.Actions
 
             browser.DocumentCompleted += (s, e) =>
             {
-                string x = e.Url.AbsoluteUri; //FIX: Remove, only for testing
+                string x = e.Url.AbsoluteUri; //UNDONE: Remove, only for testing
                 isLoading = false;
             };
 
@@ -44,7 +44,7 @@ namespace AutoBrowser.Actions
             }
 
             browser.DocumentCompleted -= null;
-
+            Wait(3); //UNDO: Remove after
             return true;
         }
 

@@ -51,13 +51,15 @@
     <Compile Include="Actions\Download.cs" />
     <Compile Include="Actions\ExtractAttribute.cs" />
     <Compile Include="Actions\ExtractElement.cs" />
-    <Compile Include="Actions\ForStructure.cs" />
+    <Compile Include="Actions\Repeat.cs" />
     <Compile Include="Actions\Redirect.cs" />
     <Compile Include="Classes\AutoWebBrowser.cs" />
     <Compile Include="Actions\WebAction.cs" />
     <Compile Include="Classes\MathOperations.cs" />
     <Compile Include="Classes\ProgressChangedArgs.cs" />
     <Compile Include="Classes\WebTools.cs" />
+    <Compile Include="Enums\HtmlAttribute.cs" />
+    <Compile Include="Enums\HtmlTag.cs" />
     <Compile Include="Tester.cs">
       <SubType>Form</SubType>
     </Compile>
