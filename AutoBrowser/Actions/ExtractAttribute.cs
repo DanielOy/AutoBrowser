@@ -83,6 +83,26 @@ namespace AutoBrowser.Actions
             return element.GetAttribute(AttributeName);
         }
 
+        public object Perform(List<HtmlElement> elements)
+        {
+            if (elements == null)
+            {
+                throw new ArgumentNullException(nameof(elements));
+            }
+
+            if (string.IsNullOrEmpty(AttributeName))
+            {
+                throw new ArgumentNullException(nameof(AttributeName));
+            }
+
+            if (AttributeName != Enums.HtmlAttribute.length.Value)
+            {
+                throw new Exception("Only 'length' value can be extracted from the element collection.");
+            }
+
+            return elements.Count;
+        }
+
         public object Perform(HtmlElementCollection elements)
         {
             if (elements == null)

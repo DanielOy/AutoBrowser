@@ -11,10 +11,17 @@ namespace AutoBrowser.Actions
         public override Action Action => Action.Redirect;
 
         public string Url { get; set; }
+        public int TimeOut { get; set; }
 
         public Redirect(string url)
         {
             Url = _originalUrl = url;
+        }
+
+        public Redirect(string url, int timeOut)
+        {
+            Url = _originalUrl = url;
+            TimeOut = timeOut;
         }
 
         public override object Perform(WebBrowser browser)
@@ -32,19 +39,31 @@ namespace AutoBrowser.Actions
 
             browser.DocumentCompleted += (s, e) =>
             {
-                string x = e.Url.AbsoluteUri; //UNDONE: Remove, only for testing
                 isLoading = false;
             };
 
             browser.Navigate(Url);
 
-            while (isLoading)
+            if (TimeOut > 0)
             {
-                Wait(1);
+                int _waitedTime = 0;
+                while (isLoading && _waitedTime < TimeOut)
+                {
+                    Wait(1);
+                    _waitedTime++;
+                }
+            }
+            else
+            {
+                while (isLoading)
+                {
+                    Wait(1);
+                }
             }
 
+
             browser.DocumentCompleted -= null;
-            Wait(3); //UNDO: Remove after
+            Wait(3); //UNDO: Remove after, create an action wait
             return true;
         }
 

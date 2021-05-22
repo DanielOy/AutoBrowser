@@ -1,11 +1,13 @@
 ﻿using AutoBrowser.Enums;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace AutoBrowser.Actions
 {
     //TODO: Permit to get a list of elements, don't only one, and make operations with the list.
+    //TODO: Extract elements from elements (childs) & get elements by className
     public class ExtractElement : WebAction
     {
         private readonly string _originalName;
@@ -58,7 +60,26 @@ namespace AutoBrowser.Actions
             {
                 if (multi.From == MultiNode.Attribute.Class)
                 {
-                    throw new Exception("Method not implemented");
+                    if (string.IsNullOrEmpty(multi.Index?.ToString()))
+                    {
+                        var elements = new List<HtmlElement>(browser.Document.GetElementsByTagName(multi.Value).Cast<HtmlElement>());
+                        elements = elements
+                            .Where(x => x.GetAttribute(HtmlAttribute.ClassName.Value).Contains(multi.ClassName.ToString()))
+                            .ToList();
+
+                        return elements;
+                    }
+                    else
+                    {
+                        int i = Convert.ToInt32(multi.Index);
+
+                        var elements = new List<HtmlElement>(browser.Document.GetElementsByTagName(multi.Value).Cast<HtmlElement>());
+                        elements = elements
+                            .Where(x => x.GetAttribute(HtmlAttribute.ClassName.Value).Contains(multi.ClassName.ToString()))
+                            .ToList();
+
+                        return elements?[i];
+                    }
                 }
                 else if (multi.From == MultiNode.Attribute.Tag)
                 {
@@ -99,7 +120,28 @@ namespace AutoBrowser.Actions
             {
                 if (multi.From == MultiNode.Attribute.Class)
                 {
-                    throw new Exception("Method not implemented");
+                    if (string.IsNullOrEmpty(multi.Index?.ToString()))
+                    {
+                        var elements = new List<HtmlElement>(element.GetElementsByTagName(multi.Value).Cast<HtmlElement>());
+                        elements = elements
+                            .Where(x => x.GetAttribute(HtmlAttribute.ClassName.Value).Equals(multi.ClassName))
+                            .ToList();
+                        var auxElement = (new WebBrowser()).Document.CreateElement("div");
+
+                        elements.ForEach(x => auxElement.AppendChild(x));
+                        return auxElement.Children;
+                    }
+                    else
+                    {
+                        int i = Convert.ToInt32(multi.Index);
+
+                        var elements = new List<HtmlElement>(element.GetElementsByTagName(multi.Value).Cast<HtmlElement>());
+                        elements = elements
+                            .Where(x => x.GetAttribute(HtmlAttribute.ClassName.Value).Equals(multi.ClassName))
+                            .ToList();
+
+                        return elements[i];
+                    }
                 }
                 else if (multi.From == MultiNode.Attribute.Tag)
                 {
@@ -193,11 +235,13 @@ namespace AutoBrowser.Actions
         #region Variables
         private readonly string _originalValue;
         private readonly object _originalIndex;
+        private readonly object _originalClassName;
         #endregion
 
         #region Properties
         public Attribute From { get; set; }
         public object Index { get; set; }
+        public object ClassName { get; set; }
         #endregion
 
 
@@ -207,6 +251,7 @@ namespace AutoBrowser.Actions
             From = Attribute.Tag;
             Value = _originalValue = tag.Value;
             Index = _originalIndex = "";
+            ClassName = _originalClassName = "";
         }
 
         public MultiNode(HtmlTag tag, object index)
@@ -214,12 +259,14 @@ namespace AutoBrowser.Actions
             From = Attribute.Tag;
             Value = _originalValue = tag.Value;
             Index = _originalIndex = index;
+            ClassName = _originalClassName = "";
         }
 
-        public MultiNode(Attribute from, string value, object index)
+        public MultiNode(HtmlTag tag, object className, object index)
         {
-            From = from;
-            Value = _originalValue = value;
+            From = Attribute.Class;
+            Value = _originalValue = tag.Value;
+            ClassName = _originalClassName = className;
             Index = _originalIndex = index;
         }
         #endregion
@@ -241,12 +288,18 @@ namespace AutoBrowser.Actions
             {
                 Index = Index.ToString().Replace($"[{variable.Key}]", variable.Value.ToString());
             }
+
+            if (ClassName.ToString().Contains($"[{variable.Key}]"))
+            {
+                ClassName = ClassName.ToString().Replace($"[{variable.Key}]", variable.Value.ToString());
+            }
         }
 
         public override void ResetValues()
         {
             Value = _originalValue;
             Index = _originalIndex;
+            ClassName = _originalClassName;
         }
     }
 }

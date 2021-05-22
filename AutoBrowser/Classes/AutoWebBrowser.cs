@@ -7,8 +7,8 @@ namespace AutoBrowser.Classes
 {
     //TODO: Make the process async
     //TODO: Add wait action dynamically 
-    //TODO: Add conditions if 
     //TODO: Implements notifications and write on file
+    //TODO: Add conditions if 
     //TODO: Allow to download files with jdownloader and IDM. 
     //TODO: Create a forms to configure steps.
     //TODO: Implements sqlite or nosql
@@ -33,8 +33,32 @@ namespace AutoBrowser.Classes
         {
             _browser = browser;
             _browser.ScriptErrorsSuppressed = true;
+            _browser.Navigating += _browser_Navigating;
+            _browser.NewWindow += _browser_NewWindow;
             _savedElements = new Dictionary<string, object>();
             _savedValues = new Dictionary<string, object>();
+        }
+
+        private void _browser_NewWindow(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            string url = (sender as WebBrowser).Url.AbsoluteUri;
+        }
+
+        private void _browser_Navigating(object sender, WebBrowserNavigatingEventArgs e)
+        {
+            if (e.Url.Host.Equals("poweredby.jads.co") || e.Url.Host.Equals("cdn.cloudimagesb.com"))
+            {
+                e.Cancel = true;
+            }
+            else //UNDO: only for tests.
+            {
+                string url = e.Url.AbsoluteUri;
+            }
+
+            if (e.Url.AbsoluteUri.EndsWith(".exe") || e.Url.AbsoluteUri.EndsWith(".gif"))
+            {
+                e.Cancel = true;
+            }
         }
 
         private void PerformProgressChangedEvent(string description)
@@ -70,6 +94,7 @@ namespace AutoBrowser.Classes
                         attribute.ReplaceVariables(_savedValues);
                         result = IsElementCollection(attribute.Variable) ?
                             attribute.Perform(GetElementCollection(attribute.Variable)) :
+                            IsElementList(attribute.Variable) ? attribute.Perform(GetElementList(attribute.Variable)) :
                             attribute.Perform(GetElement(attribute.Variable));
                         SaveAttribute(attribute.Name, result);
                         break;
@@ -100,6 +125,16 @@ namespace AutoBrowser.Classes
                         break;
                 }
             }
+        }
+
+        private List<HtmlElement> GetElementList(string name)
+        {
+            return _savedElements[name] as List<HtmlElement>;
+        }
+
+        private bool IsElementList(string name)
+        {
+            return _savedElements[name] is List<HtmlElement>;
         }
 
         private HtmlElementCollection GetElementCollection(string name)

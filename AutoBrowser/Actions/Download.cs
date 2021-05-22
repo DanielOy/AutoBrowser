@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace AutoBrowser.Actions
@@ -13,7 +14,7 @@ namespace AutoBrowser.Actions
         public string DownloadFolder { get; set; } = Path.Combine(Application.StartupPath, "Downloads");
         public string FileName { get; set; }
         public string Url { get; set; }
-
+        public bool ReplaceFile { get; set; }
         #endregion
 
         #region Variables
@@ -52,25 +53,76 @@ namespace AutoBrowser.Actions
                 throw new ArgumentNullException(nameof(Url));
             }
 
+            string filePath = GetFileFullPath();
+
+            if (!ReplaceFile && File.Exists(filePath))
+            {
+                return true;
+            }
+
             WebClient wc = new WebClient();
             wc.Headers.Add(HttpRequestHeader.Cookie, Classes.WebTools.GetCookie(browser?.Url?.AbsoluteUri));
             wc.Headers.Add(HttpRequestHeader.UserAgent, "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:88.0) Gecko/20100101 Firefox/88.0");
+            try
+            {
+                wc.DownloadFile(Url, filePath);
 
+                WriteFile.WriteOnFile("DownloadHistory", $"[{DateTime.Now.ToString("dd/MM hh:mm:ss")}] {filePath.Substring(filePath.LastIndexOf("\\") + 1)}");
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
+        }
+
+        private string GetFileFullPath()
+        {
             if (!Directory.Exists(DownloadFolder))
             {
                 Directory.CreateDirectory(DownloadFolder);
             }
 
-            if (File.Exists(Path.Combine(DownloadFolder, FileName)))
+            RemoveInvalidCharacters();
+
+            string FullPath = Path.Combine(new DirectoryInfo(DownloadFolder).FullName, FileName);
+
+            FullPath = FormatValidLength(FullPath);
+
+            return FullPath;
+        }
+
+        private string FormatValidLength(string FullPath)
+        {
+            if (FullPath.Length > 259)
             {
-                return true;
+                string extencion = FileName.Substring(FileName.LastIndexOf('.'));
+
+                int folderNameLength = new DirectoryInfo(DownloadFolder).FullName.Length;
+                int extencionLength = extencion.Length;
+
+                FileName = FileName.Substring(0, 250 - (folderNameLength + extencionLength)).Trim();
+
+                FullPath = Path.Combine(new DirectoryInfo(DownloadFolder).FullName, (FileName + extencion));
             }
-            try
-            {
-                wc.DownloadFile(Url, Path.Combine(DownloadFolder, FileName));
-            }
-            catch { }
-            return true;
+
+            return FullPath;
+        }
+
+        private void RemoveInvalidCharacters()
+        {
+            FileName = Regex.Replace(FileName, @"\s{2,}", " ");
+
+            string invalidChars = Regex.Escape(new string(Path.GetInvalidFileNameChars()));
+            string invalidRegStr = string.Format(@"([{0}]*\.+$)|([{0}]+)", invalidChars);
+
+            FileName = Regex.Replace(FileName, invalidRegStr, "");
+
+            invalidChars = Regex.Escape(new string(Path.GetInvalidPathChars()));
+            invalidRegStr = string.Format(@"([{0}]*\.+$)|([{0}]+)", invalidChars);
+
+            DownloadFolder = Regex.Replace(DownloadFolder, invalidRegStr, "");
+
         }
 
         public override void ReplaceVariables(Dictionary<string, object> savedValues)
