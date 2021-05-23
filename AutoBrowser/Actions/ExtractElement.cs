@@ -7,7 +7,7 @@ using System.Windows.Forms;
 namespace AutoBrowser.Actions
 {
     //TODO: Permit to get a list of elements, don't only one, and make operations with the list.
-    //TODO: Extract elements from elements (childs) & get elements by className
+    //TODO: Extract elements from elements (childs)
     public class ExtractElement : WebAction
     {
         private readonly string _originalName;
@@ -90,7 +90,7 @@ namespace AutoBrowser.Actions
                     else
                     {
                         int i = Convert.ToInt32(multi.Index);
-                        return browser.Document.GetElementsByTagName(node.Value)[i];
+                        return browser.Document.GetElementsByTagName(node.Value)?[i];
                     }
                 }
             }

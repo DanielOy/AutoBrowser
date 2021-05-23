@@ -75,7 +75,7 @@ namespace AutoBrowser.Actions
             DownloadFolder = _originalDownloadFolder;
         }
 
-        protected string GetFileFullPath()
+        protected FileInfo GetValidFileInfo()
         {
             if (!Directory.Exists(DownloadFolder))
             {
@@ -88,7 +88,7 @@ namespace AutoBrowser.Actions
 
             FullPath = FormatValidLength(FullPath);
 
-            return FullPath;
+            return new FileInfo(FullPath);
         }
 
         private string FormatValidLength(string FullPath) //TODO: Extract in a library class

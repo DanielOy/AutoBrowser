@@ -11,7 +11,7 @@ namespace AutoBrowser.Enums
     {
         public string Value { get; set; }
 
-        public HtmlAttribute(string value)
+        private HtmlAttribute(string value)
         {
             Value = value;
         }

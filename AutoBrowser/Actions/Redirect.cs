@@ -61,7 +61,6 @@ namespace AutoBrowser.Actions
                 }
             }
 
-
             browser.DocumentCompleted -= null;
             Wait(3); //UNDO: Remove after, create an action wait
             return true;

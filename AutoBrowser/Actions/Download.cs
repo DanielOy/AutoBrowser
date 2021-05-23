@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Net;
-using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using static AutoBrowser.Classes.AutoWebBrowser;
 
 namespace AutoBrowser.Actions
 {
@@ -13,6 +12,8 @@ namespace AutoBrowser.Actions
         public override Action Action => Action.Download;
 
         public bool ReplaceFile { get; set; }
+        public int TimeOut { get; set; }
+        public event ProgressChangedEventHandler ProgressChanged;
         #endregion
 
         #region Constructor
@@ -44,9 +45,9 @@ namespace AutoBrowser.Actions
                 throw new ArgumentNullException(nameof(Url));
             }
 
-            string filePath = GetFileFullPath();
+            FileInfo downloadFile = GetValidFileInfo();
 
-            if (!ReplaceFile && File.Exists(filePath))
+            if (!ReplaceFile && downloadFile.Exists)
             {
                 return true;
             }
@@ -54,19 +55,49 @@ namespace AutoBrowser.Actions
             WebClient wc = new WebClient();
             wc.Headers.Add(HttpRequestHeader.Cookie, Classes.WebTools.GetCookie(browser?.Url?.AbsoluteUri));
             wc.Headers.Add(HttpRequestHeader.UserAgent, "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:88.0) Gecko/20100101 Firefox/88.0");
-            try
-            {
-                wc.DownloadFile(Url, filePath);
 
-                WriteFile.WriteOnFile($"[{DateTime.Now.ToString("dd/MM hh:mm:ss")}] {filePath.Substring(filePath.LastIndexOf("\\") + 1)}", "DownloadHistory");
-            }
-            catch
+            bool downloadFinished = false;
+            wc.DownloadFileCompleted += (s, e) => { downloadFinished = true; };
+            wc.DownloadProgressChanged += (s, e) =>
             {
-                return false;
+                ProgressChanged?.Invoke(this, new Classes.ProgressChangedArgs(
+                    $"Downloading [{e.ProgressPercentage}%] " +
+                    $"[{Math.Floor((double)(e.BytesReceived / 1024))}KB/{Math.Floor((double)(e.TotalBytesToReceive / 1024))}KB] " +
+                    $"{downloadFile.Name}"));
+            };
+            wc.DownloadFileAsync(new Uri(Url), downloadFile.FullName);
+
+            if (TimeOut > 0)
+            {
+                int _waitedTime = 0;
+                while (!downloadFinished && _waitedTime < TimeOut)
+                {
+                    Wait(1);
+                    _waitedTime++;
+                }
             }
+            else
+            {
+                while (!downloadFinished)
+                {
+                    Wait(1);
+                }
+            }
+
+            WriteFile.WriteOnFile($"[{DateTime.Now.ToString("dd/MM hh:mm:ss")}] {downloadFile.Name}", "DownloadHistory");
+
             return true;
         }
 
+        private void Wait(int seconds)
+        {
+            DateTime finalTime = DateTime.Now.AddSeconds(seconds);
+
+            while (finalTime > DateTime.Now)
+            {
+                Application.DoEvents();
+            }
+        }
         #endregion
     }
 }

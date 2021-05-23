@@ -5,13 +5,12 @@ using System.Windows.Forms;
 
 namespace AutoBrowser.Classes
 {
-    //TODO: Make the process async
     //TODO: Add wait action dynamically 
-    //TODO: Implements notifications and write on file
     //TODO: Add conditions if 
-    //TODO: Allow to download files with jdownloader and IDM. 
     //TODO: Create a forms to configure steps.
     //TODO: Implements sqlite or nosql
+    //TODO: Make the process async
+    //TODO: improve notifications
 
     public class AutoWebBrowser
     {
@@ -20,7 +19,9 @@ namespace AutoBrowser.Classes
         private readonly Dictionary<string, object> _savedValues;
 
         public delegate void ProgressChangedEventHandler(object sender, ProgressChangedArgs e);
-        public event ProgressChangedEventHandler OnProgressChanged;
+        public delegate void ProcessFinishedEventHandler(object sender, EventArgs e);
+        public event ProgressChangedEventHandler ProgressChanged;
+        public event ProcessFinishedEventHandler ProcessFinished;
 
         public AutoWebBrowser()
         {
@@ -63,13 +64,18 @@ namespace AutoBrowser.Classes
 
         private void PerformProgressChangedEvent(string description)
         {
-            OnProgressChanged?.Invoke(this, new ProgressChangedArgs(description));
+            ProgressChanged?.Invoke(this, new ProgressChangedArgs(description));
+        }
+
+        private void PerformProcessFinishedEvent()
+        {
+            ProcessFinished?.Invoke(this, new EventArgs());
         }
 
         public void Run(List<BaseAction> steps)
         {
             PerformActions(steps);
-            PerformProgressChangedEvent("Process fished.");
+            PerformProcessFinishedEvent();
         }
 
         public void PerformActions(List<BaseAction> steps)
@@ -87,6 +93,7 @@ namespace AutoBrowser.Classes
                     case BaseDownload download:
                         download.ReplaceVariables(_savedValues);
                         PerformProgressChangedEvent($"Downloading from: {download.Url} to: {download.FileName}");
+                        if (download is Download dw) { dw.ProgressChanged += ProgressChanged; }
                         download.Perform(_browser);
                         break;
                     case ExtractAttribute attribute:
@@ -112,6 +119,10 @@ namespace AutoBrowser.Classes
                     case WebAction web:
                         PerformProgressChangedEvent($"Executing {web.Action.ToString()}");
                         result = web.Perform(_browser);
+                        break;
+                    case ToastNotification toast:
+                        toast.ReplaceVariables(_savedValues);
+                        toast.Perform();
                         break;
                     case Repeat f:
                         f.ReplaceVariables(_savedValues);

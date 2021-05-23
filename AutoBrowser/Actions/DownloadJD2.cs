@@ -37,7 +37,7 @@ namespace AutoBrowser.Actions
                 throw new ArgumentNullException(nameof(Url));
             }
 
-            FileInfo fileToDownload = new FileInfo(GetFileFullPath());
+            FileInfo fileToDownload = GetValidFileInfo();
 
             if (fileToDownload.Exists)
             {
