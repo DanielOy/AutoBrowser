@@ -84,7 +84,7 @@ namespace AutoBrowser.Classes
                         PerformProgressChangedEvent($"Navigating to {redirect.Url}");
                         redirect.Perform(_browser);
                         break;
-                    case Download download:
+                    case BaseDownload download:
                         download.ReplaceVariables(_savedValues);
                         PerformProgressChangedEvent($"Downloading from: {download.Url} to: {download.FileName}");
                         download.Perform(_browser);

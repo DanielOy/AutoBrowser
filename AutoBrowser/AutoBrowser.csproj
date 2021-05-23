@@ -47,17 +47,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Actions\BaseAction.cs" />
+    <Compile Include="Actions\BaseDownload.cs" />
     <Compile Include="Actions\Click.cs" />
     <Compile Include="Actions\Download.cs" />
+    <Compile Include="Actions\DownloadIDM.cs" />
+    <Compile Include="Actions\DownloadJD2.cs" />
     <Compile Include="Actions\ExtractAttribute.cs" />
     <Compile Include="Actions\ExtractElement.cs" />
     <Compile Include="Actions\Repeat.cs" />
     <Compile Include="Actions\Redirect.cs" />
+    <Compile Include="Actions\WriteFile.cs" />
     <Compile Include="Classes\AutoWebBrowser.cs" />
     <Compile Include="Actions\WebAction.cs" />
     <Compile Include="Classes\MathOperations.cs" />
     <Compile Include="Classes\ProgressChangedArgs.cs" />
     <Compile Include="Classes\WebTools.cs" />
+    <Compile Include="Configuration.cs" />
     <Compile Include="Enums\HtmlAttribute.cs" />
     <Compile Include="Enums\HtmlTag.cs" />
     <Compile Include="Tester.cs">

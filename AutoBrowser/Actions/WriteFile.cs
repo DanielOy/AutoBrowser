@@ -5,10 +5,16 @@ namespace AutoBrowser.Actions
     public class WriteFile
     {
 
-        public static void WriteOnFile(string fileName, string text)
+        public static void WriteOnFile(string text, string fileFullName)
         {
-            fileName += fileName.EndsWith(".txt") ? "" : ".txt";
-            File.AppendAllText(fileName, $"{text}\n");
+            var textFile = new FileInfo(fileFullName);
+
+            if (string.IsNullOrEmpty(textFile.Extension))
+            {
+                textFile = new FileInfo(fileFullName + ".txt");
+            }
+
+            File.AppendAllText(textFile.FullName, $"{text}\n");
         }
     }
 }
