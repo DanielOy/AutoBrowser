@@ -53,16 +53,24 @@ namespace AutoBrowser.Actions
             }
 
             WebClient wc = new WebClient();
-            wc.Headers.Add(HttpRequestHeader.Cookie, Classes.WebTools.GetCookie(browser?.Url?.AbsoluteUri));
+            wc.Headers.Add(HttpRequestHeader.Cookie, Library.WebTools.GetCookie(browser?.Url?.AbsoluteUri));
             wc.Headers.Add(HttpRequestHeader.UserAgent, "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:88.0) Gecko/20100101 Firefox/88.0");
 
             bool downloadFinished = false;
             wc.DownloadFileCompleted += (s, e) => { downloadFinished = true; };
             wc.DownloadProgressChanged += (s, e) =>
             {
+                string sizeDownloaded = ((e.BytesReceived / 1024) > 1024) ?
+                $"{((double)(e.BytesReceived / 1024) / 1024):0.##}MB" :
+                $"{((double)(e.BytesReceived / 1024)):0.##}KB";
+
+                string sizeTotal = ((e.TotalBytesToReceive / 1024) > 1024) ?
+                $"{((double)(e.TotalBytesToReceive / 1024) / 1024):0.##}MB" :
+                $"{((double)(e.TotalBytesToReceive / 1024)):0.##}KB";
+
                 ProgressChanged?.Invoke(this, new Classes.ProgressChangedArgs(
                     $"Downloading [{e.ProgressPercentage}%] " +
-                    $"[{Math.Floor((double)(e.BytesReceived / 1024))}KB/{Math.Floor((double)(e.TotalBytesToReceive / 1024))}KB] " +
+                    $"[{sizeDownloaded}/{sizeTotal}] " +
                     $"{downloadFile.Name}"));
             };
             wc.DownloadFileAsync(new Uri(Url), downloadFile.FullName);

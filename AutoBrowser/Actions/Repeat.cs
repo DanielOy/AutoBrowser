@@ -91,7 +91,7 @@ namespace AutoBrowser.Actions
                 return i;
             }
 
-            return Classes.MathOperations.Calculate(IndexFormula.Replace($"[{Name}]", i.ToString()));
+            return Library.MathOperations.Calculate(IndexFormula.Replace($"[{Name}]", i.ToString()));
         } 
         #endregion
     }

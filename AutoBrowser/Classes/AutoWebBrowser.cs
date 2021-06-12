@@ -6,7 +6,6 @@ using System.Windows.Forms;
 namespace AutoBrowser.Classes
 {
     //TODO: Add wait action dynamically 
-    //TODO: Add conditions if 
     //TODO: Create a forms to configure steps.
     //TODO: Implements sqlite or nosql
     //TODO: Make the process async
@@ -26,6 +25,8 @@ namespace AutoBrowser.Classes
         public AutoWebBrowser()
         {
             _browser = new WebBrowser() { ScriptErrorsSuppressed = true };
+            _browser.Navigating += _browser_Navigating;
+            _browser.NewWindow += _browser_NewWindow;
             _savedElements = new Dictionary<string, object>();
             _savedValues = new Dictionary<string, object>();
         }
@@ -42,24 +43,32 @@ namespace AutoBrowser.Classes
 
         private void _browser_NewWindow(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            string url = (sender as WebBrowser).Url.AbsoluteUri;
+            e.Cancel = true;
         }
 
         private void _browser_Navigating(object sender, WebBrowserNavigatingEventArgs e)
         {
-            if (e.Url.Host.Equals("poweredby.jads.co") || e.Url.Host.Equals("cdn.cloudimagesb.com"))
+            if (IsAdLink(e.Url))
             {
                 e.Cancel = true;
             }
-            else //UNDO: only for tests.
+            else if (e.Url.AbsoluteUri.EndsWith(".exe"))
             {
-                string url = e.Url.AbsoluteUri;
+                e.Cancel = true;
             }
+        }
 
-            if (e.Url.AbsoluteUri.EndsWith(".exe") || e.Url.AbsoluteUri.EndsWith(".gif"))
+        private bool IsAdLink(Uri url)
+        {
+            List<string> blackList = new List<string>()
             {
-                e.Cancel = true;
-            }
+                "poweredby.jads.co",
+                "cdn.cloudimagesb.com",
+                "googleads.g.doubleclick.net",
+                "www.facebook.com",
+            };
+
+            return blackList.Contains(url.Host);
         }
 
         private void PerformProgressChangedEvent(string description)
@@ -133,6 +142,13 @@ namespace AutoBrowser.Classes
                             PerformActions(f.Actions);
                         }
                         RemoveAttribute(f.Name);
+                        break;
+                    case Conditional c:
+                        c.ReplaceVariables(_savedValues);
+                        if (c.EvaluateCondition())
+                        {
+                            PerformActions(c.Actions);
+                        }
                         break;
                 }
             }

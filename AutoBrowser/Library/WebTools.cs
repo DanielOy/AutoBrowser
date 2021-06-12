@@ -3,7 +3,7 @@ using System;
 using System.Net;
 using System.Text;
 
-namespace AutoBrowser.Classes
+namespace AutoBrowser.Library
 {
     public static class WebTools
     {

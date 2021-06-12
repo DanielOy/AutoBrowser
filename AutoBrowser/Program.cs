@@ -14,7 +14,7 @@ namespace AutoBrowser
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Classes.WebTools.ConfigureIEBrowserEmulator(Process.GetCurrentProcess().ProcessName);
+            Library.WebTools.ConfigureIEBrowserEmulator(Process.GetCurrentProcess().ProcessName);
             Application.Run(new Tester());
         }
     }
