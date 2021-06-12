@@ -42,29 +42,7 @@ namespace AutoBrowser.Actions
                 Body,
                 ToolTipIcon.Info);
         }
-        public override void ReplaceVariables(Dictionary<string, object> savedValues)
-        {
-            if (savedValues == null)
-            {
-                return;
-            }
-
-            ResetValues();
-
-            foreach (var item in savedValues)
-            {
-                if (Title.Contains($"[{item.Key}]"))
-                {
-                    Title = Title.Replace($"[{item.Key}]", item.Value.ToString());
-                }
-
-                if (Body.Contains($"[{item.Key}]"))
-                {
-                    Body = Body.Replace($"[{item.Key}]", item.Value.ToString());
-                }
-            }
-        }
-
+        
         protected override void ResetValues()
         {
             Title = _originalTitle;

@@ -76,24 +76,6 @@ namespace AutoBrowser.Actions
             }
         }
 
-        public override void ReplaceVariables(Dictionary<string, object> savedValues)
-        {
-            if (savedValues == null)
-            {
-                return;
-            }
-
-            ResetValues();
-
-            foreach (var item in savedValues)
-            {
-                if (Url.Contains($"[{item.Key}]"))
-                {
-                    Url = Url.Replace($"[{item.Key}]", item.Value.ToString());
-                }
-            }
-        }
-
         protected override void ResetValues()
         {
             Url = _originalUrl;

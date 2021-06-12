@@ -69,7 +69,7 @@ namespace AutoBrowser.Actions
                 content.AppendLine($"filename = {fileName}");
             }
 
-            WriteFile.WriteOnFile(content.ToString(), Path.Combine(Configuration.JDownloaderFilesPath, $"AutoWeb{DateTime.Now.ToString("MMdd_hh_mm_ss")}.crawljob"));
+            Library.File.WriteOnFile(content.ToString(), Path.Combine(Configuration.JDownloaderFilesPath, $"AutoWeb{DateTime.Now.ToString("MMdd_hh_mm_ss")}.crawljob"));
         }
 
         private void InitJdownloader2()

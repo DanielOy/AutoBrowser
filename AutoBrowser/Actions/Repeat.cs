@@ -49,34 +49,6 @@ namespace AutoBrowser.Actions
         #endregion
 
         #region Functions
-        public override void ReplaceVariables(Dictionary<string, object> savedValues)
-        {
-            if (savedValues == null)
-            {
-                return;
-            }
-
-            ResetValues();
-
-            foreach (var item in savedValues)
-            {
-                if (Name.Contains($"[{item.Key}]"))
-                {
-                    Name = Name.Replace($"[{item.Key}]", item.Value.ToString());
-                }
-
-                if (Times.ToString().Contains($"[{item.Key}]"))
-                {
-                    Times = Times.ToString().Replace($"[{item.Key}]", item.Value.ToString());
-                }
-
-                if (IndexFormula.ToString().Contains($"[{item.Key}]"))
-                {
-                    IndexFormula = IndexFormula.ToString().Replace($"[{item.Key}]", item.Value.ToString());
-                }
-            }
-        }
-
         protected override void ResetValues()
         {
             Name = _originalName;
@@ -91,7 +63,7 @@ namespace AutoBrowser.Actions
                 return i;
             }
 
-            return Library.MathOperations.Calculate(IndexFormula.Replace($"[{Name}]", i.ToString()));
+            return Library.Math.Calculate(IndexFormula.Replace($"[{Name}]", i.ToString()));
         } 
         #endregion
     }

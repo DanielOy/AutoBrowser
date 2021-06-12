@@ -2,7 +2,7 @@
 
 namespace AutoBrowser.Library
 {
-    public static partial class MathOperations
+    public static partial class Math
     {
         public static bool CalculateLogic(string expression)
         {

@@ -53,20 +53,15 @@ namespace AutoBrowser.Actions
             }
 
             WebClient wc = new WebClient();
-            wc.Headers.Add(HttpRequestHeader.Cookie, Library.WebTools.GetCookie(browser?.Url?.AbsoluteUri));
+            wc.Headers.Add(HttpRequestHeader.Cookie, Library.Web.GetCookie(browser?.Url?.AbsoluteUri));
             wc.Headers.Add(HttpRequestHeader.UserAgent, "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:88.0) Gecko/20100101 Firefox/88.0");
 
             bool downloadFinished = false;
             wc.DownloadFileCompleted += (s, e) => { downloadFinished = true; };
             wc.DownloadProgressChanged += (s, e) =>
             {
-                string sizeDownloaded = ((e.BytesReceived / 1024) > 1024) ?
-                $"{((double)(e.BytesReceived / 1024) / 1024):0.##}MB" :
-                $"{((double)(e.BytesReceived / 1024)):0.##}KB";
-
-                string sizeTotal = ((e.TotalBytesToReceive / 1024) > 1024) ?
-                $"{((double)(e.TotalBytesToReceive / 1024) / 1024):0.##}MB" :
-                $"{((double)(e.TotalBytesToReceive / 1024)):0.##}KB";
+                string sizeDownloaded = Library.TextFormat.NoBytesToSize(e.BytesReceived);
+                string sizeTotal = Library.TextFormat.NoBytesToSize(e.TotalBytesToReceive);
 
                 ProgressChanged?.Invoke(this, new Classes.ProgressChangedArgs(
                     $"Downloading [{e.ProgressPercentage}%] " +
@@ -92,7 +87,7 @@ namespace AutoBrowser.Actions
                 }
             }
 
-            WriteFile.WriteOnFile($"[{DateTime.Now.ToString("dd/MM hh:mm:ss")}] {downloadFile.Name}", "DownloadHistory");
+            Library.File.WriteOnFile($"[{DateTime.Now.ToString("dd/MM hh:mm:ss")}] {downloadFile.Name}", "DownloadHistory");
 
             return true;
         }

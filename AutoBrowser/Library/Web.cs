@@ -5,7 +5,7 @@ using System.Text;
 
 namespace AutoBrowser.Library
 {
-    public static class WebTools
+    public static class Web
     {
         [System.Runtime.InteropServices.DllImport("wininet.dll", CharSet = System.Runtime.InteropServices.CharSet.Auto, SetLastError = true, PreserveSig = true)]
         public static extern bool InternetGetCookieEx(string url, string cookieName, StringBuilder cookieData, ref int size, Int32 dwFlags, IntPtr lpReserved);

@@ -58,17 +58,18 @@
     <Compile Include="Actions\Repeat.cs" />
     <Compile Include="Actions\Redirect.cs" />
     <Compile Include="Actions\ToastNotification.cs" />
-    <Compile Include="Actions\WriteFile.cs" />
     <Compile Include="Classes\AutoWebBrowser.cs" />
     <Compile Include="Actions\WebAction.cs" />
     <Compile Include="Classes\ProgressChangedArgs.cs" />
-    <Compile Include="Library\WebTools.cs" />
+    <Compile Include="Library\File.cs" />
+    <Compile Include="Library\TextFormat.cs" />
+    <Compile Include="Library\Web.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="Enums\HtmlAttribute.cs" />
     <Compile Include="Enums\HtmlTag.cs" />
-    <Compile Include="Library\MathOperations.Aritmetic.cs" />
-    <Compile Include="Library\MathOperations.Logic.cs" />
-    <Compile Include="Library\MathOperations.Order.cs" />
+    <Compile Include="Library\Math.Aritmetic.cs" />
+    <Compile Include="Library\Math.Logic.cs" />
+    <Compile Include="Library\Math.Order.cs" />
     <Compile Include="Tester.cs">
       <SubType>Form</SubType>
     </Compile>

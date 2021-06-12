@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace AutoBrowser.Library
 {
-    public static partial class MathOperations
+    public static partial class Math
     {
         #region Global Variables
         private static readonly List<Operator> _operators = new List<Operator>()

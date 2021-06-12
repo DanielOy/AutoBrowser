@@ -123,34 +123,6 @@ namespace AutoBrowser.Actions
             return elements.Count;
         }
 
-        public override void ReplaceVariables(Dictionary<string, object> savedValues)
-        {
-            if (savedValues == null)
-            {
-                return;
-            }
-
-            ResetValues();
-
-            foreach (var item in savedValues)
-            {
-                if (Name.Contains($"[{item.Key}]"))
-                {
-                    Name = Name.Replace($"[{item.Key}]", item.Value.ToString());
-                }
-
-                if (AttributeName.Contains($"[{item.Key}]"))
-                {
-                    AttributeName = AttributeName.Replace($"[{item.Key}]", item.Value.ToString());
-                }
-
-                if (Variable.Contains($"[{item.Key}]"))
-                {
-                    Variable = Variable.Replace($"[{item.Key}]", item.Value.ToString());
-                }
-            }
-        }
-
         protected override void ResetValues()
         {
             Variable = _originalVariable;

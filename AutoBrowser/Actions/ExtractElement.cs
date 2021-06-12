@@ -159,7 +159,7 @@ namespace AutoBrowser.Actions
             return null;
         }
 
-        public override void ReplaceVariables(Dictionary<string, object> savedValues)
+        public new void ReplaceVariables(Dictionary<string, object> savedValues)
         {
             if (savedValues == null)
             {

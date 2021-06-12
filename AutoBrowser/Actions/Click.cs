@@ -38,24 +38,6 @@ namespace AutoBrowser.Actions
             return true;
         }
 
-        public override void ReplaceVariables(Dictionary<string, object> savedValues)
-        {
-            if (savedValues == null)
-            {
-                return;
-            }
-
-            ResetValues();
-
-            foreach (var item in savedValues)
-            {
-                if (Variable.Contains($"[{item.Key}]"))
-                {
-                    Variable = Variable.Replace($"[{item.Key}]", item.Value.ToString());
-                }
-            }
-        }
-
         protected override void ResetValues()
         {
             Variable = _originalVariable;
