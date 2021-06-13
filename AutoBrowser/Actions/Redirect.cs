@@ -1,17 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace AutoBrowser.Actions
 {
     public class Redirect : WebAction
     {
-        private readonly string _originalUrl;
+        #region Global Variables
+        private string _originalUrl;
+        #endregion
 
-        public override Action Action => Action.Redirect;
+        #region Properties
 
         public string Url { get; set; }
+
         public int TimeOut { get; set; }
+        #endregion
+
+        #region Constructors
+        public Redirect()
+        {
+        }
 
         public Redirect(string url)
         {
@@ -23,7 +31,9 @@ namespace AutoBrowser.Actions
             Url = _originalUrl = url;
             TimeOut = timeOut;
         }
+        #endregion
 
+        #region Functions
         public override object Perform(WebBrowser browser)
         {
             if (browser == null)
@@ -66,19 +76,15 @@ namespace AutoBrowser.Actions
             return true;
         }
 
-        private void Wait(int seconds)
-        {
-            DateTime finalTime = DateTime.Now.AddSeconds(seconds);
-
-            while (finalTime > DateTime.Now)
-            {
-                Application.DoEvents();
-            }
-        }
-
         protected override void ResetValues()
         {
             Url = _originalUrl;
         }
+
+        internal override void InitVariables()
+        {
+            _originalUrl = Url;
+        } 
+        #endregion
     }
 }

@@ -1,21 +1,30 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace AutoBrowser.Actions
 {
     public class Click : WebAction
     {
-        private readonly string _originalVariable;
+        #region Global Variables
+        private string _originalVariable;
+        #endregion
 
-        public override Action Action => Action.Click;
+        #region Properties
         public string Variable { get; set; }
+        #endregion
+
+        #region Constructors
+        public Click()
+        {
+        }
 
         public Click(string variable)
         {
             Variable = _originalVariable = variable;
         }
+        #endregion
 
+        #region Functions
         public override object Perform(WebBrowser browser)
         {
             if (browser == null)
@@ -42,5 +51,11 @@ namespace AutoBrowser.Actions
         {
             Variable = _originalVariable;
         }
+
+        internal override void InitVariables()
+        {
+            _originalVariable = Variable;
+        } 
+        #endregion
     }
 }

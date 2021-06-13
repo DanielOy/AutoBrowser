@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Tester));
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.formBrowser = new System.Windows.Forms.WebBrowser();
             this.btnStart = new System.Windows.Forms.Button();
@@ -68,14 +69,15 @@
             this.btnStart.UseVisualStyleBackColor = true;
             this.btnStart.Click += new System.EventHandler(this.BtnStart_Click);
             // 
-            // FrmTEST
+            // Tester
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(689, 437);
             this.Controls.Add(this.tableLayoutPanel1);
-            this.Name = "FrmTEST";
-            this.Text = "Form1";
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Name = "Tester";
+            this.Text = "Tester";
             this.Shown += new System.EventHandler(this.FrmTEST_Shown);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);

@@ -1,13 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 
 namespace AutoBrowser.Actions
 {
     public class ToastNotification : BaseAction
     {
-        #region Variables
-        private readonly string _originalTitle;
-        private readonly string _originalBody;
+        #region Global Variables
+        private string _originalTitle;
+        private string _originalBody;
         #endregion
 
         #region Properties
@@ -15,7 +14,8 @@ namespace AutoBrowser.Actions
         public string Body { get; set; }
         #endregion
 
-        #region Constructor
+        #region Constructors
+        public ToastNotification() { }
         public ToastNotification(string body)
         {
             Title = _originalTitle = Application.ProductName;
@@ -29,6 +29,7 @@ namespace AutoBrowser.Actions
         }
         #endregion
 
+        #region Functions
         public void Perform()
         {
             NotifyIcon notify = new NotifyIcon
@@ -42,11 +43,18 @@ namespace AutoBrowser.Actions
                 Body,
                 ToolTipIcon.Info);
         }
-        
+
         protected override void ResetValues()
         {
             Title = _originalTitle;
             Body = _originalBody;
         }
+
+        internal override void InitVariables()
+        {
+            _originalTitle = Title;
+            _originalBody = Body;
+        } 
+        #endregion
     }
 }

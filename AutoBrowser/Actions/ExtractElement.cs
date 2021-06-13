@@ -10,17 +10,24 @@ namespace AutoBrowser.Actions
     //TODO: Extract elements from elements (childs)
     public class ExtractElement : WebAction
     {
-        private readonly string _originalName;
+        #region Global Variables
+        private string _originalName;
+        #endregion
 
-        public override Action Action => Action.ExtractElement;
+        #region Properties
         public List<Node> NodePath { get; set; }
         public string Name { get; set; }
+        #endregion
+
+        #region Constructors
+        public ExtractElement() { }
 
         public ExtractElement(string name, List<Node> nodePath)
         {
             Name = _originalName = name;
             NodePath = nodePath;
-        }
+        } 
+        #endregion
 
         public override object Perform(WebBrowser browser)
         {
@@ -47,18 +54,18 @@ namespace AutoBrowser.Actions
         {
             if (node is SingleNode single)
             {
-                if (single.From == SingleNode.Attribute.Id)
+                if (single.From == SingleNode.SingleNodeType.Id)
                 {
                     return browser.Document.GetElementById(node.Value);
                 }
-                else if (single.From == SingleNode.Attribute.Index)
+                else if (single.From == SingleNode.SingleNodeType.Index)
                 {
                     return browser.Document.Body.Children[Convert.ToInt32(node.Value)];
                 }
             }
             else if (node is MultiNode multi)
             {
-                if (multi.From == MultiNode.Attribute.Class)
+                if (multi.From == MultiNode.MultiNodeType.Class)
                 {
                     if (string.IsNullOrEmpty(multi.Index?.ToString()))
                     {
@@ -81,7 +88,7 @@ namespace AutoBrowser.Actions
                         return elements?[i];
                     }
                 }
-                else if (multi.From == MultiNode.Attribute.Tag)
+                else if (multi.From == MultiNode.MultiNodeType.Tag)
                 {
                     if (string.IsNullOrEmpty(multi.Index?.ToString()))
                     {
@@ -101,7 +108,7 @@ namespace AutoBrowser.Actions
         {
             if (node is SingleNode single)
             {
-                if (single.From == SingleNode.Attribute.Id)
+                if (single.From == SingleNode.SingleNodeType.Id)
                 {
                     foreach (HtmlElement child in element.Children)
                     {
@@ -111,14 +118,14 @@ namespace AutoBrowser.Actions
                         }
                     }
                 }
-                else if (single.From == SingleNode.Attribute.Index)
+                else if (single.From == SingleNode.SingleNodeType.Index)
                 {
                     return element.Children[Convert.ToInt32(node.Value)];
                 }
             }
             else if (node is MultiNode multi)
             {
-                if (multi.From == MultiNode.Attribute.Class)
+                if (multi.From == MultiNode.MultiNodeType.Class)
                 {
                     if (string.IsNullOrEmpty(multi.Index?.ToString()))
                     {
@@ -143,7 +150,7 @@ namespace AutoBrowser.Actions
                         return elements[i];
                     }
                 }
-                else if (multi.From == MultiNode.Attribute.Tag)
+                else if (multi.From == MultiNode.MultiNodeType.Tag)
                 {
                     if (string.IsNullOrEmpty(multi.Index?.ToString()))
                     {
@@ -184,122 +191,12 @@ namespace AutoBrowser.Actions
             Name = _originalName;
             NodePath.ForEach(n => n.ResetValues());
         }
-    }
 
-    public abstract class Node
-    {
-        //public int Order { get; set; }
-        //public abstract object From { get; protected set; }
-        public string Value { get; set; }
-
-        //public enum Attribute { }
-        public abstract void ReplaceVariables(KeyValuePair<string, object> savedValues);
-        public abstract void ResetValues();
-
-    }
-
-    public class SingleNode : Node
-    {
-        private readonly string _originalValue;
-
-        public Attribute From { get; set; }
-
-        public enum Attribute
+        internal override void InitVariables()
         {
-            Id = 0,
-            Index = 1
-        }
-
-        public SingleNode(Attribute from, string value)
-        {
-            From = from;
-            Value = _originalValue = value;
-        }
-
-        public override void ReplaceVariables(KeyValuePair<string, object> variable)
-        {
-            if (Value.Contains($"[{variable.Key}]"))
-            {
-                Value = Value.Replace($"[{variable.Key}]", variable.Value.ToString());
-            }
-        }
-
-        public override void ResetValues()
-        {
-            Value = _originalValue;
+            _originalName = Name;
+            NodePath.ForEach(n => n.InitVariables());
         }
     }
 
-    public class MultiNode : Node
-    {
-        #region Variables
-        private readonly string _originalValue;
-        private readonly object _originalIndex;
-        private readonly object _originalClassName;
-        #endregion
-
-        #region Properties
-        public Attribute From { get; set; }
-        public object Index { get; set; }
-        public object ClassName { get; set; }
-        #endregion
-
-
-        #region Constructors
-        public MultiNode(HtmlTag tag)
-        {
-            From = Attribute.Tag;
-            Value = _originalValue = tag.Value;
-            Index = _originalIndex = "";
-            ClassName = _originalClassName = "";
-        }
-
-        public MultiNode(HtmlTag tag, object index)
-        {
-            From = Attribute.Tag;
-            Value = _originalValue = tag.Value;
-            Index = _originalIndex = index;
-            ClassName = _originalClassName = "";
-        }
-
-        public MultiNode(HtmlTag tag, object className, object index)
-        {
-            From = Attribute.Class;
-            Value = _originalValue = tag.Value;
-            ClassName = _originalClassName = className;
-            Index = _originalIndex = index;
-        }
-        #endregion
-
-        public enum Attribute
-        {
-            Tag = 2,
-            Class = 3
-        }
-
-        public override void ReplaceVariables(KeyValuePair<string, object> variable)
-        {
-            if (Value.Contains($"[{variable.Key}]"))
-            {
-                Value = Value.Replace($"[{variable.Key}]", variable.Value.ToString());
-            }
-
-            if (Index.ToString().Contains($"[{variable.Key}]"))
-            {
-                Index = Index.ToString().Replace($"[{variable.Key}]", variable.Value.ToString());
-            }
-
-            if (ClassName.ToString().Contains($"[{variable.Key}]"))
-            {
-                ClassName = ClassName.ToString().Replace($"[{variable.Key}]", variable.Value.ToString());
-            }
-        }
-
-        public override void ResetValues()
-        {
-            Value = _originalValue;
-            Index = _originalIndex;
-            ClassName = _originalClassName;
-        }
-    }
 }

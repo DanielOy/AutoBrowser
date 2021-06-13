@@ -9,20 +9,20 @@ namespace AutoBrowser.Actions
     [DebuggerDisplay("{Name} = {Variable} => {AttributeName}")]
     public class ExtractAttribute : WebAction
     {
-        #region Variables
-        private readonly string _originalVariable;
-        private readonly string _originalAttributeName;
-        private readonly string _originalName;
+        #region Global Variables
+        private string _originalVariable;
+        private string _originalAttributeName;
+        private string _originalName;
         #endregion
 
         #region Properties
-        public override Action Action => Action.ExtractAtribute;
         public string Variable { get; set; }
         public string AttributeName { get; set; }
         public string Name { get; set; }
         #endregion
 
         #region Constructor
+        public ExtractAttribute() { }
         /// <summary>
         /// Get the value of an attribute of the element with the variable name.
         /// </summary>
@@ -68,6 +68,7 @@ namespace AutoBrowser.Actions
 
             return browser.Document.Body.GetAttribute(AttributeName);
         }
+
         public object Perform(HtmlElement element)
         {
             if (element == null)
@@ -128,7 +129,14 @@ namespace AutoBrowser.Actions
             Variable = _originalVariable;
             AttributeName = _originalAttributeName;
             Name = _originalName;
-        } 
+        }
+
+        internal override void InitVariables()
+        {
+            _originalVariable = Variable;
+            _originalAttributeName = AttributeName;
+            _originalName = Name;
+        }
         #endregion
     }
 }

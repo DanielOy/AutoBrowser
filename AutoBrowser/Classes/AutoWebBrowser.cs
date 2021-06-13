@@ -10,6 +10,8 @@ namespace AutoBrowser.Classes
     //TODO: Implements sqlite or nosql
     //TODO: Make the process async
     //TODO: improve notifications
+    //TODO: associated files with the program
+    //TODO: implements encryptation
 
     public class AutoWebBrowser
     {
@@ -126,10 +128,11 @@ namespace AutoBrowser.Classes
                         click.Perform(GetElement(click.Variable));
                         break;
                     case WebAction web:
-                        PerformProgressChangedEvent($"Executing {web.Action.ToString()}");
+                        PerformProgressChangedEvent($"Performing action {nameof(web)}");
                         result = web.Perform(_browser);
                         break;
                     case ToastNotification toast:
+                        PerformProgressChangedEvent($"Launching toast notification");
                         toast.ReplaceVariables(_savedValues);
                         toast.Perform();
                         break;

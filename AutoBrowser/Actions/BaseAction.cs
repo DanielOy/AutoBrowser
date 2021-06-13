@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Windows.Forms;
 
 namespace AutoBrowser.Actions
 {
     public abstract class BaseAction
     {
+        internal abstract void InitVariables();
+
         internal virtual void ReplaceVariables(Dictionary<string, object> sessionVariables)
         {
             if (sessionVariables == null || sessionVariables.Count == 0)
@@ -16,8 +19,7 @@ namespace AutoBrowser.Actions
 
             ResetValues();
 
-            Type actionType = GetType();
-            List<PropertyInfo> properties = new List<PropertyInfo>(actionType.GetProperties())
+            List<PropertyInfo> properties = new List<PropertyInfo>(GetType().GetProperties())
                 .Where(x => x.PropertyType == typeof(string) || x.PropertyType == typeof(object))?
                 .ToList();
 
@@ -41,5 +43,15 @@ namespace AutoBrowser.Actions
         }
 
         protected abstract void ResetValues();
+
+        protected void Wait(int seconds)
+        {
+            DateTime finalTime = DateTime.Now.AddSeconds(seconds);
+
+            while (finalTime > DateTime.Now)
+            {
+                Application.DoEvents();
+            }
+        }
     }
 }

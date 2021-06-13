@@ -4,10 +4,10 @@ namespace AutoBrowser.Actions
 {
     public class Repeat : BaseAction
     {
-        #region Variables
-        private readonly string _originalName;
-        private readonly object _originalTimes;
-        private readonly string _originalIndexFormula;
+        #region Global Variables
+        private string _originalName;
+        private object _originalTimes;
+        private string _originalIndexFormula;
         #endregion
 
         #region Properties
@@ -18,6 +18,7 @@ namespace AutoBrowser.Actions
         #endregion
 
         #region Constructors
+        public Repeat() { }
         /// <summary>
         /// Create a new object that contains a list of actions to repeat in base the number of times.
         /// </summary>
@@ -64,7 +65,15 @@ namespace AutoBrowser.Actions
             }
 
             return Library.Math.Calculate(IndexFormula.Replace($"[{Name}]", i.ToString()));
-        } 
+        }
+
+        internal override void InitVariables()
+        {
+            _originalName = Name;
+            _originalTimes = Times;
+            _originalIndexFormula = IndexFormula;
+            Actions?.ForEach(x => x.InitVariables());
+        }
         #endregion
     }
 }

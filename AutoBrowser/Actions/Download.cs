@@ -9,14 +9,13 @@ namespace AutoBrowser.Actions
     public class Download : BaseDownload
     {
         #region Properties
-        public override Action Action => Action.Download;
-
         public bool ReplaceFile { get; set; }
         public int TimeOut { get; set; }
         public event ProgressChangedEventHandler ProgressChanged;
         #endregion
 
         #region Constructor
+        public Download() { }
         public Download(string url, string fileName) : base(url, fileName)
         {
             Url = _originalUrl = url;
@@ -57,16 +56,24 @@ namespace AutoBrowser.Actions
             wc.Headers.Add(HttpRequestHeader.UserAgent, "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:88.0) Gecko/20100101 Firefox/88.0");
 
             bool downloadFinished = false;
+            DateTime lastUpdate = DateTime.Now;
+            int lastPorcent = 0;
             wc.DownloadFileCompleted += (s, e) => { downloadFinished = true; };
             wc.DownloadProgressChanged += (s, e) =>
             {
                 string sizeDownloaded = Library.TextFormat.NoBytesToSize(e.BytesReceived);
                 string sizeTotal = Library.TextFormat.NoBytesToSize(e.TotalBytesToReceive);
 
-                ProgressChanged?.Invoke(this, new Classes.ProgressChangedArgs(
-                    $"Downloading [{e.ProgressPercentage}%] " +
-                    $"[{sizeDownloaded}/{sizeTotal}] " +
-                    $"{downloadFile.Name}"));
+                if ((DateTime.Now - lastUpdate).Seconds >= 1 && lastPorcent < e.ProgressPercentage)
+                {
+                    lastUpdate = DateTime.Now;
+                    lastPorcent = e.ProgressPercentage;
+
+                    ProgressChanged?.Invoke(this, new Classes.ProgressChangedArgs(
+                        $"Downloading [{e.ProgressPercentage}%] " +
+                        $"[{sizeDownloaded}/{sizeTotal}] " +
+                        $"{downloadFile.Name}"));
+                }
             };
             wc.DownloadFileAsync(new Uri(Url), downloadFile.FullName);
 
@@ -92,14 +99,11 @@ namespace AutoBrowser.Actions
             return true;
         }
 
-        private void Wait(int seconds)
+        internal override void InitVariables()
         {
-            DateTime finalTime = DateTime.Now.AddSeconds(seconds);
-
-            while (finalTime > DateTime.Now)
-            {
-                Application.DoEvents();
-            }
+            _originalUrl = Url;
+            _originalfileName = FileName;
+            _originalDownloadFolder = DownloadFolder;
         }
         #endregion
     }

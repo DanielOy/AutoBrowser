@@ -8,11 +8,11 @@ namespace AutoBrowser.Actions
     public class DownloadIDM : BaseDownload
     {
         #region Properties
-        public override Action Action => Action.Download;
         public bool StartQueue { get; set; } = true;
         #endregion
 
         #region Constructors
+        public DownloadIDM() { }
         public DownloadIDM(string url, string fileName) : base(url, fileName)
         {
             Url = _originalUrl = url;
@@ -28,6 +28,7 @@ namespace AutoBrowser.Actions
         }
         #endregion
 
+        #region Functions
         public override object Perform(WebBrowser browser)
         {
             if (string.IsNullOrEmpty(Url))
@@ -47,6 +48,13 @@ namespace AutoBrowser.Actions
             return true;
         }
 
+        internal override void InitVariables()
+        {
+            _originalUrl = Url;
+            _originalfileName = FileName;
+            _originalDownloadFolder = DownloadFolder;
+        }
+
         /*
          /d [URL] - downloads a file
          /s - starts queue in scheduler
@@ -62,7 +70,7 @@ namespace AutoBrowser.Actions
         {
             Process idmProcess = new Process
             {
-                StartInfo = new ProcessStartInfo(Configuration.IDMExePath)
+                StartInfo = new ProcessStartInfo(Global.IDMExePath)
                 {
                     Arguments = $"/q /n " +
                     $"{(StartQueue ? "/s " : "/a ")} " +
@@ -72,7 +80,7 @@ namespace AutoBrowser.Actions
                 }
             };
             idmProcess.Start();
-        }
-
+        } 
+        #endregion
     }
 }

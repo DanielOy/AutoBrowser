@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Windows.Forms;
 
 namespace AutoBrowser.Actions
@@ -19,6 +18,7 @@ namespace AutoBrowser.Actions
         #endregion
 
         #region Constructor
+        public BaseDownload() { }
         public BaseDownload(string url, string fileName)
         {
             Url = _originalUrl = url;

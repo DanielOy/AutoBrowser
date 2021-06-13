@@ -9,11 +9,11 @@ namespace AutoBrowser.Actions
     public class DownloadJD2 : BaseDownload
     {
         #region Properties
-        public override Action Action => Action.Download;
         public bool StartQueue { get; set; } = true;
         #endregion
 
         #region Constructor
+        public DownloadJD2() { }
         public DownloadJD2(string url, string fileName) : base(url, fileName)
         {
             Url = _originalUrl = url;
@@ -29,6 +29,7 @@ namespace AutoBrowser.Actions
         }
         #endregion
 
+        #region Functions
         public override object Perform(WebBrowser browser)
         {
 
@@ -69,7 +70,7 @@ namespace AutoBrowser.Actions
                 content.AppendLine($"filename = {fileName}");
             }
 
-            Library.File.WriteOnFile(content.ToString(), Path.Combine(Configuration.JDownloaderFilesPath, $"AutoWeb{DateTime.Now.ToString("MMdd_hh_mm_ss")}.crawljob"));
+            Library.File.WriteOnFile(content.ToString(), Path.Combine(Global.JDownloaderFilesPath, $"AutoWeb{DateTime.Now.ToString("MMdd_hh_mm_ss")}.crawljob"));
         }
 
         private void InitJdownloader2()
@@ -77,8 +78,16 @@ namespace AutoBrowser.Actions
             var _Process = Process.GetProcessesByName("JDownloader2");
             if (_Process == null || _Process.Length == 0)
             {
-                Process.Start(Configuration.JDownloaderExePath);
+                Process.Start(Global.JDownloaderExePath);
             }
         }
+
+        internal override void InitVariables()
+        {
+            _originalUrl = Url;
+            _originalfileName = FileName;
+            _originalDownloadFolder = DownloadFolder;
+        } 
+        #endregion
     }
 }

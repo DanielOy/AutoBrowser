@@ -32,9 +32,13 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Resources\awb.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -55,16 +59,22 @@
     <Compile Include="Actions\DownloadJD2.cs" />
     <Compile Include="Actions\ExtractAttribute.cs" />
     <Compile Include="Actions\ExtractElement.cs" />
+    <Compile Include="Actions\ExtractElement.Node.cs">
+      <DependentUpon>ExtractElement.cs</DependentUpon>
+    </Compile>
     <Compile Include="Actions\Repeat.cs" />
     <Compile Include="Actions\Redirect.cs" />
     <Compile Include="Actions\ToastNotification.cs" />
     <Compile Include="Classes\AutoWebBrowser.cs" />
     <Compile Include="Actions\WebAction.cs" />
+    <Compile Include="Classes\Project.cs" />
     <Compile Include="Classes\ProgressChangedArgs.cs" />
     <Compile Include="Library\File.cs" />
+    <Compile Include="Library\Json.cs" />
+    <Compile Include="Library\WinRegistry.cs" />
     <Compile Include="Library\TextFormat.cs" />
     <Compile Include="Library\Web.cs" />
-    <Compile Include="Configuration.cs" />
+    <Compile Include="Global.cs" />
     <Compile Include="Enums\HtmlAttribute.cs" />
     <Compile Include="Enums\HtmlTag.cs" />
     <Compile Include="Library\Math.Aritmetic.cs" />
@@ -89,6 +99,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -102,6 +113,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\awb.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
