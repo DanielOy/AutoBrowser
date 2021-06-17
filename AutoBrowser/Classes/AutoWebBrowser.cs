@@ -10,8 +10,8 @@ namespace AutoBrowser.Classes
     //TODO: Implements sqlite or nosql
     //TODO: Make the process async
     //TODO: improve notifications
-    //TODO: associated files with the program
-    //TODO: implements encryptation
+    //TODO: allow user to generate a task in task scheduler
+    //TODO: allow to open process
 
     public class AutoWebBrowser
     {
@@ -67,7 +67,7 @@ namespace AutoBrowser.Classes
                 "poweredby.jads.co",
                 "cdn.cloudimagesb.com",
                 "googleads.g.doubleclick.net",
-                "www.facebook.com",
+                //"www.facebook.com",
             };
 
             return blackList.Contains(url.Host);
@@ -130,6 +130,16 @@ namespace AutoBrowser.Classes
                     case WebAction web:
                         PerformProgressChangedEvent($"Performing action {nameof(web)}");
                         result = web.Perform(_browser);
+                        break;
+                    case Input input:
+                        PerformProgressChangedEvent($"Waiting for user input");
+                        result = input.Perform();
+                        SaveAttribute(input.Name, result);
+                        break;
+                    case WriteFile write:
+                        write.ReplaceVariables(_savedValues);
+                        PerformProgressChangedEvent($"Writing text in file.");
+                        write.Perform();
                         break;
                     case ToastNotification toast:
                         PerformProgressChangedEvent($"Launching toast notification");

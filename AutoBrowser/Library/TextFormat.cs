@@ -29,5 +29,10 @@
             }
             return $"{bytesNumber:0.##}Bytes";
         }
+
+        public static string URLEnconde(string text)
+        {
+            return System.Web.HttpUtility.UrlEncode(text);
+        }
     }
 }

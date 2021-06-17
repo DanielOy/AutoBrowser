@@ -80,6 +80,10 @@ namespace AutoBrowser.Actions
             {
                 throw new ArgumentNullException(nameof(AttributeName));
             }
+            if (AttributeName=="text") //FIX: requiere to be standard
+            {
+                return element.InnerText;
+            }
 
             return element.GetAttribute(AttributeName);
         }

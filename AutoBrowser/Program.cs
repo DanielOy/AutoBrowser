@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace AutoBrowser
@@ -16,9 +17,26 @@ namespace AutoBrowser
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            Application.ThreadException += new ThreadExceptionEventHandler(Application_ThreadException);
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
+            
             Library.Web.ConfigureIEBrowserEmulator(Process.GetCurrentProcess().ProcessName);
             Library.WinRegistry.SetFileAsocciation(Global.FileExtension, Application.ExecutablePath);
             ChooseProcess();
+        }
+
+        static void Application_ThreadException(object sender, ThreadExceptionEventArgs e)
+        {
+            // Log the exception, display it, etc
+            Debug.WriteLine(e.Exception.Message);
+            Library.File.WriteOnFile($"{e.Exception.Message}\n{e.Exception.StackTrace}", "Error.log");
+        }
+
+        static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            // Log the exception, display it, etc
+            Debug.WriteLine((e.ExceptionObject as Exception).Message);
+            Library.File.WriteOnFile($"{(e.ExceptionObject as Exception).Message}\n{(e.ExceptionObject as Exception).StackTrace}", "Error.log");
         }
 
         private static void ChooseProcess()
@@ -30,7 +48,6 @@ namespace AutoBrowser
             }
             else if (ParametersList[1].EndsWith(Global.FileExtension))
             {
-                MessageBox.Show(Environment.CurrentDirectory +"\n\n"+ Environment.SystemDirectory);
                 if (Environment.CurrentDirectory == Environment.SystemDirectory)
                 {
                     Environment.CurrentDirectory = new System.IO.FileInfo(ParametersList[1]).DirectoryName;

@@ -69,6 +69,36 @@ namespace AutoBrowser.Classes
             fs.Close();
         }
 
+        public List<Actions.BaseAction> LoadProject2(string fileName)
+        {
+            XmlSerializer xs = new XmlSerializer(typeof(List<Actions.BaseAction>), GetSubClasses());
+            string text = File.ReadAllText(fileName);
+            text = Library.AES.Decrypt(text);
+
+            byte[] byteArray = System.Text.Encoding.UTF8.GetBytes(text);
+            MemoryStream fs = new MemoryStream(byteArray);
+
+            List<Actions.BaseAction> actions = (List<Actions.BaseAction>)xs.Deserialize(fs);
+            fs.Close();
+
+            actions.ForEach(x => x.InitVariables());
+
+            return actions;
+        }
+
+        public void SaveProject2(List<Actions.BaseAction> actions, string fileName)
+        {
+            XmlSerializer xs = new XmlSerializer(actions.GetType(), GetSubClasses());
+            //FileStream fs = new FileStream(fileName, FileMode.OpenOrCreate);
+            MemoryStream fs = new MemoryStream();
+
+            xs.Serialize(fs, actions);
+            string text = System.Text.Encoding.UTF8.GetString(fs.GetBuffer());
+            text = Library.AES.Encrypt(text);
+            File.WriteAllText(fileName, text);
+            fs.Close();
+        }
+
         private Type[] GetSubClasses()
         {
             var subTypes = Assembly

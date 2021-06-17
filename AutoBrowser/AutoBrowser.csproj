@@ -39,6 +39,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -62,14 +63,18 @@
     <Compile Include="Actions\ExtractElement.Node.cs">
       <DependentUpon>ExtractElement.cs</DependentUpon>
     </Compile>
+    <Compile Include="Actions\Input.cs" />
     <Compile Include="Actions\Repeat.cs" />
     <Compile Include="Actions\Redirect.cs" />
     <Compile Include="Actions\ToastNotification.cs" />
+    <Compile Include="Actions\WriteFile.cs" />
     <Compile Include="Classes\AutoWebBrowser.cs" />
     <Compile Include="Actions\WebAction.cs" />
     <Compile Include="Classes\Project.cs" />
     <Compile Include="Classes\ProgressChangedArgs.cs" />
+    <Compile Include="Library\AES.cs" />
     <Compile Include="Library\File.cs" />
+    <Compile Include="Library\Forms\InputBox.cs" />
     <Compile Include="Library\Json.cs" />
     <Compile Include="Library\WinRegistry.cs" />
     <Compile Include="Library\TextFormat.cs" />
