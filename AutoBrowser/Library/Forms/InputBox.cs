@@ -38,6 +38,8 @@ namespace AutoBrowser.Library.Forms
             form.StartPosition = FormStartPosition.CenterScreen;
             form.MinimizeBox = false;
             form.MaximizeBox = false;
+            form.AcceptButton = buttonOk;
+            form.CancelButton = buttonCancel;
 
             DialogResult dialogResult = form.ShowDialog();
             input = textBox.Text;

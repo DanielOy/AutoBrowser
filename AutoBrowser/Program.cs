@@ -19,7 +19,7 @@ namespace AutoBrowser
             Application.SetCompatibleTextRenderingDefault(false);
             Application.ThreadException += new ThreadExceptionEventHandler(Application_ThreadException);
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
-            
+
             Library.Web.ConfigureIEBrowserEmulator(Process.GetCurrentProcess().ProcessName);
             Library.WinRegistry.SetFileAsocciation(Global.FileExtension, Application.ExecutablePath);
             ChooseProcess();
@@ -44,7 +44,7 @@ namespace AutoBrowser
             List<string> ParametersList = Environment.GetCommandLineArgs().ToList();
             if (ParametersList.Count == 1)
             {
-                Application.Run(new Tester());
+                Application.Run(new Main());
             }
             else if (ParametersList[1].EndsWith(Global.FileExtension))
             {
@@ -59,7 +59,7 @@ namespace AutoBrowser
                 }
                 else
                 {
-                    var frm = new Tester { FileName = ParametersList[1] };
+                    var frm = new Tester { FileName = ParametersList[1], IsAuto = true };
                     Application.Run(frm);
                 }
             }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace AutoBrowser.Library
 {
@@ -13,6 +14,11 @@ namespace AutoBrowser.Library
 
         private static int ResolvePostOperations(List<string> postFija)
         {
+            if (postFija.Count==1)
+            {
+                return Convert.ToInt32(postFija[0]);
+            }
+
             Stack<int> numbers = new Stack<int>();
             int total = 0;
             foreach (string item in postFija)
@@ -23,8 +29,8 @@ namespace AutoBrowser.Library
                 }
                 else if (item != ">=" && item != "<=")
                 {
-                    int a = numbers.Pop();
                     int b = numbers.Pop();
+                    int a = numbers.Pop();
                     total = ResolveOperation(a, item.Trim(), b);
                     numbers.Push(total);
                 }

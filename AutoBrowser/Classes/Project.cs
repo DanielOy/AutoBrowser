@@ -34,7 +34,7 @@ namespace AutoBrowser.Classes
 
         private void ConfigureLog(string fileName, AutoWebBrowser browser)
         {
-            _logFile = $"{fileName.Replace(".aweb", "")}_{DateTime.Now.ToString("yyMMdd_hhmmss")}.log";
+            _logFile = $"{fileName.Replace(Global.FileExtension, "")}_{DateTime.Now.ToString("yyMMdd_hhmmss")}.log";
             Library.File.WriteOnFile($"[{DateTime.Now.ToLongTimeString()}] PROCESS STARTING.", _logFile);
 
             browser.ProgressChanged += (s, e) =>
@@ -47,6 +47,19 @@ namespace AutoBrowser.Classes
             };
         }
 
+        private Type[] GetSubClasses()
+        {
+            var subTypes = Assembly
+                .GetAssembly(typeof(Actions.BaseAction))
+                .GetTypes()
+                .Where(myType => myType.IsClass && !myType.IsAbstract &&
+                (myType.IsSubclassOf(typeof(Actions.BaseAction)) || myType.IsSubclassOf(typeof(Actions.Node))))
+                .ToArray();
+
+            return subTypes;
+        }
+
+#if DEBUG
         public List<Actions.BaseAction> LoadProject(string fileName)
         {
             XmlSerializer xs = new XmlSerializer(typeof(List<Actions.BaseAction>), GetSubClasses());
@@ -68,8 +81,9 @@ namespace AutoBrowser.Classes
             xs.Serialize(fs, actions);
             fs.Close();
         }
-
-        public List<Actions.BaseAction> LoadProject2(string fileName)
+#endif
+#if !DEBUG
+        public List<Actions.BaseAction> LoadProject(string fileName)
         {
             XmlSerializer xs = new XmlSerializer(typeof(List<Actions.BaseAction>), GetSubClasses());
             string text = File.ReadAllText(fileName);
@@ -86,10 +100,9 @@ namespace AutoBrowser.Classes
             return actions;
         }
 
-        public void SaveProject2(List<Actions.BaseAction> actions, string fileName)
+        public void SaveProject(List<Actions.BaseAction> actions, string fileName)
         {
             XmlSerializer xs = new XmlSerializer(actions.GetType(), GetSubClasses());
-            //FileStream fs = new FileStream(fileName, FileMode.OpenOrCreate);
             MemoryStream fs = new MemoryStream();
 
             xs.Serialize(fs, actions);
@@ -98,17 +111,6 @@ namespace AutoBrowser.Classes
             File.WriteAllText(fileName, text);
             fs.Close();
         }
-
-        private Type[] GetSubClasses()
-        {
-            var subTypes = Assembly
-                .GetAssembly(typeof(Actions.BaseAction))
-                .GetTypes()
-                .Where(myType => myType.IsClass && !myType.IsAbstract &&
-                (myType.IsSubclassOf(typeof(Actions.BaseAction)) || myType.IsSubclassOf(typeof(Actions.Node))))
-                .ToArray();
-
-            return subTypes;
-        }
+#endif
     }
 }

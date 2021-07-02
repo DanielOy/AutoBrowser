@@ -184,6 +184,14 @@ namespace AutoBrowser.Actions
 
                 NodePath.ForEach(n => n.ReplaceVariables(item));
             }
+
+            foreach (var multi in NodePath)
+            {
+                if (multi is MultiNode m)
+                {
+                    m.CalculateIndex();
+                }
+            }
         }
 
         protected override void ResetValues()

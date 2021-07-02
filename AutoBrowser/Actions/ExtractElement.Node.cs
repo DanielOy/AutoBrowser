@@ -1,4 +1,5 @@
 ﻿using AutoBrowser.Enums;
+using System;
 using System.Collections.Generic;
 
 namespace AutoBrowser.Actions
@@ -133,6 +134,16 @@ namespace AutoBrowser.Actions
             _originalValue = Value;
             _originalClassName = ClassName;
             _originalIndex = Index;
+        }
+
+        internal void CalculateIndex()
+        {
+            if (string.IsNullOrEmpty(Index?.ToString()))
+            {
+                return;
+            }
+
+            Index = Library.Math.Calculate(Index.ToString());
         }
         #endregion
     }

@@ -10,16 +10,22 @@ namespace AutoBrowser.Library
         public static void SetFileAsocciation(string extension, string applicationPath)
         {
             RegistryKey subKey = Registry.CurrentUser.OpenSubKey($@"Software\Classes\{extension}\shell\open\command", true);
+            string keyValue = applicationPath + " %1";
+
             if (subKey == null)
             {
                 RegistryKey key = Registry.CurrentUser.CreateSubKey("Software\\Classes\\" + extension);
                 subKey = key.CreateSubKey("shell\\open\\command");
                 key.Close();
             }
-            subKey.SetValue("", applicationPath + " %1");
-            subKey.Close();
 
-            SHChangeNotify(0x08000000, 0x0000, IntPtr.Zero, IntPtr.Zero);
+            if (!(subKey.GetValue("")?.ToString()?.Equals(keyValue) ?? false))
+            {
+                subKey.SetValue("", keyValue);
+                subKey.Close();
+
+                SHChangeNotify(0x08000000, 0x0000, IntPtr.Zero, IntPtr.Zero);
+            }
         }
 
         [DllImport("shell32.dll", CharSet = CharSet.Auto, SetLastError = true)]
