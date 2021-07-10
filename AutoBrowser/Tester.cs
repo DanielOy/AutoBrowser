@@ -10,12 +10,12 @@ namespace AutoBrowser
     {
         #region Global Variables
         private AutoWebBrowser autoWeb;
-        private List<BaseAction> actions;
         #endregion
 
         #region Properties
         public string FileName { get; set; }
         public bool IsAuto { get; set; }
+        public List<BaseAction> Actions { get; set; }
         #endregion
 
         #region Constructor
@@ -30,7 +30,7 @@ namespace AutoBrowser
         {
             try
             {
-                autoWeb.Run(actions);
+                autoWeb.Run(Actions);
             }
             catch (Exception ex)
             {
@@ -53,12 +53,12 @@ namespace AutoBrowser
                 if (!string.IsNullOrEmpty(FileName))
                 {
                     this.Text = FileName.Replace(Global.FileExtension, "");
-                    actions = new Project().LoadProject(FileName);
+                    Actions = new Project().LoadProject(FileName);
 
                     if (IsAuto)
                     {
                         btnStart.Visible = false;
-                        autoWeb.Run(actions);
+                        autoWeb.Run(Actions);
                     }
                 }
             }

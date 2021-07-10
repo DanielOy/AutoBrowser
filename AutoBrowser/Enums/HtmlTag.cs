@@ -25,5 +25,7 @@ namespace AutoBrowser.Enums
         public static HtmlTag h2 { get { return new HtmlTag("h2"); } }
         public static HtmlTag code { get { return new HtmlTag("code"); } }
         public static HtmlTag option { get { return new HtmlTag("option"); } }
+        public static HtmlTag tr { get { return new HtmlTag("tr"); } }
+        public static HtmlTag span { get { return new HtmlTag("span"); } }
     }
 }

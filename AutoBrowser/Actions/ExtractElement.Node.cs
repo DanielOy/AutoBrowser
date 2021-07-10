@@ -1,6 +1,8 @@
 ﻿using AutoBrowser.Enums;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
 namespace AutoBrowser.Actions
 {
@@ -11,6 +13,23 @@ namespace AutoBrowser.Actions
         public abstract void ReplaceVariables(KeyValuePair<string, object> savedValues);
         public abstract void ResetValues();
         public abstract void InitVariables();
+
+        public static Type[] GetSubtypes()
+        {
+            return Assembly
+                .GetAssembly(typeof(Node))
+                .GetTypes()
+                .Where(myType => myType.IsClass && !myType.IsAbstract &&
+                (myType.IsSubclassOf(typeof(Node))))
+                .ToArray();
+        }
+
+        public static string[] GetSubtypeNames()
+        {
+            return GetSubtypes()
+                .Select(x => x.Name)
+                .ToArray();
+        }
     }
 
     public class SingleNode : Node

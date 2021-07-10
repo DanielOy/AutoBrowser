@@ -6,7 +6,6 @@ using System.Windows.Forms;
 namespace AutoBrowser.Classes
 {
     //TODO: Add wait action dynamically 
-    //TODO: Create a forms to configure steps. -> use TreeView
     //TODO: Implements sqlite or nosql
     //TODO: Make the process async
     //TODO: improve notifications

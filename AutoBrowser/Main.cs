@@ -81,5 +81,44 @@ namespace AutoBrowser
             }
         }
         #endregion
+
+        private void AddToolStripButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                DialogResult result;
+                using (var frm = new Editor())
+                {
+                    result = frm.ShowDialog();
+                }
+                if (result == DialogResult.OK)
+                {
+                    LoadProjects();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void EditToolStripButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var selected = ((DataRowView)ProjectsDataGridView.SelectedRows[0].DataBoundItem).Row;
+                string fileName = selected["Project"].ToString();
+
+                using (var frm = new Editor())
+                {
+                    frm.FileName = fileName + Global.FileExtension;
+                    frm.ShowDialog();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }

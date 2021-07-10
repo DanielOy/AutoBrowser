@@ -53,5 +53,22 @@ namespace AutoBrowser.Actions
                 Application.DoEvents();
             }
         }
+
+        public static Type[] GetActions()
+        {
+            return Assembly
+                .GetAssembly(typeof(BaseAction))
+                .GetTypes()
+                .Where(myType => myType.IsClass && !myType.IsAbstract &&
+                (myType.IsSubclassOf(typeof(BaseAction))))
+                .ToArray();
+        }
+
+        public static string[] GetActionNames()
+        {
+            return GetActions()
+                .Select(x => x.Name)
+                .ToArray();
+        }
     }
 }

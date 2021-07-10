@@ -33,8 +33,10 @@
             this.MainStatusStrip = new System.Windows.Forms.StatusStrip();
             this.MainToolStrip = new System.Windows.Forms.ToolStrip();
             this.ExecuteToolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.AddToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.ProjectsDataGridView = new System.Windows.Forms.DataGridView();
+            this.EditToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.tableLayoutPanel1.SuspendLayout();
             this.MainToolStrip.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -69,7 +71,9 @@
             // MainToolStrip
             // 
             this.MainToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ExecuteToolStripButton});
+            this.ExecuteToolStripButton,
+            this.AddToolStripButton,
+            this.EditToolStripButton});
             this.MainToolStrip.Location = new System.Drawing.Point(0, 0);
             this.MainToolStrip.Name = "MainToolStrip";
             this.MainToolStrip.Size = new System.Drawing.Size(524, 25);
@@ -85,6 +89,16 @@
             this.ExecuteToolStripButton.Size = new System.Drawing.Size(52, 22);
             this.ExecuteToolStripButton.Text = "Execute";
             this.ExecuteToolStripButton.Click += new System.EventHandler(this.ExecuteToolStripButton_Click);
+            // 
+            // AddToolStripButton
+            // 
+            this.AddToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.AddToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("AddToolStripButton.Image")));
+            this.AddToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.AddToolStripButton.Name = "AddToolStripButton";
+            this.AddToolStripButton.Size = new System.Drawing.Size(33, 22);
+            this.AddToolStripButton.Text = "Add";
+            this.AddToolStripButton.Click += new System.EventHandler(this.AddToolStripButton_Click);
             // 
             // tableLayoutPanel2
             // 
@@ -112,6 +126,16 @@
             this.ProjectsDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.ProjectsDataGridView.Size = new System.Drawing.Size(512, 279);
             this.ProjectsDataGridView.TabIndex = 0;
+            // 
+            // EditToolStripButton
+            // 
+            this.EditToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.EditToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("EditToolStripButton.Image")));
+            this.EditToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.EditToolStripButton.Name = "EditToolStripButton";
+            this.EditToolStripButton.Size = new System.Drawing.Size(31, 22);
+            this.EditToolStripButton.Text = "Edit";
+            this.EditToolStripButton.Click += new System.EventHandler(this.EditToolStripButton_Click);
             // 
             // Main
             // 
@@ -142,5 +166,7 @@
         private System.Windows.Forms.ToolStripButton ExecuteToolStripButton;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private System.Windows.Forms.DataGridView ProjectsDataGridView;
+        private System.Windows.Forms.ToolStripButton AddToolStripButton;
+        private System.Windows.Forms.ToolStripButton EditToolStripButton;
     }
 }
