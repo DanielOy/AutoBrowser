@@ -1,7 +1,7 @@
 ﻿using AutoBrowser.Library.Forms;
 using System.Windows.Forms;
 
-namespace AutoBrowser.Actions
+namespace AutoBrowser.Core.Actions
 {
     public class Input : BaseAction
     {
@@ -65,6 +65,11 @@ namespace AutoBrowser.Actions
         {
             _originalName = Name;
             _originalDescription = Description;
+        }
+
+        public override string GetDescription()
+        {
+            return $"Request a value for <{Name}>";
         }
     }
 }

@@ -4,6 +4,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
+using AutoBrowser.Core;
+using AutoBrowser.Forms;
 
 namespace AutoBrowser
 {
@@ -55,7 +57,7 @@ namespace AutoBrowser
 
                 if (ParametersList.Contains("--hide") || ParametersList.Contains("--h"))
                 {
-                    new Classes.Project().Execute(ParametersList[1]);
+                    new Project().Execute(ParametersList[1]);
                 }
                 else
                 {

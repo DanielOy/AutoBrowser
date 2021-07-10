@@ -1,4 +1,4 @@
-﻿namespace AutoBrowser
+﻿namespace AutoBrowser.Forms
 {
     partial class Main
     {

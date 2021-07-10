@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
 
-namespace AutoBrowser.Actions
+namespace AutoBrowser.Core.Actions
 {
     public class DownloadIDM : BaseDownload
     {
@@ -80,7 +80,12 @@ namespace AutoBrowser.Actions
                 }
             };
             idmProcess.Start();
-        } 
+        }
+
+        public override string GetDescription()
+        {
+            return $"IDownload <{Url}> in <{FileName}>";
+        }
         #endregion
     }
 }

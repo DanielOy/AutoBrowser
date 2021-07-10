@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace AutoBrowser.Actions
+namespace AutoBrowser.Core.Actions
 {
     public class Repeat : BaseAction
     {
@@ -73,6 +73,11 @@ namespace AutoBrowser.Actions
             _originalTimes = Times;
             _originalIndexFormula = IndexFormula;
             Actions?.ForEach(x => x.InitVariables());
+        }
+
+        public override string GetDescription()
+        {
+            return $"[{Name}]: Repeat <{Times}> times";
         }
         #endregion
     }

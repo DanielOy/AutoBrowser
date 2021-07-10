@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 using System.Windows.Forms;
 
-namespace AutoBrowser.Actions
+namespace AutoBrowser.Core.Actions
 {
     public class DownloadJD2 : BaseDownload
     {
@@ -87,7 +87,12 @@ namespace AutoBrowser.Actions
             _originalUrl = Url;
             _originalfileName = FileName;
             _originalDownloadFolder = DownloadFolder;
-        } 
+        }
+
+        public override string GetDescription()
+        {
+            return $"JDownload <{Url}> in <{FileName}>";
+        }
         #endregion
     }
 }

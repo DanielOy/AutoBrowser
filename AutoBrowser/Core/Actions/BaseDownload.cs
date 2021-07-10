@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Windows.Forms;
 
-namespace AutoBrowser.Actions
+namespace AutoBrowser.Core.Actions
 {
     public abstract class BaseDownload : WebAction
     {

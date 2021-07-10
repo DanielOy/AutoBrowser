@@ -4,11 +4,13 @@ using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 
-namespace AutoBrowser.Actions
+namespace AutoBrowser.Core.Actions
 {
     public abstract class BaseAction
     {
         internal abstract void InitVariables();
+
+        public abstract string GetDescription();
 
         internal virtual void ReplaceVariables(Dictionary<string, object> sessionVariables)
         {

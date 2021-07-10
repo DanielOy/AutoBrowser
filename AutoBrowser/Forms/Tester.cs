@@ -1,10 +1,10 @@
-﻿using AutoBrowser.Actions;
-using AutoBrowser.Classes;
+﻿using AutoBrowser.Core.Actions;
+using AutoBrowser.Core;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace AutoBrowser
+namespace AutoBrowser.Forms
 {
     public partial class Tester : Form
     {

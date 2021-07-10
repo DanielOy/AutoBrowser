@@ -1,7 +1,7 @@
 ﻿using System.Runtime.Serialization;
 using System.Windows.Forms;
 
-namespace AutoBrowser.Actions
+namespace AutoBrowser.Core.Actions
 {
     public abstract class WebAction : BaseAction
     {

@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 
-namespace AutoBrowser.Actions
+namespace AutoBrowser.Core.Actions
 {
     public class ToastNotification : BaseAction
     {
@@ -54,7 +54,12 @@ namespace AutoBrowser.Actions
         {
             _originalTitle = Title;
             _originalBody = Body;
-        } 
+        }
+
+        public override string GetDescription()
+        {
+            return $"Notify <{Title}>";
+        }
         #endregion
     }
 }

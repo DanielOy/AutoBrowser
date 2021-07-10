@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AutoBrowser.Enums
+namespace AutoBrowser.Core.Enums
 {
     public class HtmlAttribute
     {

@@ -1,9 +1,9 @@
-﻿using AutoBrowser.Actions;
+﻿using AutoBrowser.Core.Actions;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace AutoBrowser.Classes
+namespace AutoBrowser.Core
 {
     //TODO: Add wait action dynamically 
     //TODO: Implements sqlite or nosql

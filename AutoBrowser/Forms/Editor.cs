@@ -1,4 +1,5 @@
-﻿using AutoBrowser.Actions;
+﻿using AutoBrowser.Core;
+using AutoBrowser.Core.Actions;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -6,9 +7,10 @@ using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 
-namespace AutoBrowser
+namespace AutoBrowser.Forms
 {
-    //TODO: Allow move steps
+    //TODO: Improve with icons
+    //TODO: Improve descriptions
 
     public partial class Editor : Form
     {
@@ -33,7 +35,7 @@ namespace AutoBrowser
         #region Functions
         private void LoadProject()
         {
-            var actions = new Classes.Project().LoadProject(fileName);
+            var actions = new Project().LoadProject(fileName);
             StepsTreeView.Nodes.AddRange(ActionsToNodes(actions));
         }
 
@@ -46,19 +48,19 @@ namespace AutoBrowser
                 switch (action)
                 {
                     case ExtractElement e:
-                        node = new TreeNode(action.GetType().Name) { Tag = action };
-                        e.NodePath.ForEach(n => node.Nodes.Add(new TreeNode(n.GetType().Name) { Tag = n }));
+                        node = new TreeNode(action.GetDescription()) { Tag = action };
+                        e.NodePath.ForEach(n => node.Nodes.Add(new TreeNode(n.GetDescription()) { Tag = n }));
                         break;
                     case Repeat r:
-                        node = new TreeNode(action.GetType().Name) { Tag = action };
+                        node = new TreeNode(action.GetDescription()) { Tag = action };
                         node.Nodes.AddRange(ActionsToNodes(r.Actions));
                         break;
                     case Conditional c:
-                        node = new TreeNode(action.GetType().Name) { Tag = action };
+                        node = new TreeNode(action.GetDescription()) { Tag = action };
                         node.Nodes.AddRange(ActionsToNodes(c.Actions));
                         break;
                     default:
-                        node = new TreeNode(action.GetType().Name) { Tag = action };
+                        node = new TreeNode(action.GetDescription()) { Tag = action };
                         break;
                 }
                 nodes.Add(node);
@@ -313,7 +315,7 @@ namespace AutoBrowser
         private void InitActionsComboItems()
         {
             ActionsComboBox.Items.Clear();
-            if ((currentNode?.Tag is ExtractElement && !(isEditNode ?? false))|| currentNode?.Tag is Node)
+            if ((currentNode?.Tag is ExtractElement && !(isEditNode ?? false)) || currentNode?.Tag is Node)
             {
                 ActionsComboBox.Items.AddRange(Node.GetSubtypeNames());
             }
@@ -332,7 +334,7 @@ namespace AutoBrowser
                 isEditNode = true;
 
                 currentNode = StepsTreeView.SelectedNode;
-                string action = StepsTreeView.SelectedNode?.Text;
+                string action = StepsTreeView.SelectedNode?.Tag?.GetType()?.Name;
 
                 if (!string.IsNullOrEmpty(action))
                 {
@@ -384,31 +386,31 @@ namespace AutoBrowser
 
                 if (isEditNode == true)
                 {
-                    bool found = FindNode(StepsTreeView.Nodes, currentNode, node);
+                    bool found = FindNode(StepsTreeView.Nodes, this.currentNode, node);
                 }
                 else if (isEditNode == false)
                 {
-                    if (currentNode == null)
+                    if (this.currentNode == null)
                     {
                         StepsTreeView.Nodes.Add(node);
                     }
-                    else if (currentNode.Tag.GetType() == typeof(Repeat) || StepsTreeView.SelectedNode.Tag.GetType() == typeof(Conditional))
+                    else if (this.currentNode.Tag.GetType() == typeof(Repeat) || StepsTreeView.SelectedNode.Tag.GetType() == typeof(Conditional))
                     {
-                        currentNode.Nodes.Add(node);
+                        this.currentNode.Nodes.Add(node);
                     }
-                    else if (currentNode.Tag.GetType() == typeof(ExtractElement))
+                    else if (this.currentNode.Tag.GetType() == typeof(ExtractElement))
                     {
-                        currentNode.Nodes.Add(node);
+                        this.currentNode.Nodes.Add(node);
                     }
                     else
                     {
-                        if (currentNode.Parent == null)
+                        if (this.currentNode.Parent == null)
                         {
                             StepsTreeView.Nodes.Add(node);
                         }
                         else
                         {
-                            currentNode.Parent.Nodes.Add(node);
+                            this.currentNode.Parent.Nodes.Add(node);
                         }
                     }
                 }
@@ -418,7 +420,7 @@ namespace AutoBrowser
                 ActionsComboBox.Text = "";
                 ClearFormInputs();
                 isEditNode = null;
-                currentNode = null;
+                this.currentNode = null;
             }
             catch (Exception ex)
             {
@@ -458,7 +460,7 @@ namespace AutoBrowser
 
                 List<BaseAction> actions = NodesToActions(StepsTreeView.Nodes);
 
-                (new Classes.Project()).SaveProject(actions, fileName);
+                (new Project()).SaveProject(actions, fileName);
                 MessageBox.Show("Project saved successfully", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 DialogResult = DialogResult.OK;
                 Close();
@@ -475,7 +477,7 @@ namespace AutoBrowser
             {
                 List<BaseAction> originalActions = NodesToActions(StepsTreeView.Nodes);
 
-                var Project = new Classes.Project();
+                var Project = new Project();
                 string tempFile = "TempFile.aweb";
 
                 if (File.Exists(tempFile)) { File.Delete(tempFile); }
@@ -500,5 +502,79 @@ namespace AutoBrowser
         }
 
         #endregion
+
+        private void UpButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                currentNode = StepsTreeView.SelectedNode;
+                if (currentNode == null)
+                {
+                    return;
+                }
+
+                TreeNode parent = currentNode.Parent;
+                TreeView view = currentNode.TreeView;
+                if (parent != null)
+                {
+                    int index = parent.Nodes.IndexOf(currentNode);
+                    if (index > 0)
+                    {
+                        parent.Nodes.RemoveAt(index);
+                        parent.Nodes.Insert(index - 1, currentNode);
+                    }
+                }
+                else if (currentNode.TreeView.Nodes.Contains(currentNode)) //root node
+                {
+                    int index = view.Nodes.IndexOf(currentNode);
+                    if (index > 0)
+                    {
+                        view.Nodes.RemoveAt(index);
+                        view.Nodes.Insert(index - 1, currentNode);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void DownButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                currentNode = StepsTreeView.SelectedNode;
+                if (currentNode == null)
+                {
+                    return;
+                }
+
+                TreeNode parent = currentNode.Parent;
+                TreeView view = currentNode.TreeView;
+                if (parent != null)
+                {
+                    int index = parent.Nodes.IndexOf(currentNode);
+                    if (index < parent.Nodes.Count - 1)
+                    {
+                        parent.Nodes.RemoveAt(index);
+                        parent.Nodes.Insert(index + 1, currentNode);
+                    }
+                }
+                else if (view != null && view.Nodes.Contains(currentNode)) //root node
+                {
+                    int index = view.Nodes.IndexOf(currentNode);
+                    if (index < view.Nodes.Count - 1)
+                    {
+                        view.Nodes.RemoveAt(index);
+                        view.Nodes.Insert(index + 1, currentNode);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace AutoBrowser.Actions
+namespace AutoBrowser.Core.Actions
 {
     public class Redirect : WebAction
     {
@@ -84,7 +84,12 @@ namespace AutoBrowser.Actions
         internal override void InitVariables()
         {
             _originalUrl = Url;
-        } 
+        }
+
+        public override string GetDescription()
+        {
+            return $"Go to <{Url}>";
+        }
         #endregion
     }
 }

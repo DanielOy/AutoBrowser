@@ -51,31 +51,31 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Actions\BaseAction.cs" />
-    <Compile Include="Actions\BaseDownload.cs" />
-    <Compile Include="Actions\Click.cs" />
-    <Compile Include="Actions\Conditional.cs" />
-    <Compile Include="Actions\Download.cs" />
-    <Compile Include="Actions\DownloadIDM.cs" />
-    <Compile Include="Actions\DownloadJD2.cs" />
-    <Compile Include="Actions\ExtractAttribute.cs" />
-    <Compile Include="Actions\ExtractElement.cs" />
-    <Compile Include="Actions\ExtractElement.Node.cs">
+    <Compile Include="Core\Actions\BaseAction.cs" />
+    <Compile Include="Core\Actions\BaseDownload.cs" />
+    <Compile Include="Core\Actions\Click.cs" />
+    <Compile Include="Core\Actions\Conditional.cs" />
+    <Compile Include="Core\Actions\Download.cs" />
+    <Compile Include="Core\Actions\DownloadIDM.cs" />
+    <Compile Include="Core\Actions\DownloadJD2.cs" />
+    <Compile Include="Core\Actions\ExtractAttribute.cs" />
+    <Compile Include="Core\Actions\ExtractElement.cs" />
+    <Compile Include="Core\Actions\ExtractElement.Node.cs">
       <DependentUpon>ExtractElement.cs</DependentUpon>
     </Compile>
-    <Compile Include="Actions\Input.cs" />
-    <Compile Include="Actions\Repeat.cs" />
-    <Compile Include="Actions\Redirect.cs" />
-    <Compile Include="Actions\ToastNotification.cs" />
-    <Compile Include="Actions\WriteFile.cs" />
-    <Compile Include="Classes\AutoWebBrowser.cs" />
-    <Compile Include="Actions\WebAction.cs" />
-    <Compile Include="Classes\Project.cs" />
-    <Compile Include="Classes\ProgressChangedArgs.cs" />
-    <Compile Include="Editor.cs">
+    <Compile Include="Core\Actions\Input.cs" />
+    <Compile Include="Core\Actions\Repeat.cs" />
+    <Compile Include="Core\Actions\Redirect.cs" />
+    <Compile Include="Core\Actions\ToastNotification.cs" />
+    <Compile Include="Core\Actions\WriteFile.cs" />
+    <Compile Include="Core\AutoWebBrowser.cs" />
+    <Compile Include="Core\Actions\WebAction.cs" />
+    <Compile Include="Core\Project.cs" />
+    <Compile Include="Core\ProgressChangedArgs.cs" />
+    <Compile Include="Forms\Editor.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Editor.Designer.cs">
+    <Compile Include="Forms\Editor.Designer.cs">
       <DependentUpon>Editor.cs</DependentUpon>
     </Compile>
     <Compile Include="Library\AES.cs" />
@@ -86,32 +86,32 @@
     <Compile Include="Library\TextFormat.cs" />
     <Compile Include="Library\Web.cs" />
     <Compile Include="Global.cs" />
-    <Compile Include="Enums\HtmlAttribute.cs" />
-    <Compile Include="Enums\HtmlTag.cs" />
+    <Compile Include="Core\Enums\HtmlAttribute.cs" />
+    <Compile Include="Core\Enums\HtmlTag.cs" />
     <Compile Include="Library\Math.Aritmetic.cs" />
     <Compile Include="Library\Math.Logic.cs" />
     <Compile Include="Library\Math.Order.cs" />
-    <Compile Include="Main.cs">
+    <Compile Include="Forms\Main.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Main.Designer.cs">
+    <Compile Include="Forms\Main.Designer.cs">
       <DependentUpon>Main.cs</DependentUpon>
     </Compile>
-    <Compile Include="Tester.cs">
+    <Compile Include="Forms\Tester.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Tester.Designer.cs">
+    <Compile Include="Forms\Tester.Designer.cs">
       <DependentUpon>Tester.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Editor.resx">
+    <EmbeddedResource Include="Forms\Editor.resx">
       <DependentUpon>Editor.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Main.resx">
+    <EmbeddedResource Include="Forms\Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Tester.resx">
+    <EmbeddedResource Include="Forms\Tester.resx">
       <DependentUpon>Tester.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">

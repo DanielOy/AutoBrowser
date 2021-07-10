@@ -2,9 +2,9 @@
 using System.IO;
 using System.Net;
 using System.Windows.Forms;
-using static AutoBrowser.Classes.AutoWebBrowser;
+using static AutoBrowser.Core.AutoWebBrowser;
 
-namespace AutoBrowser.Actions
+namespace AutoBrowser.Core.Actions
 {
     public class Download : BaseDownload
     {
@@ -69,7 +69,7 @@ namespace AutoBrowser.Actions
                     lastUpdate = DateTime.Now;
                     lastPorcent = e.ProgressPercentage;
 
-                    ProgressChanged?.Invoke(this, new Classes.ProgressChangedArgs(
+                    ProgressChanged?.Invoke(this, new ProgressChangedArgs(
                         $"Downloading [{e.ProgressPercentage}%] " +
                         $"[{sizeDownloaded}/{sizeTotal}] " +
                         $"{downloadFile.Name}"));
@@ -104,6 +104,11 @@ namespace AutoBrowser.Actions
             _originalUrl = Url;
             _originalfileName = FileName;
             _originalDownloadFolder = DownloadFolder;
+        }
+
+        public override string GetDescription()
+        {
+            return $"Download <{Url}> in <{FileName}>";
         }
         #endregion
     }

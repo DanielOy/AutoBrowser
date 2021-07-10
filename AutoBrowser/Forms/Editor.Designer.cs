@@ -1,4 +1,4 @@
-﻿namespace AutoBrowser
+﻿namespace AutoBrowser.Forms
 {
     partial class Editor
     {
@@ -46,6 +46,8 @@
             this.AddButton = new System.Windows.Forms.Button();
             this.Editbutton = new System.Windows.Forms.Button();
             this.DeleteButton = new System.Windows.Forms.Button();
+            this.UpButton = new System.Windows.Forms.Button();
+            this.DownButton = new System.Windows.Forms.Button();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.SaveToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.TestToolStripButton = new System.Windows.Forms.ToolStripButton();
@@ -95,7 +97,7 @@
             this.tableLayoutPanel3.ColumnCount = 3;
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 3.505843F));
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 96.49416F));
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 26F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tableLayoutPanel3.Controls.Add(this.tableLayoutPanel4, 1, 1);
             this.tableLayoutPanel3.Location = new System.Drawing.Point(227, 3);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
@@ -115,13 +117,13 @@
             this.tableLayoutPanel4.Controls.Add(this.tableLayoutPanel6, 0, 2);
             this.tableLayoutPanel4.Controls.Add(this.ControlsTableLayoutPanel, 0, 1);
             this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel4.Location = new System.Drawing.Point(17, 22);
+            this.tableLayoutPanel4.Location = new System.Drawing.Point(16, 22);
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
             this.tableLayoutPanel4.RowCount = 3;
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(381, 330);
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(378, 330);
             this.tableLayoutPanel4.TabIndex = 2;
             // 
             // tableLayoutPanel5
@@ -136,15 +138,15 @@
             this.tableLayoutPanel5.Name = "tableLayoutPanel5";
             this.tableLayoutPanel5.RowCount = 1;
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel5.Size = new System.Drawing.Size(375, 24);
+            this.tableLayoutPanel5.Size = new System.Drawing.Size(372, 24);
             this.tableLayoutPanel5.TabIndex = 1;
             // 
             // ActionsComboBox
             // 
             this.ActionsComboBox.ImeMode = System.Windows.Forms.ImeMode.Off;
-            this.ActionsComboBox.Location = new System.Drawing.Point(88, 3);
+            this.ActionsComboBox.Location = new System.Drawing.Point(87, 3);
             this.ActionsComboBox.Name = "ActionsComboBox";
-            this.ActionsComboBox.Size = new System.Drawing.Size(284, 21);
+            this.ActionsComboBox.Size = new System.Drawing.Size(282, 21);
             this.ActionsComboBox.Sorted = true;
             this.ActionsComboBox.TabIndex = 1;
             this.ActionsComboBox.SelectedIndexChanged += new System.EventHandler(this.ActionsComboBox_SelectedIndexChanged);
@@ -174,13 +176,13 @@
             this.tableLayoutPanel6.Name = "tableLayoutPanel6";
             this.tableLayoutPanel6.RowCount = 1;
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel6.Size = new System.Drawing.Size(375, 29);
+            this.tableLayoutPanel6.Size = new System.Drawing.Size(372, 29);
             this.tableLayoutPanel6.TabIndex = 2;
             // 
             // SaveButton
             // 
             this.SaveButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.SaveButton.Location = new System.Drawing.Point(95, 3);
+            this.SaveButton.Location = new System.Drawing.Point(94, 3);
             this.SaveButton.Name = "SaveButton";
             this.SaveButton.Size = new System.Drawing.Size(74, 23);
             this.SaveButton.TabIndex = 1;
@@ -190,7 +192,7 @@
             // 
             // CancelButton
             // 
-            this.CancelButton.Location = new System.Drawing.Point(205, 3);
+            this.CancelButton.Location = new System.Drawing.Point(204, 3);
             this.CancelButton.Name = "CancelButton";
             this.CancelButton.Size = new System.Drawing.Size(74, 23);
             this.CancelButton.TabIndex = 2;
@@ -208,7 +210,7 @@
             this.ControlsTableLayoutPanel.Name = "ControlsTableLayoutPanel";
             this.ControlsTableLayoutPanel.RowCount = 1;
             this.ControlsTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 21F));
-            this.ControlsTableLayoutPanel.Size = new System.Drawing.Size(375, 21);
+            this.ControlsTableLayoutPanel.Size = new System.Drawing.Size(372, 21);
             this.ControlsTableLayoutPanel.TabIndex = 3;
             // 
             // tableLayoutPanel7
@@ -236,8 +238,10 @@
             // 
             // tableLayoutPanel8
             // 
-            this.tableLayoutPanel8.ColumnCount = 5;
+            this.tableLayoutPanel8.ColumnCount = 7;
             this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35F));
@@ -245,16 +249,18 @@
             this.tableLayoutPanel8.Controls.Add(this.AddButton, 1, 0);
             this.tableLayoutPanel8.Controls.Add(this.Editbutton, 2, 0);
             this.tableLayoutPanel8.Controls.Add(this.DeleteButton, 3, 0);
+            this.tableLayoutPanel8.Controls.Add(this.UpButton, 4, 0);
+            this.tableLayoutPanel8.Controls.Add(this.DownButton, 5, 0);
             this.tableLayoutPanel8.Location = new System.Drawing.Point(3, 3);
             this.tableLayoutPanel8.Name = "tableLayoutPanel8";
             this.tableLayoutPanel8.RowCount = 1;
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel8.Size = new System.Drawing.Size(189, 29);
+            this.tableLayoutPanel8.Size = new System.Drawing.Size(212, 29);
             this.tableLayoutPanel8.TabIndex = 1;
             // 
             // AddButton
             // 
-            this.AddButton.Location = new System.Drawing.Point(45, 3);
+            this.AddButton.Location = new System.Drawing.Point(21, 3);
             this.AddButton.Name = "AddButton";
             this.AddButton.Size = new System.Drawing.Size(29, 23);
             this.AddButton.TabIndex = 0;
@@ -264,7 +270,7 @@
             // 
             // Editbutton
             // 
-            this.Editbutton.Location = new System.Drawing.Point(80, 3);
+            this.Editbutton.Location = new System.Drawing.Point(56, 3);
             this.Editbutton.Name = "Editbutton";
             this.Editbutton.Size = new System.Drawing.Size(29, 23);
             this.Editbutton.TabIndex = 1;
@@ -274,13 +280,33 @@
             // 
             // DeleteButton
             // 
-            this.DeleteButton.Location = new System.Drawing.Point(115, 3);
+            this.DeleteButton.Location = new System.Drawing.Point(91, 3);
             this.DeleteButton.Name = "DeleteButton";
             this.DeleteButton.Size = new System.Drawing.Size(29, 23);
             this.DeleteButton.TabIndex = 2;
             this.DeleteButton.Text = "-";
             this.DeleteButton.UseVisualStyleBackColor = true;
             this.DeleteButton.Click += new System.EventHandler(this.DeleteButton_Click);
+            // 
+            // UpButton
+            // 
+            this.UpButton.Location = new System.Drawing.Point(126, 3);
+            this.UpButton.Name = "UpButton";
+            this.UpButton.Size = new System.Drawing.Size(29, 23);
+            this.UpButton.TabIndex = 3;
+            this.UpButton.Text = "U";
+            this.UpButton.UseVisualStyleBackColor = true;
+            this.UpButton.Click += new System.EventHandler(this.UpButton_Click);
+            // 
+            // DownButton
+            // 
+            this.DownButton.Location = new System.Drawing.Point(161, 3);
+            this.DownButton.Name = "DownButton";
+            this.DownButton.Size = new System.Drawing.Size(29, 23);
+            this.DownButton.TabIndex = 4;
+            this.DownButton.Text = "D";
+            this.DownButton.UseVisualStyleBackColor = true;
+            this.DownButton.Click += new System.EventHandler(this.DownButton_Click);
             // 
             // toolStrip1
             // 
@@ -360,9 +386,11 @@
         private System.Windows.Forms.Button AddButton;
         private System.Windows.Forms.Button Editbutton;
         private System.Windows.Forms.Button DeleteButton;
-        private System.Windows.Forms.Button CancelButton;
+        private new System.Windows.Forms.Button CancelButton;
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripButton SaveToolStripButton;
         private System.Windows.Forms.ToolStripButton TestToolStripButton;
+        private System.Windows.Forms.Button UpButton;
+        private System.Windows.Forms.Button DownButton;
     }
 }

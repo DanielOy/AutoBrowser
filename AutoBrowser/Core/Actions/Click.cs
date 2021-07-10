@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace AutoBrowser.Actions
+namespace AutoBrowser.Core.Actions
 {
     public class Click : WebAction
     {
@@ -55,7 +55,12 @@ namespace AutoBrowser.Actions
         internal override void InitVariables()
         {
             _originalVariable = Variable;
-        } 
+        }
+
+        public override string GetDescription()
+        {
+            return $"Click <{Variable}>";
+        }
         #endregion
     }
 }

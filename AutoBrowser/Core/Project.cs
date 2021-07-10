@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Xml.Serialization;
 
-namespace AutoBrowser.Classes
+namespace AutoBrowser.Core
 {
     public class Project
     {

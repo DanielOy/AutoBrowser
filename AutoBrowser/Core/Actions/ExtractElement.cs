@@ -1,13 +1,11 @@
-﻿using AutoBrowser.Enums;
+﻿using AutoBrowser.Core.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace AutoBrowser.Actions
+namespace AutoBrowser.Core.Actions
 {
-    //TODO: Permit to get a list of elements, don't only one, and make operations with the list.
-    //TODO: Extract elements from elements (childs)
     public class ExtractElement : WebAction
     {
         #region Global Variables
@@ -204,6 +202,11 @@ namespace AutoBrowser.Actions
         {
             _originalName = Name;
             NodePath.ForEach(n => n.InitVariables());
+        }
+
+        public override string GetDescription()
+        {
+            return $"[{Name}] => ";
         }
     }
 

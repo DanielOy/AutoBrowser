@@ -1,4 +1,4 @@
-﻿namespace AutoBrowser.Actions
+﻿namespace AutoBrowser.Core.Actions
 {
     public class WriteFile : BaseAction
     {
@@ -32,6 +32,11 @@
         {
             _originalText = Text;
             _originalFileName = FileName;
+        }
+
+        public override string GetDescription()
+        {
+            return $"Write <{Text}> on <{FileName}>";
         }
     }
 }

@@ -1,10 +1,10 @@
-﻿using AutoBrowser.Enums;
+﻿using AutoBrowser.Core.Enums;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows.Forms;
 
-namespace AutoBrowser.Actions
+namespace AutoBrowser.Core.Actions
 {
     [DebuggerDisplay("{Name} = {Variable} => {AttributeName}")]
     public class ExtractAttribute : WebAction
@@ -80,7 +80,7 @@ namespace AutoBrowser.Actions
             {
                 throw new ArgumentNullException(nameof(AttributeName));
             }
-            if (AttributeName=="text") //FIX: requiere to be standard
+            if (AttributeName == "text") //FIX: requiere to be standard
             {
                 return element.InnerText;
             }
@@ -140,6 +140,11 @@ namespace AutoBrowser.Actions
             _originalVariable = Variable;
             _originalAttributeName = AttributeName;
             _originalName = Name;
+        }
+
+        public override string GetDescription()
+        {
+            return $"[{Name}]: <{Variable}>.<{AttributeName}>";
         }
         #endregion
     }

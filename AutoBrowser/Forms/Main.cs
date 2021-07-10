@@ -3,7 +3,7 @@ using System.Data;
 using System.IO;
 using System.Windows.Forms;
 
-namespace AutoBrowser
+namespace AutoBrowser.Forms
 {
     public partial class Main : Form
     {

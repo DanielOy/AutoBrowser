@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AutoBrowser.Classes
+namespace AutoBrowser.Core
 {
     public class ProgressChangedArgs : EventArgs
     {

@@ -1,10 +1,10 @@
-﻿using AutoBrowser.Enums;
+﻿using AutoBrowser.Core.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace AutoBrowser.Actions
+namespace AutoBrowser.Core.Actions
 {
     public abstract class Node
     {
@@ -13,6 +13,7 @@ namespace AutoBrowser.Actions
         public abstract void ReplaceVariables(KeyValuePair<string, object> savedValues);
         public abstract void ResetValues();
         public abstract void InitVariables();
+        public abstract string GetDescription();
 
         public static Type[] GetSubtypes()
         {
@@ -68,6 +69,11 @@ namespace AutoBrowser.Actions
         public override void InitVariables()
         {
             _originalValue = Value;
+        }
+
+        public override string GetDescription()
+        {
+            return $"Element <{From.ToString()}> = <{Value}>";
         }
     }
 
@@ -163,6 +169,11 @@ namespace AutoBrowser.Actions
             }
 
             Index = Library.Math.Calculate(Index.ToString());
+        }
+
+        public override string GetDescription()
+        {
+            return $"Element <{From.ToString()}> = <{Value}>";
         }
         #endregion
     }

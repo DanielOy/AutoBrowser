@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace AutoBrowser.Actions
+namespace AutoBrowser.Core.Actions
 {
     public class Conditional : BaseAction
     {
@@ -42,6 +42,11 @@ namespace AutoBrowser.Actions
             Expression = Expression.Replace("-", "_");
             Expression = Expression.Replace(" ", "");
             return Library.Math.CalculateLogic(Expression);
+        }
+
+        public override string GetDescription()
+        {
+            return $"If <{Expression}>";
         }
         #endregion
     }
