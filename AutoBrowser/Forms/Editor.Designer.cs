@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Editor));
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
@@ -51,6 +52,7 @@
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.SaveToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.TestToolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.TreeNodeImageList = new System.Windows.Forms.ImageList(this.components);
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
@@ -97,7 +99,7 @@
             this.tableLayoutPanel3.ColumnCount = 3;
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 3.505843F));
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 96.49416F));
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 31F));
             this.tableLayoutPanel3.Controls.Add(this.tableLayoutPanel4, 1, 1);
             this.tableLayoutPanel3.Location = new System.Drawing.Point(227, 3);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
@@ -123,7 +125,7 @@
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(378, 330);
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(377, 330);
             this.tableLayoutPanel4.TabIndex = 2;
             // 
             // tableLayoutPanel5
@@ -138,7 +140,7 @@
             this.tableLayoutPanel5.Name = "tableLayoutPanel5";
             this.tableLayoutPanel5.RowCount = 1;
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel5.Size = new System.Drawing.Size(372, 24);
+            this.tableLayoutPanel5.Size = new System.Drawing.Size(371, 24);
             this.tableLayoutPanel5.TabIndex = 1;
             // 
             // ActionsComboBox
@@ -146,7 +148,7 @@
             this.ActionsComboBox.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.ActionsComboBox.Location = new System.Drawing.Point(87, 3);
             this.ActionsComboBox.Name = "ActionsComboBox";
-            this.ActionsComboBox.Size = new System.Drawing.Size(282, 21);
+            this.ActionsComboBox.Size = new System.Drawing.Size(281, 21);
             this.ActionsComboBox.Sorted = true;
             this.ActionsComboBox.TabIndex = 1;
             this.ActionsComboBox.SelectedIndexChanged += new System.EventHandler(this.ActionsComboBox_SelectedIndexChanged);
@@ -176,13 +178,13 @@
             this.tableLayoutPanel6.Name = "tableLayoutPanel6";
             this.tableLayoutPanel6.RowCount = 1;
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel6.Size = new System.Drawing.Size(372, 29);
+            this.tableLayoutPanel6.Size = new System.Drawing.Size(371, 29);
             this.tableLayoutPanel6.TabIndex = 2;
             // 
             // SaveButton
             // 
             this.SaveButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.SaveButton.Location = new System.Drawing.Point(94, 3);
+            this.SaveButton.Location = new System.Drawing.Point(93, 3);
             this.SaveButton.Name = "SaveButton";
             this.SaveButton.Size = new System.Drawing.Size(74, 23);
             this.SaveButton.TabIndex = 1;
@@ -192,7 +194,7 @@
             // 
             // CancelButton
             // 
-            this.CancelButton.Location = new System.Drawing.Point(204, 3);
+            this.CancelButton.Location = new System.Drawing.Point(203, 3);
             this.CancelButton.Name = "CancelButton";
             this.CancelButton.Size = new System.Drawing.Size(74, 23);
             this.CancelButton.TabIndex = 2;
@@ -210,7 +212,7 @@
             this.ControlsTableLayoutPanel.Name = "ControlsTableLayoutPanel";
             this.ControlsTableLayoutPanel.RowCount = 1;
             this.ControlsTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 21F));
-            this.ControlsTableLayoutPanel.Size = new System.Drawing.Size(372, 21);
+            this.ControlsTableLayoutPanel.Size = new System.Drawing.Size(371, 21);
             this.ControlsTableLayoutPanel.TabIndex = 3;
             // 
             // tableLayoutPanel7
@@ -223,7 +225,7 @@
             this.tableLayoutPanel7.Location = new System.Drawing.Point(3, 3);
             this.tableLayoutPanel7.Name = "tableLayoutPanel7";
             this.tableLayoutPanel7.RowCount = 2;
-            this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37F));
             this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel7.Size = new System.Drawing.Size(218, 385);
             this.tableLayoutPanel7.TabIndex = 2;
@@ -231,9 +233,12 @@
             // StepsTreeView
             // 
             this.StepsTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.StepsTreeView.Location = new System.Drawing.Point(3, 38);
+            this.StepsTreeView.ImageIndex = 0;
+            this.StepsTreeView.ImageList = this.TreeNodeImageList;
+            this.StepsTreeView.Location = new System.Drawing.Point(3, 40);
             this.StepsTreeView.Name = "StepsTreeView";
-            this.StepsTreeView.Size = new System.Drawing.Size(212, 344);
+            this.StepsTreeView.SelectedImageIndex = 0;
+            this.StepsTreeView.Size = new System.Drawing.Size(212, 342);
             this.StepsTreeView.TabIndex = 0;
             // 
             // tableLayoutPanel8
@@ -255,54 +260,61 @@
             this.tableLayoutPanel8.Name = "tableLayoutPanel8";
             this.tableLayoutPanel8.RowCount = 1;
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel8.Size = new System.Drawing.Size(212, 29);
+            this.tableLayoutPanel8.Size = new System.Drawing.Size(212, 31);
             this.tableLayoutPanel8.TabIndex = 1;
             // 
             // AddButton
             // 
+            this.AddButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.AddButton.Image = ((System.Drawing.Image)(resources.GetObject("AddButton.Image")));
             this.AddButton.Location = new System.Drawing.Point(21, 3);
             this.AddButton.Name = "AddButton";
-            this.AddButton.Size = new System.Drawing.Size(29, 23);
+            this.AddButton.Size = new System.Drawing.Size(29, 25);
             this.AddButton.TabIndex = 0;
-            this.AddButton.Text = "+";
             this.AddButton.UseVisualStyleBackColor = true;
             this.AddButton.Click += new System.EventHandler(this.AddButton_Click);
             // 
             // Editbutton
             // 
+            this.Editbutton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Editbutton.Image = ((System.Drawing.Image)(resources.GetObject("Editbutton.Image")));
             this.Editbutton.Location = new System.Drawing.Point(56, 3);
             this.Editbutton.Name = "Editbutton";
-            this.Editbutton.Size = new System.Drawing.Size(29, 23);
+            this.Editbutton.Size = new System.Drawing.Size(29, 25);
             this.Editbutton.TabIndex = 1;
-            this.Editbutton.Text = "E";
             this.Editbutton.UseVisualStyleBackColor = true;
             this.Editbutton.Click += new System.EventHandler(this.Editbutton_Click);
             // 
             // DeleteButton
             // 
+            this.DeleteButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.DeleteButton.Image = ((System.Drawing.Image)(resources.GetObject("DeleteButton.Image")));
             this.DeleteButton.Location = new System.Drawing.Point(91, 3);
             this.DeleteButton.Name = "DeleteButton";
-            this.DeleteButton.Size = new System.Drawing.Size(29, 23);
+            this.DeleteButton.Size = new System.Drawing.Size(29, 25);
             this.DeleteButton.TabIndex = 2;
-            this.DeleteButton.Text = "-";
             this.DeleteButton.UseVisualStyleBackColor = true;
             this.DeleteButton.Click += new System.EventHandler(this.DeleteButton_Click);
             // 
             // UpButton
             // 
+            this.UpButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.UpButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.UpButton.Image = ((System.Drawing.Image)(resources.GetObject("UpButton.Image")));
             this.UpButton.Location = new System.Drawing.Point(126, 3);
             this.UpButton.Name = "UpButton";
-            this.UpButton.Size = new System.Drawing.Size(29, 23);
+            this.UpButton.Size = new System.Drawing.Size(29, 25);
             this.UpButton.TabIndex = 3;
-            this.UpButton.Text = "U";
             this.UpButton.UseVisualStyleBackColor = true;
             this.UpButton.Click += new System.EventHandler(this.UpButton_Click);
             // 
             // DownButton
             // 
+            this.DownButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.DownButton.Image = ((System.Drawing.Image)(resources.GetObject("DownButton.Image")));
             this.DownButton.Location = new System.Drawing.Point(161, 3);
             this.DownButton.Name = "DownButton";
-            this.DownButton.Size = new System.Drawing.Size(29, 23);
+            this.DownButton.Size = new System.Drawing.Size(29, 25);
             this.DownButton.TabIndex = 4;
             this.DownButton.Text = "D";
             this.DownButton.UseVisualStyleBackColor = true;
@@ -321,23 +333,36 @@
             // 
             // SaveToolStripButton
             // 
-            this.SaveToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.SaveToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("SaveToolStripButton.Image")));
             this.SaveToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.SaveToolStripButton.Name = "SaveToolStripButton";
-            this.SaveToolStripButton.Size = new System.Drawing.Size(75, 21);
-            this.SaveToolStripButton.Text = "Save Project";
+            this.SaveToolStripButton.Size = new System.Drawing.Size(51, 21);
+            this.SaveToolStripButton.Text = "Save";
             this.SaveToolStripButton.Click += new System.EventHandler(this.SaveToolStripButton_Click);
             // 
             // TestToolStripButton
             // 
-            this.TestToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.TestToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("TestToolStripButton.Image")));
             this.TestToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.TestToolStripButton.Name = "TestToolStripButton";
-            this.TestToolStripButton.Size = new System.Drawing.Size(31, 21);
+            this.TestToolStripButton.Size = new System.Drawing.Size(47, 21);
             this.TestToolStripButton.Text = "Test";
             this.TestToolStripButton.Click += new System.EventHandler(this.TestToolStripButton_Click);
+            // 
+            // TreeNodeImageList
+            // 
+            this.TreeNodeImageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("TreeNodeImageList.ImageStream")));
+            this.TreeNodeImageList.TransparentColor = System.Drawing.Color.Transparent;
+            this.TreeNodeImageList.Images.SetKeyName(0, "default.png");
+            this.TreeNodeImageList.Images.SetKeyName(1, "decision.png");
+            this.TreeNodeImageList.Images.SetKeyName(2, "repeat.png");
+            this.TreeNodeImageList.Images.SetKeyName(3, "navigate.png");
+            this.TreeNodeImageList.Images.SetKeyName(4, "click.png");
+            this.TreeNodeImageList.Images.SetKeyName(5, "download.png");
+            this.TreeNodeImageList.Images.SetKeyName(6, "html.png");
+            this.TreeNodeImageList.Images.SetKeyName(7, "input.png");
+            this.TreeNodeImageList.Images.SetKeyName(8, "toast.png");
+            this.TreeNodeImageList.Images.SetKeyName(9, "write.png");
             // 
             // Editor
             // 
@@ -392,5 +417,6 @@
         private System.Windows.Forms.ToolStripButton TestToolStripButton;
         private System.Windows.Forms.Button UpButton;
         private System.Windows.Forms.Button DownButton;
+        private System.Windows.Forms.ImageList TreeNodeImageList;
     }
 }

@@ -9,9 +9,6 @@ using System.Windows.Forms;
 
 namespace AutoBrowser.Forms
 {
-    //TODO: Improve with icons
-    //TODO: Improve descriptions
-
     public partial class Editor : Form
     {
         #region Global Variables
@@ -19,6 +16,20 @@ namespace AutoBrowser.Forms
         private bool isEdit = false;
         private TreeNode currentNode;
         private bool? isEditNode = null;
+
+        private enum TreeIcons
+        {
+            Default = 0,
+            Desicion = 1,
+            Repeat = 2,
+            Navigate = 3,
+            Click = 4,
+            Download = 5,
+            Html = 6,
+            Input = 7,
+            Notification = 8,
+            WriteFile = 9
+        }
         #endregion
 
         #region Properties
@@ -63,9 +74,29 @@ namespace AutoBrowser.Forms
                         node = new TreeNode(action.GetDescription()) { Tag = action };
                         break;
                 }
+                node.ImageIndex = GetIconIndex(action);
+                node.SelectedImageIndex = GetIconIndex(action);
                 nodes.Add(node);
             }
             return nodes.ToArray();
+        }
+
+        private int GetIconIndex(BaseAction action)
+        {
+            switch (action)
+            {
+                case Conditional c: return (int)TreeIcons.Desicion;
+                case Repeat r: return (int)TreeIcons.Repeat;
+                case Redirect re: return (int)TreeIcons.Navigate;
+                case Click c: return (int)TreeIcons.Click;
+                case Download d: return (int)TreeIcons.Download;
+                case ExtractElement e: return (int)TreeIcons.Html;
+                case Input i: return (int)TreeIcons.Input;
+                case ToastNotification t: return (int)TreeIcons.Notification;
+                case WriteFile w: return (int)TreeIcons.WriteFile;
+            }
+
+            return (int)TreeIcons.Default;
         }
 
         private Type GetTypeByName(string action)
@@ -268,6 +299,19 @@ namespace AutoBrowser.Forms
             }
             return actions;
         }
+
+        private void InitActionsComboItems()
+        {
+            ActionsComboBox.Items.Clear();
+            if ((currentNode?.Tag is ExtractElement && !(isEditNode ?? false)) || currentNode?.Tag is Node)
+            {
+                ActionsComboBox.Items.AddRange(Node.GetSubtypeNames());
+            }
+            else
+            {
+                ActionsComboBox.Items.AddRange(BaseAction.GetActionNames());
+            }
+        }
         #endregion
 
         #region Events
@@ -309,19 +353,6 @@ namespace AutoBrowser.Forms
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void InitActionsComboItems()
-        {
-            ActionsComboBox.Items.Clear();
-            if ((currentNode?.Tag is ExtractElement && !(isEditNode ?? false)) || currentNode?.Tag is Node)
-            {
-                ActionsComboBox.Items.AddRange(Node.GetSubtypeNames());
-            }
-            else
-            {
-                ActionsComboBox.Items.AddRange(BaseAction.GetActionNames());
             }
         }
 
@@ -501,8 +532,6 @@ namespace AutoBrowser.Forms
             }
         }
 
-        #endregion
-
         private void UpButton_Click(object sender, EventArgs e)
         {
             try
@@ -576,5 +605,6 @@ namespace AutoBrowser.Forms
                 MessageBox.Show(ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+        #endregion
     }
 }
