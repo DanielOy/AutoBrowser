@@ -1,22 +1,24 @@
 ﻿using AutoBrowser.Core.Actions;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace AutoBrowser.Core
 {
-    //TODO: Add wait action dynamically 
-    //TODO: Implements sqlite or nosql
+    //TODO: V2: Implements sqlite or nosql
+    //TODO: V2: Improve notifications
     //TODO: Make the process async
-    //TODO: improve notifications
-    //TODO: allow user to generate a task in task scheduler
-    //TODO: allow to open process
+    //TODO: Allow user to generate a task in task scheduler
+    //TODO: Generate a library for get access to task scheduler : https://docs.microsoft.com/en-gb/windows/win32/taskschd/schtasks?redirectedfrom=MSDN
 
     public class AutoWebBrowser
     {
         private WebBrowser _browser;
+        private List<string> _blackList;
         private readonly Dictionary<string, object> _savedElements;
         private readonly Dictionary<string, object> _savedValues;
+        private const string _blackListFile = "BlackList.dat";
 
         public delegate void ProgressChangedEventHandler(object sender, ProgressChangedArgs e);
         public delegate void ProcessFinishedEventHandler(object sender, EventArgs e);
@@ -40,6 +42,22 @@ namespace AutoBrowser.Core
             _browser.NewWindow += _browser_NewWindow;
             _savedElements = new Dictionary<string, object>();
             _savedValues = new Dictionary<string, object>();
+            LoadBlackList();
+        }
+
+        private void LoadBlackList()
+        {
+            if (!System.IO.File.Exists(_blackListFile))
+            {
+                System.IO.File.WriteAllLines(_blackListFile, new string[]{
+                    "poweredby.jads.co",
+                    "cdn.cloudimagesb.com",
+                    "googleads.g.doubleclick.net"});
+            }
+
+            _blackList = System.IO.File.ReadAllLines(_blackListFile)
+                .Where(x => !string.IsNullOrEmpty(x.Trim()))
+                .ToList();
         }
 
         private void _browser_NewWindow(object sender, System.ComponentModel.CancelEventArgs e)
@@ -57,19 +75,19 @@ namespace AutoBrowser.Core
             {
                 e.Cancel = true;
             }
+            else if (string.IsNullOrEmpty(e.Url.Host))
+            {
+                e.Cancel = true;
+            }
+            else
+            {
+                Library.File.WriteOnFile($"{e.Url.Host}|{e.Url.AbsoluteUri}", "Pages.dat");
+            }
         }
 
         private bool IsAdLink(Uri url)
         {
-            List<string> blackList = new List<string>()
-            {
-                "poweredby.jads.co",
-                "cdn.cloudimagesb.com",
-                "googleads.g.doubleclick.net",
-                //"www.facebook.com",
-            };
-
-            return blackList.Contains(url.Host);
+            return _blackList.Contains(url.Host);
         }
 
         private void PerformProgressChangedEvent(string description)
@@ -127,7 +145,7 @@ namespace AutoBrowser.Core
                         click.Perform(GetElement(click.Variable));
                         break;
                     case WebAction web:
-                        PerformProgressChangedEvent($"Performing action {nameof(web)}");
+                        PerformProgressChangedEvent($"Performing: {web.GetDescription()}");
                         result = web.Perform(_browser);
                         break;
                     case Input input:
@@ -161,6 +179,11 @@ namespace AutoBrowser.Core
                         {
                             PerformActions(c.Actions);
                         }
+                        break;
+                    case ExternalProcess ep:
+                        ep.ReplaceVariables(_savedValues);
+                        PerformProgressChangedEvent(ep.GetDescription());
+                        ep.Perform();
                         break;
                 }
             }

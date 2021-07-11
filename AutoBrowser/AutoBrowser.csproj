@@ -58,6 +58,7 @@
     <Compile Include="Core\Actions\Download.cs" />
     <Compile Include="Core\Actions\DownloadIDM.cs" />
     <Compile Include="Core\Actions\DownloadJD2.cs" />
+    <Compile Include="Core\Actions\ExternalProcess.cs" />
     <Compile Include="Core\Actions\ExtractAttribute.cs" />
     <Compile Include="Core\Actions\ExtractElement.cs" />
     <Compile Include="Core\Actions\ExtractElement.Node.cs">
@@ -67,6 +68,7 @@
     <Compile Include="Core\Actions\Repeat.cs" />
     <Compile Include="Core\Actions\Redirect.cs" />
     <Compile Include="Core\Actions\ToastNotification.cs" />
+    <Compile Include="Core\Actions\Wait.cs" />
     <Compile Include="Core\Actions\WriteFile.cs" />
     <Compile Include="Core\AutoWebBrowser.cs" />
     <Compile Include="Core\Actions\WebAction.cs" />

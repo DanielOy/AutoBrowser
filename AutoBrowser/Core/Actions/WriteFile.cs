@@ -2,20 +2,26 @@
 {
     public class WriteFile : BaseAction
     {
+        #region Global Variables
         private string _originalText;
         private string _originalFileName;
+        #endregion
 
+        #region Properties
         public string Text { get; set; }
 
         public string FileName { get; set; }
+        #endregion
 
+        #region Constructor
         public WriteFile() { }
 
         public WriteFile(string text, string fileName)
         {
             Text = _originalText = text;
             FileName = _originalFileName = fileName;
-        }
+        } 
+        #endregion
 
         protected override void ResetValues()
         {

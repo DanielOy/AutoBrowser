@@ -28,7 +28,9 @@ namespace AutoBrowser.Forms
             Html = 6,
             Input = 7,
             Notification = 8,
-            WriteFile = 9
+            WriteFile = 9,
+            Process = 10,
+            Wait = 11
         }
         #endregion
 
@@ -94,6 +96,8 @@ namespace AutoBrowser.Forms
                 case Input i: return (int)TreeIcons.Input;
                 case ToastNotification t: return (int)TreeIcons.Notification;
                 case WriteFile w: return (int)TreeIcons.WriteFile;
+                case Wait wt: return (int)TreeIcons.Wait;
+                case ExternalProcess ep: return (int)TreeIcons.Process;
             }
 
             return (int)TreeIcons.Default;
@@ -190,6 +194,8 @@ namespace AutoBrowser.Forms
             AddButton.Enabled = enabled;
             DeleteButton.Enabled = enabled;
             Editbutton.Enabled = enabled;
+            UpButton.Enabled = enabled;
+            DownButton.Enabled = enabled;
 
             if (enabled) { Text = "Editor"; }
         }
@@ -236,10 +242,24 @@ namespace AutoBrowser.Forms
                     {
                         prop.SetValue(instance, combo.SelectedItem.ToString());
                     }
+                    else if (prop.PropertyType.BaseType == typeof(Enum))
+                    {
+                        prop.SetValue(instance, Enum.Parse(prop.PropertyType, combo.SelectedItem.ToString()));
+                    }
                 }
             }
 
-            TreeNode node = new TreeNode(actionName) { Tag = instance };
+            TreeNode node;
+            if (instance is BaseAction action)
+            {
+                node = new TreeNode(action.GetDescription()) { Tag = instance };
+                node.ImageIndex = GetIconIndex(action);
+                node.SelectedImageIndex = GetIconIndex(action);
+            }
+            else
+            {
+                node = new TreeNode((instance as Node).GetDescription()) { Tag = instance };
+            }
             return node;
         }
 
@@ -263,19 +283,6 @@ namespace AutoBrowser.Forms
             return false;
         }
 
-        private bool FindNode(TreeNodeCollection rootNode, TreeNode searchNode, TreeNode replacedWith)
-        {
-            foreach (TreeNode childNode in rootNode)
-            {
-                bool found = FindNode(childNode, searchNode, replacedWith);
-                if (found)
-                {
-                    return found;
-                }
-            }
-            return false;
-        }
-
         private List<BaseAction> NodesToActions(TreeNodeCollection nodes)
         {
             List<BaseAction> actions = new List<BaseAction>();
@@ -292,12 +299,34 @@ namespace AutoBrowser.Forms
                     c.Actions = NodesToActions(node.Nodes);
                     actions.Add(c);
                 }
+                else if (action is ExtractElement e)
+                {
+                    e.NodePath = TreeNodesToNodes(node.Nodes);
+                    actions.Add(e);
+                }
                 else
                 {
                     actions.Add((BaseAction)node.Tag);
                 }
             }
             return actions;
+        }
+
+        private List<Node> TreeNodesToNodes(TreeNodeCollection treeNodes)
+        {
+            List<Node> nodes = new List<Node>();
+            foreach (TreeNode tnode in treeNodes)
+            {
+                if (tnode.Tag is SingleNode s)
+                {
+                    nodes.Add(s);
+                }
+                else
+                {
+                    nodes.Add(tnode.Tag as MultiNode);
+                }
+            }
+            return nodes;
         }
 
         private void InitActionsComboItems()
@@ -417,7 +446,8 @@ namespace AutoBrowser.Forms
 
                 if (isEditNode == true)
                 {
-                    bool found = FindNode(StepsTreeView.Nodes, this.currentNode, node);
+                    this.currentNode.Tag = node.Tag;
+                    this.currentNode.Text = node.Text;
                 }
                 else if (isEditNode == false)
                 {

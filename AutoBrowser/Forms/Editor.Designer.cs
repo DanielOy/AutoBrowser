@@ -43,6 +43,7 @@
             this.ControlsTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel7 = new System.Windows.Forms.TableLayoutPanel();
             this.StepsTreeView = new System.Windows.Forms.TreeView();
+            this.TreeNodeImageList = new System.Windows.Forms.ImageList(this.components);
             this.tableLayoutPanel8 = new System.Windows.Forms.TableLayoutPanel();
             this.AddButton = new System.Windows.Forms.Button();
             this.Editbutton = new System.Windows.Forms.Button();
@@ -52,7 +53,6 @@
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.SaveToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.TestToolStripButton = new System.Windows.Forms.ToolStripButton();
-            this.TreeNodeImageList = new System.Windows.Forms.ImageList(this.components);
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
@@ -99,7 +99,7 @@
             this.tableLayoutPanel3.ColumnCount = 3;
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 3.505843F));
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 96.49416F));
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 31F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 32F));
             this.tableLayoutPanel3.Controls.Add(this.tableLayoutPanel4, 1, 1);
             this.tableLayoutPanel3.Location = new System.Drawing.Point(227, 3);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
@@ -125,14 +125,14 @@
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(377, 330);
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(376, 330);
             this.tableLayoutPanel4.TabIndex = 2;
             // 
             // tableLayoutPanel5
             // 
             this.tableLayoutPanel5.ColumnCount = 2;
-            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 22.81167F));
-            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 77.18833F));
+            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 28.10811F));
+            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 71.89189F));
             this.tableLayoutPanel5.Controls.Add(this.ActionsComboBox, 1, 0);
             this.tableLayoutPanel5.Controls.Add(this.label1, 0, 0);
             this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -140,15 +140,15 @@
             this.tableLayoutPanel5.Name = "tableLayoutPanel5";
             this.tableLayoutPanel5.RowCount = 1;
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel5.Size = new System.Drawing.Size(371, 24);
+            this.tableLayoutPanel5.Size = new System.Drawing.Size(370, 24);
             this.tableLayoutPanel5.TabIndex = 1;
             // 
             // ActionsComboBox
             // 
             this.ActionsComboBox.ImeMode = System.Windows.Forms.ImeMode.Off;
-            this.ActionsComboBox.Location = new System.Drawing.Point(87, 3);
+            this.ActionsComboBox.Location = new System.Drawing.Point(107, 3);
             this.ActionsComboBox.Name = "ActionsComboBox";
-            this.ActionsComboBox.Size = new System.Drawing.Size(281, 21);
+            this.ActionsComboBox.Size = new System.Drawing.Size(260, 21);
             this.ActionsComboBox.Sorted = true;
             this.ActionsComboBox.TabIndex = 1;
             this.ActionsComboBox.SelectedIndexChanged += new System.EventHandler(this.ActionsComboBox_SelectedIndexChanged);
@@ -178,7 +178,7 @@
             this.tableLayoutPanel6.Name = "tableLayoutPanel6";
             this.tableLayoutPanel6.RowCount = 1;
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel6.Size = new System.Drawing.Size(371, 29);
+            this.tableLayoutPanel6.Size = new System.Drawing.Size(370, 29);
             this.tableLayoutPanel6.TabIndex = 2;
             // 
             // SaveButton
@@ -205,14 +205,14 @@
             // ControlsTableLayoutPanel
             // 
             this.ControlsTableLayoutPanel.ColumnCount = 2;
-            this.ControlsTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 22.54642F));
-            this.ControlsTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 77.45358F));
+            this.ControlsTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 28.10811F));
+            this.ControlsTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 71.89189F));
             this.ControlsTableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.ControlsTableLayoutPanel.Location = new System.Drawing.Point(3, 33);
             this.ControlsTableLayoutPanel.Name = "ControlsTableLayoutPanel";
             this.ControlsTableLayoutPanel.RowCount = 1;
             this.ControlsTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 21F));
-            this.ControlsTableLayoutPanel.Size = new System.Drawing.Size(371, 21);
+            this.ControlsTableLayoutPanel.Size = new System.Drawing.Size(370, 21);
             this.ControlsTableLayoutPanel.TabIndex = 3;
             // 
             // tableLayoutPanel7
@@ -240,6 +240,23 @@
             this.StepsTreeView.SelectedImageIndex = 0;
             this.StepsTreeView.Size = new System.Drawing.Size(212, 342);
             this.StepsTreeView.TabIndex = 0;
+            // 
+            // TreeNodeImageList
+            // 
+            this.TreeNodeImageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("TreeNodeImageList.ImageStream")));
+            this.TreeNodeImageList.TransparentColor = System.Drawing.Color.Transparent;
+            this.TreeNodeImageList.Images.SetKeyName(0, "default.png");
+            this.TreeNodeImageList.Images.SetKeyName(1, "decision.png");
+            this.TreeNodeImageList.Images.SetKeyName(2, "repeat.png");
+            this.TreeNodeImageList.Images.SetKeyName(3, "navigate.png");
+            this.TreeNodeImageList.Images.SetKeyName(4, "click.png");
+            this.TreeNodeImageList.Images.SetKeyName(5, "download.png");
+            this.TreeNodeImageList.Images.SetKeyName(6, "html.png");
+            this.TreeNodeImageList.Images.SetKeyName(7, "input.png");
+            this.TreeNodeImageList.Images.SetKeyName(8, "toast.png");
+            this.TreeNodeImageList.Images.SetKeyName(9, "write.png");
+            this.TreeNodeImageList.Images.SetKeyName(10, "process.png");
+            this.TreeNodeImageList.Images.SetKeyName(11, "wait.png");
             // 
             // tableLayoutPanel8
             // 
@@ -348,21 +365,6 @@
             this.TestToolStripButton.Size = new System.Drawing.Size(47, 21);
             this.TestToolStripButton.Text = "Test";
             this.TestToolStripButton.Click += new System.EventHandler(this.TestToolStripButton_Click);
-            // 
-            // TreeNodeImageList
-            // 
-            this.TreeNodeImageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("TreeNodeImageList.ImageStream")));
-            this.TreeNodeImageList.TransparentColor = System.Drawing.Color.Transparent;
-            this.TreeNodeImageList.Images.SetKeyName(0, "default.png");
-            this.TreeNodeImageList.Images.SetKeyName(1, "decision.png");
-            this.TreeNodeImageList.Images.SetKeyName(2, "repeat.png");
-            this.TreeNodeImageList.Images.SetKeyName(3, "navigate.png");
-            this.TreeNodeImageList.Images.SetKeyName(4, "click.png");
-            this.TreeNodeImageList.Images.SetKeyName(5, "download.png");
-            this.TreeNodeImageList.Images.SetKeyName(6, "html.png");
-            this.TreeNodeImageList.Images.SetKeyName(7, "input.png");
-            this.TreeNodeImageList.Images.SetKeyName(8, "toast.png");
-            this.TreeNodeImageList.Images.SetKeyName(9, "write.png");
             // 
             // Editor
             // 

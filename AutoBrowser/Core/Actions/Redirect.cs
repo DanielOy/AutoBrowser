@@ -49,6 +49,7 @@ namespace AutoBrowser.Core.Actions
 
             browser.DocumentCompleted += (s, e) =>
             {
+                var url = e.Url;
                 isLoading = false;
             };
 
@@ -72,7 +73,8 @@ namespace AutoBrowser.Core.Actions
             }
 
             browser.DocumentCompleted -= null;
-            Wait(3); //UNDO: Remove after, create an action wait
+            Wait(1);
+
             return true;
         }
 
