@@ -46,7 +46,7 @@ namespace AutoBrowser
             List<string> ParametersList = Environment.GetCommandLineArgs().ToList();
             if (ParametersList.Count == 1)
             {
-                Application.Run(new Main());
+                Application.Run(new Main()); 
             }
             else if (ParametersList[1].EndsWith(Global.FileExtension))
             {

@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using Microsoft.Toolkit.Uwp.Notifications;
+using System.Windows.Forms;
 
 namespace AutoBrowser.Core.Actions
 {
@@ -32,16 +33,23 @@ namespace AutoBrowser.Core.Actions
         #region Functions
         public void Perform()
         {
-            NotifyIcon notify = new NotifyIcon
-            {
-                Icon = System.Drawing.Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetExecutingAssembly().Location),
-                Visible = true
-            };
+            //NotifyIcon notify = new NotifyIcon
+            //{
+            //    Icon = System.Drawing.Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetExecutingAssembly().Location),
+            //    Visible = true
+            //};
 
-            notify.ShowBalloonTip(3000,
-                Title,
-                Body,
-                ToolTipIcon.Info);
+            //notify.ShowBalloonTip(3000,
+            //    Title,
+            //    Body,
+            //    ToolTipIcon.Info);
+
+            new ToastContentBuilder()
+                .AddArgument("action", "viewConversation")
+                .AddArgument("conversationId", 9813)
+                .AddText(Title)
+                .AddText(Body)
+                .Show();
         }
 
         protected override void ResetValues()

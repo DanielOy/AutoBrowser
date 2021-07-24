@@ -1,4 +1,5 @@
-﻿using AutoBrowser.Core.Enums;
+﻿using AutoBrowser.Core.Browsers;
+using AutoBrowser.Core.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,7 +28,7 @@ namespace AutoBrowser.Core.Actions
         } 
         #endregion
 
-        public override object Perform(WebBrowser browser)
+        public override object Perform(BaseBrowser browser)
         {
             if (browser == null)
             {
@@ -48,7 +49,7 @@ namespace AutoBrowser.Core.Actions
             return element;
         }
 
-        private object GetElement(Node node, WebBrowser browser)
+        private object GetElement(Node node, BaseBrowser browser)
         {
             if (node is SingleNode single)
             {

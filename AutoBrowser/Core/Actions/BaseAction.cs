@@ -36,7 +36,7 @@ namespace AutoBrowser.Core.Actions
                 {
                     string propValue = propertie.GetValue(this)?.ToString();
 
-                    if (propValue.Contains($"[{variable.Key}]"))
+                    if (propValue!=null && propValue.Contains($"[{variable.Key}]"))
                     {
                         propertie.SetValue(this, propValue.Replace($"[{variable.Key}]", variable.Value.ToString()));
                     }

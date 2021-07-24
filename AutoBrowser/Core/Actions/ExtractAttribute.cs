@@ -1,4 +1,5 @@
-﻿using AutoBrowser.Core.Enums;
+﻿using AutoBrowser.Core.Browsers;
+using AutoBrowser.Core.Enums;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -51,7 +52,7 @@ namespace AutoBrowser.Core.Actions
         #endregion
 
         #region Functions
-        public override object Perform(WebBrowser browser)
+        public override object Perform(BaseBrowser browser)
         {
             if (browser == null)
             {

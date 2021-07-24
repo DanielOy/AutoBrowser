@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AutoBrowser.Core.Browsers;
+using System;
 using System.Windows.Forms;
 
 namespace AutoBrowser.Core.Actions
@@ -25,7 +26,7 @@ namespace AutoBrowser.Core.Actions
         #endregion
 
         #region Functions
-        public override object Perform(WebBrowser browser)
+        public override object Perform(BaseBrowser browser)
         {
             if (browser == null)
             {

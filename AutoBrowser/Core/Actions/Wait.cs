@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using AutoBrowser.Core.Browsers;
+using System.Windows.Forms;
 
 namespace AutoBrowser.Core.Actions
 {
@@ -24,7 +25,7 @@ namespace AutoBrowser.Core.Actions
             Element = _originalElement = element;
         }
 
-        public override object Perform(WebBrowser browser)
+        public override object Perform(BaseBrowser browser)
         {
             if (SpecialFunction == WaitFunctions.NoSeconds)
             {
@@ -37,7 +38,7 @@ namespace AutoBrowser.Core.Actions
             return true;
         }
 
-        private void WaitLoadElement(WebBrowser browser)
+        private void WaitLoadElement(BaseBrowser browser)
         {
             int secondsWaited = 0;
             if (browser == null || browser.Document == null)

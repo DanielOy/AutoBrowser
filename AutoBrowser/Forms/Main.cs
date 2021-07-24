@@ -17,7 +17,10 @@ namespace AutoBrowser.Forms
         #region Methods
         private void LoadProjects()
         {
-            var files = new DirectoryInfo(Environment.CurrentDirectory).GetFiles($"*{Global.FileExtension}", SearchOption.TopDirectoryOnly);
+            string ProjectPath = Path.Combine(Environment.CurrentDirectory, "Projects");
+            Environment.CurrentDirectory = ProjectPath;
+
+            var files = new DirectoryInfo(ProjectPath).GetFiles($"*{Global.FileExtension}", SearchOption.TopDirectoryOnly);
             var dt = GetTableStructure();
 
             if (files != null && files.Length != 0)

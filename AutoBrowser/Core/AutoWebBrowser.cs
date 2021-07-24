@@ -1,4 +1,5 @@
 ﻿using AutoBrowser.Core.Actions;
+using AutoBrowser.Core.Browsers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,17 +9,16 @@ namespace AutoBrowser.Core
 {
     //TODO: V2: Implements sqlite or nosql
     //TODO: V2: Improve notifications
+    //TODO: V2: Create a project concept (object and folder).
+    //TODO: V2: Allow user to generate a task in task scheduler
+    //TODO: V2: Implements webview2
     //TODO: Make the process async
-    //TODO: Allow user to generate a task in task scheduler
-    //TODO: Generate a library for get access to task scheduler : https://docs.microsoft.com/en-gb/windows/win32/taskschd/schtasks?redirectedfrom=MSDN
 
     public class AutoWebBrowser
     {
-        private WebBrowser _browser;
-        private List<string> _blackList;
+        private readonly BaseBrowser _browser;
         private readonly Dictionary<string, object> _savedElements;
         private readonly Dictionary<string, object> _savedValues;
-        private const string _blackListFile = "BlackList.dat";
 
         public delegate void ProgressChangedEventHandler(object sender, ProgressChangedArgs e);
         public delegate void ProcessFinishedEventHandler(object sender, EventArgs e);
@@ -27,67 +27,16 @@ namespace AutoBrowser.Core
 
         public AutoWebBrowser()
         {
-            _browser = new WebBrowser() { ScriptErrorsSuppressed = true };
-            _browser.Navigating += _browser_Navigating;
-            _browser.NewWindow += _browser_NewWindow;
+            _browser = new WBrowser();
             _savedElements = new Dictionary<string, object>();
             _savedValues = new Dictionary<string, object>();
         }
 
-        public AutoWebBrowser(WebBrowser browser)
+        public AutoWebBrowser(System.Windows.Forms.WebBrowser browser)
         {
-            _browser = browser;
-            _browser.ScriptErrorsSuppressed = true;
-            _browser.Navigating += _browser_Navigating;
-            _browser.NewWindow += _browser_NewWindow;
+            _browser = new WBrowser(browser);
             _savedElements = new Dictionary<string, object>();
             _savedValues = new Dictionary<string, object>();
-            LoadBlackList();
-        }
-
-        private void LoadBlackList()
-        {
-            if (!System.IO.File.Exists(_blackListFile))
-            {
-                System.IO.File.WriteAllLines(_blackListFile, new string[]{
-                    "poweredby.jads.co",
-                    "cdn.cloudimagesb.com",
-                    "googleads.g.doubleclick.net"});
-            }
-
-            _blackList = System.IO.File.ReadAllLines(_blackListFile)
-                .Where(x => !string.IsNullOrEmpty(x.Trim()))
-                .ToList();
-        }
-
-        private void _browser_NewWindow(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            e.Cancel = true;
-        }
-
-        private void _browser_Navigating(object sender, WebBrowserNavigatingEventArgs e)
-        {
-            if (IsAdLink(e.Url))
-            {
-                e.Cancel = true;
-            }
-            else if (e.Url.AbsoluteUri.EndsWith(".exe"))
-            {
-                e.Cancel = true;
-            }
-            else if (string.IsNullOrEmpty(e.Url.Host))
-            {
-                e.Cancel = true;
-            }
-            else
-            {
-                Library.File.WriteOnFile($"{e.Url.Host}|{e.Url.AbsoluteUri}", "Pages.dat");
-            }
-        }
-
-        private bool IsAdLink(Uri url)
-        {
-            return _blackList.Contains(url.Host);
         }
 
         private void PerformProgressChangedEvent(string description)

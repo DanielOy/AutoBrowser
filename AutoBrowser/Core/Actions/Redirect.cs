@@ -1,5 +1,5 @@
-﻿using System;
-using System.Windows.Forms;
+﻿using AutoBrowser.Core.Browsers;
+using System;
 
 namespace AutoBrowser.Core.Actions
 {
@@ -34,7 +34,7 @@ namespace AutoBrowser.Core.Actions
         #endregion
 
         #region Functions
-        public override object Perform(WebBrowser browser)
+        public override object Perform(BaseBrowser browser)
         {
             if (browser == null)
             {
@@ -45,35 +45,7 @@ namespace AutoBrowser.Core.Actions
                 throw new ArgumentNullException(nameof(Url));
             }
 
-            bool isLoading = true;
-
-            browser.DocumentCompleted += (s, e) =>
-            {
-                var url = e.Url;
-                isLoading = false;
-            };
-
-            browser.Navigate(Url);
-
-            if (TimeOut > 0)
-            {
-                int _waitedTime = 0;
-                while (isLoading && _waitedTime < TimeOut)
-                {
-                    Wait(1);
-                    _waitedTime++;
-                }
-            }
-            else
-            {
-                while (isLoading)
-                {
-                    Wait(1);
-                }
-            }
-
-            browser.DocumentCompleted -= null;
-            Wait(1);
+            browser.Navigate(Url, TimeOut);
 
             return true;
         }

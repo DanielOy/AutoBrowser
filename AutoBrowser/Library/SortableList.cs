@@ -18,12 +18,12 @@ namespace AutoBrowser.Library
 
         // function that refereshes the contents
         // of the base classes collection of elements
-        Action<SortableList<T>, List<T>> populateBaseList = (a, b) => a.ResetItems(b);
+        readonly Action<SortableList<T>, List<T>> populateBaseList = (a, b) => a.ResetItems(b);
 
         // a cache of functions that perform the sorting
         // for a given type, property, and sort direction
         static Dictionary<string, Func<List<T>, IEnumerable<T>>>
-           cachedOrderByExpressions = new Dictionary<string, Func<List<T>,
+           _cachedOrderByExpressions = new Dictionary<string, Func<List<T>,
                                                      IEnumerable<T>>>();
 
         public SortableList()
@@ -59,12 +59,12 @@ namespace AutoBrowser.Library
                 ListSortDirection.Ascending ? "OrderBy" : "OrderByDescending";
             var cacheKey = typeof(T).GUID + prop.Name + orderByMethodName;
 
-            if (!cachedOrderByExpressions.ContainsKey(cacheKey))
+            if (!_cachedOrderByExpressions.ContainsKey(cacheKey))
             {
                 CreateOrderByMethod(prop, orderByMethodName, cacheKey);
             }
 
-            ResetItems(cachedOrderByExpressions[cacheKey](originalList).ToList());
+            ResetItems(_cachedOrderByExpressions[cacheKey](originalList).ToList());
             ResetBindings();
             sortDirection = sortDirection == ListSortDirection.Ascending ?
                             ListSortDirection.Descending : ListSortDirection.Ascending;
@@ -98,7 +98,7 @@ namespace AutoBrowser.Library
                                                                propertySelectorLambda }),
                                                 sourceParameter);
 
-            cachedOrderByExpressions.Add(cacheKey, orderByExpression.Compile());
+            _cachedOrderByExpressions.Add(cacheKey, orderByExpression.Compile());
         }
 
         protected override void RemoveSortCore()
