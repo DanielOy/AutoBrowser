@@ -84,6 +84,9 @@
     <Compile Include="Library\File.cs" />
     <Compile Include="Library\Forms\InputBox.cs" />
     <Compile Include="Library\Json.cs" />
+    <Compile Include="Library\Network.cs" />
+    <Compile Include="Library\SortableList.cs" />
+    <Compile Include="Library\TextUtils.cs" />
     <Compile Include="Library\WinRegistry.cs" />
     <Compile Include="Library\TextFormat.cs" />
     <Compile Include="Library\Web.cs" />

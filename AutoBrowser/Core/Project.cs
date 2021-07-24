@@ -75,6 +75,11 @@ namespace AutoBrowser.Core
 
         public void SaveProject(List<Actions.BaseAction> actions, string fileName)
         {
+            if (File.Exists(fileName))
+            {
+                File.Delete(fileName);
+            }
+
             XmlSerializer xs = new XmlSerializer(actions.GetType(), GetSubClasses());
             FileStream fs = new FileStream(fileName, FileMode.OpenOrCreate);
 

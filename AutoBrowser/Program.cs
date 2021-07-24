@@ -1,11 +1,11 @@
-﻿using System;
+﻿using AutoBrowser.Core;
+using AutoBrowser.Forms;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
-using AutoBrowser.Core;
-using AutoBrowser.Forms;
 
 namespace AutoBrowser
 {
@@ -50,10 +50,7 @@ namespace AutoBrowser
             }
             else if (ParametersList[1].EndsWith(Global.FileExtension))
             {
-                if (Environment.CurrentDirectory == Environment.SystemDirectory)
-                {
-                    Environment.CurrentDirectory = new System.IO.FileInfo(ParametersList[1]).DirectoryName;
-                }
+                Environment.CurrentDirectory = new System.IO.FileInfo(ParametersList[1]).DirectoryName;
 
                 if (ParametersList.Contains("--hide") || ParametersList.Contains("--h"))
                 {
