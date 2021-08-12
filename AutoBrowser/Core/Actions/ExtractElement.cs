@@ -1,9 +1,8 @@
 ﻿using AutoBrowser.Core.Browsers;
-using AutoBrowser.Core.Enums;
+using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms;
 
 namespace AutoBrowser.Core.Actions
 {
@@ -25,7 +24,7 @@ namespace AutoBrowser.Core.Actions
         {
             Name = _originalName = name;
             NodePath = nodePath;
-        } 
+        }
         #endregion
 
         public override object Perform(BaseBrowser browser)
@@ -42,74 +41,30 @@ namespace AutoBrowser.Core.Actions
             object element = null;
             foreach (var node in NodePath)
             {
-                //FIX: Need to make dynamic the GetElement for element or a list of elements
-                element = element == null ? GetElement(node, browser) : GetElement(node, (element as HtmlElement));
+                switch (element)
+                {
+                    case List<HtmlNode> list:
+                        element = GetElement(node, list);
+                        break;
+                    case HtmlNode nod:
+                        element = GetElement(node, nod);
+                        break;
+                    default:
+                        element = GetElement(node, browser);
+                        break;
+                }
             }
 
             return element;
         }
 
-        private object GetElement(Node node, BaseBrowser browser)
+        private object GetElement(Node node, List<HtmlNode> list)
         {
             if (node is SingleNode single)
             {
                 if (single.From == SingleNode.SingleNodeType.Id)
                 {
-                    return browser.Document.GetElementById(node.Value);
-                }
-                else if (single.From == SingleNode.SingleNodeType.Index)
-                {
-                    return browser.Document.Body.Children[Convert.ToInt32(node.Value)];
-                }
-            }
-            else if (node is MultiNode multi)
-            {
-                if (multi.From == MultiNode.MultiNodeType.Class)
-                {
-                    if (string.IsNullOrEmpty(multi.Index?.ToString()))
-                    {
-                        var elements = new List<HtmlElement>(browser.Document.GetElementsByTagName(multi.Value).Cast<HtmlElement>());
-                        elements = elements
-                            .Where(x => x.GetAttribute(HtmlAttribute.ClassName.Value).Contains(multi.ClassName.ToString()))
-                            .ToList();
-
-                        return elements;
-                    }
-                    else
-                    {
-                        int i = Convert.ToInt32(multi.Index);
-
-                        var elements = new List<HtmlElement>(browser.Document.GetElementsByTagName(multi.Value).Cast<HtmlElement>());
-                        elements = elements
-                            .Where(x => x.GetAttribute(HtmlAttribute.ClassName.Value).Contains(multi.ClassName.ToString()))
-                            .ToList();
-
-                        return elements?[i];
-                    }
-                }
-                else if (multi.From == MultiNode.MultiNodeType.Tag)
-                {
-                    if (string.IsNullOrEmpty(multi.Index?.ToString()))
-                    {
-                        return browser.Document.GetElementsByTagName(node.Value);
-                    }
-                    else
-                    {
-                        int i = Convert.ToInt32(multi.Index);
-                        return browser.Document.GetElementsByTagName(node.Value)?[i];
-                    }
-                }
-            }
-            return null;
-        }
-
-        private object GetElement(Node node, HtmlElement element)
-        {
-            if (node is SingleNode single)
-            {
-                if (single.From == SingleNode.SingleNodeType.Id)
-                {
-                    foreach (HtmlElement child in element.Children)
+                    foreach (HtmlNode child in list)
                     {
                         if (child.Id == node.Value)
                         {
@@ -119,7 +74,7 @@ namespace AutoBrowser.Core.Actions
                 }
                 else if (single.From == SingleNode.SingleNodeType.Index)
                 {
-                    return element.Children[Convert.ToInt32(node.Value)];
+                    return list[Convert.ToInt32(node.Value)];
                 }
             }
             else if (node is MultiNode multi)
@@ -128,22 +83,20 @@ namespace AutoBrowser.Core.Actions
                 {
                     if (string.IsNullOrEmpty(multi.Index?.ToString()))
                     {
-                        var elements = new List<HtmlElement>(element.GetElementsByTagName(multi.Value).Cast<HtmlElement>());
-                        elements = elements
-                            .Where(x => x.GetAttribute(HtmlAttribute.ClassName.Value).Equals(multi.ClassName))
+                        var elements = list.Where(x => x.Name == multi.Value);
+                        elements = elements?
+                            .Where(x => x.GetAttributeValue(Enums.HtmlAttribute.ClassName.Value, "").Equals(multi.ClassName))?
                             .ToList();
-                        var auxElement = (new WebBrowser()).Document.CreateElement("div");
 
-                        elements.ForEach(x => auxElement.AppendChild(x));
-                        return auxElement.Children;
+                        return elements;
                     }
                     else
                     {
                         int i = Convert.ToInt32(multi.Index);
 
-                        var elements = new List<HtmlElement>(element.GetElementsByTagName(multi.Value).Cast<HtmlElement>());
-                        elements = elements
-                            .Where(x => x.GetAttribute(HtmlAttribute.ClassName.Value).Equals(multi.ClassName))
+                        var elements = list.Where(x => x.Name == multi.Value).ToList();
+                        elements = elements?
+                            .Where(x => x.GetAttributeValue(Enums.HtmlAttribute.ClassName.Value, "").Equals(multi.ClassName))?
                             .ToList();
 
                         return elements[i];
@@ -153,12 +106,130 @@ namespace AutoBrowser.Core.Actions
                 {
                     if (string.IsNullOrEmpty(multi.Index?.ToString()))
                     {
-                        return element.GetElementsByTagName(node.Value);
+                        return list.Where(x => x.Name == node.Value)?.ToList();
                     }
                     else
                     {
                         int i = Convert.ToInt32(multi.Index);
-                        return element.GetElementsByTagName(node.Value)[i];
+                        return list.Where(x => x.Name == node.Value).ToList()[i];
+                    }
+                }
+            }
+            return null;
+        }
+
+        private object GetElement(Node node, BaseBrowser browser)
+        {
+            if (node is SingleNode single)
+            {
+                if (single.From == SingleNode.SingleNodeType.Id)
+                {
+                    return browser.Document.GetElementbyId(node.Value);
+                }
+                else if (single.From == SingleNode.SingleNodeType.Index)
+                {
+                    return browser.Document?.DocumentNode?
+                        .Descendants("Body")?.ToArray()?[0]
+                        .Descendants()?.ToArray()?[Convert.ToInt32(node.Value)];
+                }
+            }
+            else if (node is MultiNode multi)
+            {
+                if (multi.From == MultiNode.MultiNodeType.Class)
+                {
+                    if (string.IsNullOrEmpty(multi.Index?.ToString()))
+                    {
+                        var elements = browser.Document.DocumentNode?.Descendants(multi.Value)?.ToList();
+
+                        elements = elements?
+                            .Where(x => x.GetAttributeValue(Enums.HtmlAttribute.ClassName.Value, "").Contains(multi.ClassName.ToString()))?
+                            .ToList();
+
+                        return elements;
+
+                    }
+                    else
+                    {
+                        int i = Convert.ToInt32(multi.Index);
+
+                        var elements = browser.Document.DocumentNode?.Descendants(multi.Value)?.ToList();
+                        elements = elements?
+                            .Where(x => x.GetAttributeValue(Enums.HtmlAttribute.ClassName.Value, "").Contains(multi.ClassName.ToString()))?
+                            .ToList();
+
+                        return elements?[i];
+                    }
+                }
+                else if (multi.From == MultiNode.MultiNodeType.Tag)
+                {
+                    if (string.IsNullOrEmpty(multi.Index?.ToString()))
+                    {
+                        return browser.Document.DocumentNode.Descendants(node.Value)?.ToList();
+                    }
+                    else
+                    {
+                        int i = Convert.ToInt32(multi.Index);
+                        return browser.Document.DocumentNode.Descendants(node.Value)?.ToList()[i];
+                    }
+                }
+            }
+            return null;
+        }
+
+        private object GetElement(Node node, HtmlNode element)
+        {
+            if (node is SingleNode single)
+            {
+                if (single.From == SingleNode.SingleNodeType.Id)
+                {
+                    foreach (HtmlNode child in element.ChildNodes)
+                    {
+                        if (child.Id == node.Value)
+                        {
+                            return child;
+                        }
+                    }
+                }
+                else if (single.From == SingleNode.SingleNodeType.Index)
+                {
+                    return element.ChildNodes[Convert.ToInt32(node.Value)];
+                }
+            }
+            else if (node is MultiNode multi)
+            {
+                if (multi.From == MultiNode.MultiNodeType.Class)
+                {
+                    if (string.IsNullOrEmpty(multi.Index?.ToString()))
+                    {
+                        var elements = element.Descendants(multi.Value)?.ToList();
+                        elements = elements?
+                            .Where(x => x.GetAttributeValue(Enums.HtmlAttribute.ClassName.Value, "").Equals(multi.ClassName))?
+                            .ToList();
+
+                        return elements;
+                    }
+                    else
+                    {
+                        int i = Convert.ToInt32(multi.Index);
+
+                        var elements = element.Descendants(multi.Value)?.ToList();
+                        elements = elements?
+                            .Where(x => x.GetAttributeValue(Enums.HtmlAttribute.ClassName.Value, "").Equals(multi.ClassName))?
+                            .ToList();
+
+                        return elements[i];
+                    }
+                }
+                else if (multi.From == MultiNode.MultiNodeType.Tag)
+                {
+                    if (string.IsNullOrEmpty(multi.Index?.ToString()))
+                    {
+                        return element.Descendants(node.Value)?.ToList();
+                    }
+                    else
+                    {
+                        int i = Convert.ToInt32(multi.Index);
+                        return element.Descendants(node.Value).ToList()[i];
                     }
                 }
             }

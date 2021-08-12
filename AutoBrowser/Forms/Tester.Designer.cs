@@ -29,35 +29,24 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Tester));
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.formBrowser = new System.Windows.Forms.WebBrowser();
+            this.MaintableLayout = new System.Windows.Forms.TableLayoutPanel();
             this.btnStart = new System.Windows.Forms.Button();
-            this.tableLayoutPanel1.SuspendLayout();
+            this.MaintableLayout.SuspendLayout();
             this.SuspendLayout();
             // 
-            // tableLayoutPanel1
+            // MaintableLayout
             // 
-            this.tableLayoutPanel1.ColumnCount = 1;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Controls.Add(this.formBrowser, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.btnStart, 0, 0);
-            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 2;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 7.322654F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 92.67735F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(689, 437);
-            this.tableLayoutPanel1.TabIndex = 0;
-            // 
-            // formBrowser
-            // 
-            this.formBrowser.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.formBrowser.Location = new System.Drawing.Point(3, 34);
-            this.formBrowser.MinimumSize = new System.Drawing.Size(20, 20);
-            this.formBrowser.Name = "formBrowser";
-            this.formBrowser.Size = new System.Drawing.Size(683, 400);
-            this.formBrowser.TabIndex = 0;
+            this.MaintableLayout.ColumnCount = 1;
+            this.MaintableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.MaintableLayout.Controls.Add(this.btnStart, 0, 0);
+            this.MaintableLayout.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.MaintableLayout.Location = new System.Drawing.Point(0, 0);
+            this.MaintableLayout.Name = "MaintableLayout";
+            this.MaintableLayout.RowCount = 2;
+            this.MaintableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 7.322654F));
+            this.MaintableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 92.67735F));
+            this.MaintableLayout.Size = new System.Drawing.Size(689, 437);
+            this.MaintableLayout.TabIndex = 0;
             // 
             // btnStart
             // 
@@ -77,20 +66,20 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(689, 437);
-            this.Controls.Add(this.tableLayoutPanel1);
+            this.Controls.Add(this.MaintableLayout);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Tester";
             this.Text = "Tester";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Tester_FormClosing);
             this.Shown += new System.EventHandler(this.FrmTEST_Shown);
-            this.tableLayoutPanel1.ResumeLayout(false);
+            this.MaintableLayout.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.WebBrowser formBrowser;
+        private System.Windows.Forms.TableLayoutPanel MaintableLayout;
         private System.Windows.Forms.Button btnStart;
     }
 }

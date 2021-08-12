@@ -14,7 +14,15 @@ namespace AutoBrowser.Core.Browsers
 
         public override string Cookies => Library.Web.GetCookie(Url?.AbsoluteUri);
 
-        public override HtmlDocument Document => _browser.Document;
+        public override HtmlAgilityPack.HtmlDocument Document => GetDocument();
+
+        private HtmlAgilityPack.HtmlDocument GetDocument()
+        {
+            string html = _browser.Document.Body.OuterHtml;
+            var doc = new HtmlAgilityPack.HtmlDocument();
+            doc.LoadHtml(html);
+            return doc;
+        }
         #endregion
 
         #region Constructors

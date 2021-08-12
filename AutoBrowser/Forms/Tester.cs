@@ -1,5 +1,6 @@
-﻿using AutoBrowser.Core.Actions;
-using AutoBrowser.Core;
+﻿using AutoBrowser.Core;
+using AutoBrowser.Core.Actions;
+using Microsoft.Web.WebView2.WinForms;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
@@ -30,7 +31,9 @@ namespace AutoBrowser.Forms
         {
             try
             {
+                btnStart.Enabled = false;
                 autoWeb.Run(Actions);
+                btnStart.Enabled = true;
             }
             catch (Exception ex)
             {
@@ -42,7 +45,12 @@ namespace AutoBrowser.Forms
         {
             try
             {
-                autoWeb = new AutoWebBrowser(formBrowser);
+                var formView = new WebView2();
+                MaintableLayout.Controls.Add(formView);
+                formView.Dock = DockStyle.Fill;
+
+                autoWeb = new AutoWebBrowser(formView);
+
                 autoWeb.ProgressChanged += (s, ev) => this.Text = ev.Description;
                 autoWeb.ProcessFinished += (s, ev) =>
                 {
@@ -57,7 +65,7 @@ namespace AutoBrowser.Forms
 
                     if (IsAuto)
                     {
-                        btnStart.Visible = false;
+                        btnStart.Enabled = false;
                         autoWeb.Run(Actions);
                     }
                 }
@@ -68,5 +76,10 @@ namespace AutoBrowser.Forms
             }
         }
         #endregion
+
+        private void Tester_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            autoWeb.Stop();
+        }
     }
 }

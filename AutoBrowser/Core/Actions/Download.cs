@@ -53,7 +53,7 @@ namespace AutoBrowser.Core.Actions
             }
 
             WebClient wc = new WebClient();
-            wc.Headers.Add(HttpRequestHeader.Cookie, Library.Web.GetCookie(browser?.Url?.AbsoluteUri));
+            wc.Headers.Add(HttpRequestHeader.Cookie, browser.Cookies);
             wc.Headers.Add(HttpRequestHeader.UserAgent, "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:88.0) Gecko/20100101 Firefox/88.0");
 
             bool downloadFinished = false;

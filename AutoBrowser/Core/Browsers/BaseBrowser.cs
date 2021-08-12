@@ -15,7 +15,7 @@ namespace AutoBrowser.Core.Browsers
         #region Properties
         public abstract Uri Url { get;}
         public abstract string Cookies { get; }
-        public abstract HtmlDocument Document { get; }
+        public abstract HtmlAgilityPack.HtmlDocument Document { get; }
         #endregion
 
         #region Constructors

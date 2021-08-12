@@ -1,9 +1,9 @@
 ﻿using AutoBrowser.Core.Actions;
 using AutoBrowser.Core.Browsers;
+using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Windows.Forms;
+
 
 namespace AutoBrowser.Core
 {
@@ -11,14 +11,14 @@ namespace AutoBrowser.Core
     //TODO: V2: Improve notifications
     //TODO: V2: Create a project concept (object and folder).
     //TODO: V2: Allow user to generate a task in task scheduler
-    //TODO: V2: Implements webview2
     //TODO: Make the process async
 
     public class AutoWebBrowser
     {
         private readonly BaseBrowser _browser;
-        private readonly Dictionary<string, object> _savedElements;
+        private readonly Dictionary<string, object> _savedNodes;
         private readonly Dictionary<string, object> _savedValues;
+        private bool canContinue = true;
 
         public delegate void ProgressChangedEventHandler(object sender, ProgressChangedArgs e);
         public delegate void ProcessFinishedEventHandler(object sender, EventArgs e);
@@ -28,14 +28,21 @@ namespace AutoBrowser.Core
         public AutoWebBrowser()
         {
             _browser = new WBrowser();
-            _savedElements = new Dictionary<string, object>();
+            _savedNodes = new Dictionary<string, object>();
             _savedValues = new Dictionary<string, object>();
         }
 
         public AutoWebBrowser(System.Windows.Forms.WebBrowser browser)
         {
             _browser = new WBrowser(browser);
-            _savedElements = new Dictionary<string, object>();
+            _savedNodes = new Dictionary<string, object>();
+            _savedValues = new Dictionary<string, object>();
+        }
+
+        public AutoWebBrowser(Microsoft.Web.WebView2.WinForms.WebView2 view)
+        {
+            _browser = new WView(view);
+            _savedNodes = new Dictionary<string, object>();
             _savedValues = new Dictionary<string, object>();
         }
 
@@ -59,6 +66,8 @@ namespace AutoBrowser.Core
         {
             foreach (var step in steps)
             {
+                if (!canContinue) { return; }
+
                 object result = null;
                 switch (step)
                 {
@@ -76,22 +85,22 @@ namespace AutoBrowser.Core
                     case ExtractAttribute attribute:
                         PerformProgressChangedEvent($"Getting {attribute.AttributeName} from {attribute.Variable}");
                         attribute.ReplaceVariables(_savedValues);
-                        result = IsElementCollection(attribute.Variable) ?
-                            attribute.Perform(GetElementCollection(attribute.Variable)) :
-                            IsElementList(attribute.Variable) ? attribute.Perform(GetElementList(attribute.Variable)) :
-                            attribute.Perform(GetElement(attribute.Variable));
+                        result = IsNodeCollection(attribute.Variable) ?
+                            attribute.Perform(GetNodeCollection(attribute.Variable)) :
+                            IsNodeList(attribute.Variable) ? attribute.Perform(GetNodeList(attribute.Variable)) :
+                            attribute.Perform(GetNode(attribute.Variable));
                         SaveAttribute(attribute.Name, result);
                         break;
                     case ExtractElement element:
                         PerformProgressChangedEvent($"Getting {element.Name}");
                         element.ReplaceVariables(_savedValues);
                         result = element.Perform(_browser);
-                        SaveElement(element.Name, result);
+                        SaveNode(element.Name, result);
                         break;
                     case Click click:
                         click.ReplaceVariables(_savedValues);
                         PerformProgressChangedEvent($"Perform click on {click.Variable} element");
-                        click.Perform(GetElement(click.Variable));
+                        click.Perform(GetNode(click.Variable));
                         break;
                     case WebAction web:
                         PerformProgressChangedEvent($"Performing: {web.GetDescription()}");
@@ -114,9 +123,11 @@ namespace AutoBrowser.Core
                         break;
                     case Repeat f:
                         f.ReplaceVariables(_savedValues);
-                        int times = Convert.ToInt32(f.Times);
+                        string _times = f.Times.ToString().Trim().Replace(",", "");
+                        int times = Convert.ToInt32(_times);
                         for (int i = 0; i < times; i++)
                         {
+                            if (!canContinue) { return; }
                             SaveAttribute(f.Name, f.Calculate(i));
                             PerformActions(f.Actions);
                         }
@@ -138,24 +149,29 @@ namespace AutoBrowser.Core
             }
         }
 
-        private List<HtmlElement> GetElementList(string name)
+        public void Stop()
         {
-            return _savedElements[name] as List<HtmlElement>;
+            canContinue = false;
         }
 
-        private bool IsElementList(string name)
+        private List<HtmlNode> GetNodeList(string name)
         {
-            return _savedElements[name] is List<HtmlElement>;
+            return _savedNodes[name] as List<HtmlNode>;
         }
 
-        private HtmlElementCollection GetElementCollection(string name)
+        private bool IsNodeList(string name)
         {
-            return _savedElements[name] as HtmlElementCollection;
+            return _savedNodes[name] is List<HtmlNode>;
         }
 
-        private bool IsElementCollection(string name)
+        private HtmlNodeCollection GetNodeCollection(string name)
         {
-            return _savedElements[name] is HtmlElementCollection;
+            return _savedNodes[name] as HtmlNodeCollection;
+        }
+
+        private bool IsNodeCollection(string name)
+        {
+            return _savedNodes[name] is HtmlNodeCollection;
         }
 
         private void RemoveAttribute(string name)
@@ -172,12 +188,12 @@ namespace AutoBrowser.Core
             _savedValues.Remove(name);
         }
 
-        private HtmlElement GetElement(string name)
+        private HtmlNode GetNode(string name)
         {
-            return _savedElements[name] as HtmlElement;
+            return _savedNodes[name] as HtmlNode;
         }
 
-        private void SaveElement(string elementName, object result)
+        private void SaveNode(string elementName, object result)
         {
             if (result == null)
             {
@@ -189,11 +205,11 @@ namespace AutoBrowser.Core
                 return;
             }
 
-            if (_savedElements.ContainsKey(elementName))
+            if (_savedNodes.ContainsKey(elementName))
             {
-                _savedElements.Remove(elementName);
+                _savedNodes.Remove(elementName);
             }
-            _savedElements.Add(elementName, result);
+            _savedNodes.Add(elementName, result);
         }
 
         private void SaveAttribute(string attributeName, object result)

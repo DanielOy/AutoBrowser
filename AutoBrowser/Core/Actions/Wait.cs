@@ -51,7 +51,7 @@ namespace AutoBrowser.Core.Actions
             }
 
             secondsWaited = 0;
-            while (browser.Document.GetElementById(Element) == null && TimeOut > secondsWaited)
+            while (browser.Document==null && browser.Document.GetElementbyId(Element) == null && TimeOut > secondsWaited)
             {
                 Wait(1);
                 secondsWaited++;

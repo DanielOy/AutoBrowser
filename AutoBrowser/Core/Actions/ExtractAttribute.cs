@@ -3,7 +3,7 @@ using AutoBrowser.Core.Enums;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Windows.Forms;
+using HtmlAgilityPack;
 
 namespace AutoBrowser.Core.Actions
 {
@@ -30,7 +30,7 @@ namespace AutoBrowser.Core.Actions
         /// <param name="name">Name with the attribute value will be saved.</param>
         /// <param name="variable">Name of a element, this need to be previously extracted</param>
         /// <param name="attribute">HTMLAtribute that represent the attribute that will be extracted.</param>
-        public ExtractAttribute(string name, string variable, HtmlAttribute attribute)
+        public ExtractAttribute(string name, string variable, Enums.HtmlAttribute attribute)
         {
             Variable = _originalVariable = variable;
             AttributeName = _originalAttributeName = attribute.Value;
@@ -67,10 +67,10 @@ namespace AutoBrowser.Core.Actions
                 throw new ArgumentNullException(nameof(AttributeName));
             }
 
-            return browser.Document.Body.GetAttribute(AttributeName);
+            return browser.Document.DocumentNode.GetAttributeValue(AttributeName,null);
         }
 
-        public object Perform(HtmlElement element)
+        public object Perform(HtmlNode element)
         {
             if (element == null)
             {
@@ -81,15 +81,15 @@ namespace AutoBrowser.Core.Actions
             {
                 throw new ArgumentNullException(nameof(AttributeName));
             }
-            if (AttributeName == "text") //FIX: requiere to be standard
+            if (AttributeName == "text" || AttributeName== "innerText") //FIX: requiere to be standard
             {
-                return element.InnerText;
+                return element.InnerText?.Trim();
             }
 
-            return element.GetAttribute(AttributeName);
+            return element.GetAttributeValue(AttributeName, null);
         }
 
-        public object Perform(List<HtmlElement> elements)
+        public object Perform(List<HtmlNode> elements)
         {
             if (elements == null)
             {
@@ -109,7 +109,7 @@ namespace AutoBrowser.Core.Actions
             return elements.Count;
         }
 
-        public object Perform(HtmlElementCollection elements)
+        public object Perform(HtmlNodeCollection elements)
         {
             if (elements == null)
             {
