@@ -1,4 +1,6 @@
-﻿using System;
+﻿using AutoBrowser.Core;
+using System;
+using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Windows.Forms;
@@ -7,6 +9,10 @@ namespace AutoBrowser.Forms
 {
     public partial class Main : Form
     {
+        #region Global Variables
+        private string projectPath;
+        #endregion
+
         #region Constructor
         public Main()
         {
@@ -17,39 +23,30 @@ namespace AutoBrowser.Forms
         #region Methods
         private void LoadProjects()
         {
-            string ProjectPath = Path.Combine(Environment.CurrentDirectory, "Projects");
-            Environment.CurrentDirectory = ProjectPath;
+            if (string.IsNullOrEmpty(projectPath))
+            {
+                projectPath = Path.Combine(Environment.CurrentDirectory, "Projects");
+                Environment.CurrentDirectory = projectPath;
+            }
 
-            var files = new DirectoryInfo(ProjectPath).GetFiles($"*{Global.FileExtension}", SearchOption.TopDirectoryOnly);
-            var dt = GetTableStructure();
+            var files = new DirectoryInfo(projectPath).GetFiles($"*{Global.FileExtension}", SearchOption.TopDirectoryOnly);
+
+            List<Project> projects = new List<Project>();
 
             if (files != null && files.Length != 0)
             {
                 foreach (var file in files)
                 {
-                    dt.Rows.Add(
-                        file.Name.Replace(Global.FileExtension, ""),
-                        file.CreationTime.ToString(),
-                        file.LastWriteTime.ToString(),
-                        Library.TextFormat.NoBytesToSize(file.Length));
+                    projects.Add(new Project(file.Name));
                 }
             }
 
-            ProjectsDataGridView.DataSource = dt;
+            projectBindingSource.DataSource = projects;
         }
         #endregion
 
         #region Functions
-        private DataTable GetTableStructure()
-        {
-            DataTable dt = new DataTable();
-            dt.Columns.Add("Project");
-            dt.Columns.Add("Creation Date");
-            dt.Columns.Add("Last Modify Date");
-            dt.Columns.Add("Size");
 
-            return dt;
-        }
         #endregion
 
         #region Events
@@ -57,12 +54,11 @@ namespace AutoBrowser.Forms
         {
             try
             {
-                var selected = ((DataRowView)ProjectsDataGridView.SelectedRows[0].DataBoundItem).Row;
-                string fileName = selected["Project"].ToString();
-
+                var selected = ((Project)ProjectsDataGridView.SelectedRows[0].DataBoundItem);
+                
                 using (var frm = new Tester())
                 {
-                    frm.FileName = fileName + Global.FileExtension;
+                    frm.Actions = selected.Actions;
                     frm.ShowDialog();
                 }
             }
@@ -83,20 +79,17 @@ namespace AutoBrowser.Forms
                 MessageBox.Show(ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        #endregion
 
         private void AddToolStripButton_Click(object sender, EventArgs e)
         {
             try
             {
-                DialogResult result;
                 using (var frm = new Editor())
                 {
-                    result = frm.ShowDialog();
-                }
-                if (result == DialogResult.OK)
-                {
-                    LoadProjects();
+                    if (frm.ShowDialog() == DialogResult.OK)
+                    {
+                        LoadProjects();
+                    }
                 }
             }
             catch (Exception ex)
@@ -109,19 +102,20 @@ namespace AutoBrowser.Forms
         {
             try
             {
-                var selected = ((DataRowView)ProjectsDataGridView.SelectedRows[0].DataBoundItem).Row;
-                string fileName = selected["Project"].ToString();
+                var selected = ((Project)ProjectsDataGridView.SelectedRows[0].DataBoundItem);
 
                 using (var frm = new Editor())
                 {
-                    frm.FileName = fileName + Global.FileExtension;
+                    frm.Project = selected;
                     frm.ShowDialog();
                 }
+                ProjectsDataGridView.Refresh();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+        #endregion
     }
 }

@@ -86,22 +86,9 @@
     <Compile Include="Forms\Editor.Designer.cs">
       <DependentUpon>Editor.cs</DependentUpon>
     </Compile>
-    <Compile Include="Library\AES.cs" />
-    <Compile Include="Library\File.cs" />
-    <Compile Include="Library\Forms\InputBox.cs" />
-    <Compile Include="Library\Json.cs" />
-    <Compile Include="Library\Network.cs" />
-    <Compile Include="Library\SortableList.cs" />
-    <Compile Include="Library\TextUtils.cs" />
-    <Compile Include="Library\WinRegistry.cs" />
-    <Compile Include="Library\TextFormat.cs" />
-    <Compile Include="Library\Web.cs" />
     <Compile Include="Global.cs" />
     <Compile Include="Core\Enums\HtmlAttribute.cs" />
     <Compile Include="Core\Enums\HtmlTag.cs" />
-    <Compile Include="Library\Math.Aritmetic.cs" />
-    <Compile Include="Library\Math.Logic.cs" />
-    <Compile Include="Library\Math.Order.cs" />
     <Compile Include="Forms\Main.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -135,6 +122,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="Properties\DataSources\AutoBrowser.Core.Project.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -186,6 +174,12 @@
     <PackageReference Include="TaskScheduler">
       <Version>2.9.1</Version>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\SharedLibrary\SharedLibrary\SharedLibrary.csproj">
+      <Project>{460c6d6b-e932-4c53-960a-22fccc3a2352}</Project>
+      <Name>SharedLibrary</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

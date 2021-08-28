@@ -64,7 +64,7 @@ namespace AutoBrowser.Core.Actions
                 return i;
             }
 
-            return Library.Math.Calculate(IndexFormula.Replace($"[{Name}]", i.ToString()));
+            return SharedLibrary.Math.Calculate(IndexFormula.Replace($"[{Name}]", i.ToString()));
         }
 
         internal override void InitVariables()

@@ -21,9 +21,9 @@ namespace AutoBrowser
             Application.SetCompatibleTextRenderingDefault(false);
             Application.ThreadException += new ThreadExceptionEventHandler(Application_ThreadException);
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
-
-            Library.Web.ConfigureIEBrowserEmulator(Process.GetCurrentProcess().ProcessName);
-            Library.WinRegistry.SetFileAsocciation(Global.FileExtension, Application.ExecutablePath);
+            
+           SharedLibrary.Web.ConfigureIEBrowserEmulator(Process.GetCurrentProcess().ProcessName);
+           SharedLibrary.WinRegistry.SetFileAsocciation(Global.FileExtension, Application.ExecutablePath);
             ChooseProcess();
         }
 
@@ -31,14 +31,14 @@ namespace AutoBrowser
         {
             // Log the exception, display it, etc
             Debug.WriteLine(e.Exception.Message);
-            Library.File.WriteOnFile($"{e.Exception.Message}\n{e.Exception.StackTrace}", "Error.log");
+           SharedLibrary.File.WriteOnFile($"{e.Exception.Message}\n{e.Exception.StackTrace}", "Error.log");
         }
 
         static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             // Log the exception, display it, etc
             Debug.WriteLine((e.ExceptionObject as Exception).Message);
-            Library.File.WriteOnFile($"{(e.ExceptionObject as Exception).Message}\n{(e.ExceptionObject as Exception).StackTrace}", "Error.log");
+           SharedLibrary.File.WriteOnFile($"{(e.ExceptionObject as Exception).Message}\n{(e.ExceptionObject as Exception).StackTrace}", "Error.log");
         }
 
         private static void ChooseProcess()
@@ -52,9 +52,9 @@ namespace AutoBrowser
             {
                 Environment.CurrentDirectory = new System.IO.FileInfo(ParametersList[1]).DirectoryName;
 
-                if (ParametersList.Contains("--hide") || ParametersList.Contains("--h"))
+                if (ParametersList.Contains("--hide") || ParametersList.Contains("-h"))
                 {
-                    new Project().Execute(ParametersList[1]);
+                    Project.Execute(ParametersList[1]);
                 }
                 else
                 {

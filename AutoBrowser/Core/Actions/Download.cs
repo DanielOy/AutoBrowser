@@ -62,8 +62,8 @@ namespace AutoBrowser.Core.Actions
             wc.DownloadFileCompleted += (s, e) => { downloadFinished = true; };
             wc.DownloadProgressChanged += (s, e) =>
             {
-                string sizeDownloaded = Library.TextFormat.NoBytesToSize(e.BytesReceived);
-                string sizeTotal = Library.TextFormat.NoBytesToSize(e.TotalBytesToReceive);
+                string sizeDownloaded =SharedLibrary.TextFormat.NoBytesToSize(e.BytesReceived);
+                string sizeTotal =SharedLibrary.TextFormat.NoBytesToSize(e.TotalBytesToReceive);
 
                 if ((DateTime.Now - lastUpdate).Seconds >= 1 && lastPorcent < e.ProgressPercentage)
                 {
@@ -95,7 +95,7 @@ namespace AutoBrowser.Core.Actions
                 }
             }
 
-            Library.File.WriteOnFile($"[{DateTime.Now.ToString("dd/MM hh:mm:ss")}] {downloadFile.Name}", "DownloadHistory");
+           SharedLibrary.File.WriteOnFile($"[{DateTime.Now.ToString("dd/MM hh:mm:ss")}] {downloadFile.Name}", "DownloadHistory");
 
             return true;
         }

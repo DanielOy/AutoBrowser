@@ -51,7 +51,7 @@ namespace AutoBrowser.Core.Actions
 
             string FullPath = Path.Combine(new DirectoryInfo(DownloadFolder).FullName, FileName);
 
-            FullPath = Library.File.FormatValidFileName(FullPath);
+            FullPath = SharedLibrary.File.FormatValidFileName(FullPath);
 
             return new FileInfo(FullPath);
         }

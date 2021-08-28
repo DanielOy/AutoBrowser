@@ -99,7 +99,7 @@
             this.tableLayoutPanel3.ColumnCount = 3;
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 3.505843F));
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 96.49416F));
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 32F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 33F));
             this.tableLayoutPanel3.Controls.Add(this.tableLayoutPanel4, 1, 1);
             this.tableLayoutPanel3.Location = new System.Drawing.Point(227, 3);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
@@ -125,7 +125,7 @@
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(376, 330);
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(375, 330);
             this.tableLayoutPanel4.TabIndex = 2;
             // 
             // tableLayoutPanel5
@@ -140,13 +140,13 @@
             this.tableLayoutPanel5.Name = "tableLayoutPanel5";
             this.tableLayoutPanel5.RowCount = 1;
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel5.Size = new System.Drawing.Size(370, 24);
+            this.tableLayoutPanel5.Size = new System.Drawing.Size(369, 24);
             this.tableLayoutPanel5.TabIndex = 1;
             // 
             // ActionsComboBox
             // 
             this.ActionsComboBox.ImeMode = System.Windows.Forms.ImeMode.Off;
-            this.ActionsComboBox.Location = new System.Drawing.Point(107, 3);
+            this.ActionsComboBox.Location = new System.Drawing.Point(106, 3);
             this.ActionsComboBox.Name = "ActionsComboBox";
             this.ActionsComboBox.Size = new System.Drawing.Size(260, 21);
             this.ActionsComboBox.Sorted = true;
@@ -178,13 +178,13 @@
             this.tableLayoutPanel6.Name = "tableLayoutPanel6";
             this.tableLayoutPanel6.RowCount = 1;
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel6.Size = new System.Drawing.Size(370, 29);
+            this.tableLayoutPanel6.Size = new System.Drawing.Size(369, 29);
             this.tableLayoutPanel6.TabIndex = 2;
             // 
             // SaveButton
             // 
             this.SaveButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.SaveButton.Location = new System.Drawing.Point(93, 3);
+            this.SaveButton.Location = new System.Drawing.Point(92, 3);
             this.SaveButton.Name = "SaveButton";
             this.SaveButton.Size = new System.Drawing.Size(74, 23);
             this.SaveButton.TabIndex = 1;
@@ -194,7 +194,7 @@
             // 
             // CancelButton
             // 
-            this.CancelButton.Location = new System.Drawing.Point(203, 3);
+            this.CancelButton.Location = new System.Drawing.Point(202, 3);
             this.CancelButton.Name = "CancelButton";
             this.CancelButton.Size = new System.Drawing.Size(74, 23);
             this.CancelButton.TabIndex = 2;
@@ -212,7 +212,7 @@
             this.ControlsTableLayoutPanel.Name = "ControlsTableLayoutPanel";
             this.ControlsTableLayoutPanel.RowCount = 1;
             this.ControlsTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 21F));
-            this.ControlsTableLayoutPanel.Size = new System.Drawing.Size(370, 21);
+            this.ControlsTableLayoutPanel.Size = new System.Drawing.Size(369, 21);
             this.ControlsTableLayoutPanel.TabIndex = 3;
             // 
             // tableLayoutPanel7

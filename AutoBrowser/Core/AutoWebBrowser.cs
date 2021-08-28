@@ -9,7 +9,6 @@ namespace AutoBrowser.Core
 {
     //TODO: V2: Implements sqlite or nosql
     //TODO: V2: Improve notifications
-    //TODO: V2: Create a project concept (object and folder).
     //TODO: V2: Allow user to generate a task in task scheduler
     //TODO: Make the process async
 
@@ -32,6 +31,21 @@ namespace AutoBrowser.Core
             _savedValues = new Dictionary<string, object>();
         }
 
+        public AutoWebBrowser(Project.Browsers browser, bool activeScripts)
+        {
+            switch (browser)
+            {
+                case Project.Browsers.WebView:
+                    _browser = new WView(activeScripts);
+                    break;
+                default:
+                    _browser = new WBrowser();
+                    break;
+            }
+            _savedNodes = new Dictionary<string, object>();
+            _savedValues = new Dictionary<string, object>();
+        }
+
         public AutoWebBrowser(System.Windows.Forms.WebBrowser browser)
         {
             _browser = new WBrowser(browser);
@@ -39,9 +53,9 @@ namespace AutoBrowser.Core
             _savedValues = new Dictionary<string, object>();
         }
 
-        public AutoWebBrowser(Microsoft.Web.WebView2.WinForms.WebView2 view)
+        public AutoWebBrowser(Microsoft.Web.WebView2.WinForms.WebView2 view, bool activeScripts)
         {
-            _browser = new WView(view);
+            _browser = new WView(view,activeScripts);
             _savedNodes = new Dictionary<string, object>();
             _savedValues = new Dictionary<string, object>();
         }

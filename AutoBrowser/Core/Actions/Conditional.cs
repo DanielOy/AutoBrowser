@@ -23,7 +23,8 @@ namespace AutoBrowser.Core.Actions
             None = 0,
             _FileContains_ = 1,
             _FileExists = 2,
-            _FileExistsIn_Folder = 3
+            _FileExistsIn_Folder = 3,
+            _FileNotContains_ = 4
         }
         public string Param1 { get; set; }
         public string Param2 { get; set; }
@@ -70,7 +71,7 @@ namespace AutoBrowser.Core.Actions
             {
                 Expression = Expression.Replace("-", "_");
                 Expression = Expression.Replace(" ", "");
-                return Library.Math.CalculateLogic(Expression);
+                return SharedLibrary.Math.CalculateLogic(Expression);
             }
             else
             {
@@ -83,6 +84,7 @@ namespace AutoBrowser.Core.Actions
             switch (SpecialFunction)
             {
                 case ConditionalFunctions._FileContains_: return FileContainsFunc();
+                case ConditionalFunctions._FileNotContains_: return !FileContainsFunc();
                 case ConditionalFunctions._FileExists: return FileExistsFunc();
                 case ConditionalFunctions._FileExistsIn_Folder: return FileExistsFolderFunc();
                 default: return false;

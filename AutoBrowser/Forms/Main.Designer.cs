@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.MainStatusStrip = new System.Windows.Forms.StatusStrip();
@@ -37,10 +38,16 @@
             this.EditToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.ProjectsDataGridView = new System.Windows.Forms.DataGridView();
+            this.projectBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.nameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.descriptionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.browserDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.activeScriptsDataGridViewCheckBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.tableLayoutPanel1.SuspendLayout();
             this.MainToolStrip.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ProjectsDataGridView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.projectBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -124,8 +131,16 @@
             // 
             this.ProjectsDataGridView.AllowUserToAddRows = false;
             this.ProjectsDataGridView.AllowUserToDeleteRows = false;
+            this.ProjectsDataGridView.AllowUserToOrderColumns = true;
+            this.ProjectsDataGridView.AutoGenerateColumns = false;
             this.ProjectsDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.ProjectsDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.ProjectsDataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.nameDataGridViewTextBoxColumn,
+            this.descriptionDataGridViewTextBoxColumn,
+            this.browserDataGridViewTextBoxColumn,
+            this.activeScriptsDataGridViewCheckBoxColumn});
+            this.ProjectsDataGridView.DataSource = this.projectBindingSource;
             this.ProjectsDataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ProjectsDataGridView.Location = new System.Drawing.Point(3, 3);
             this.ProjectsDataGridView.Name = "ProjectsDataGridView";
@@ -133,6 +148,38 @@
             this.ProjectsDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.ProjectsDataGridView.Size = new System.Drawing.Size(512, 279);
             this.ProjectsDataGridView.TabIndex = 0;
+            // 
+            // projectBindingSource
+            // 
+            this.projectBindingSource.DataSource = typeof(AutoBrowser.Core.Project);
+            // 
+            // nameDataGridViewTextBoxColumn
+            // 
+            this.nameDataGridViewTextBoxColumn.DataPropertyName = "Name";
+            this.nameDataGridViewTextBoxColumn.HeaderText = "Name";
+            this.nameDataGridViewTextBoxColumn.Name = "nameDataGridViewTextBoxColumn";
+            this.nameDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // descriptionDataGridViewTextBoxColumn
+            // 
+            this.descriptionDataGridViewTextBoxColumn.DataPropertyName = "Description";
+            this.descriptionDataGridViewTextBoxColumn.HeaderText = "Description";
+            this.descriptionDataGridViewTextBoxColumn.Name = "descriptionDataGridViewTextBoxColumn";
+            this.descriptionDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // browserDataGridViewTextBoxColumn
+            // 
+            this.browserDataGridViewTextBoxColumn.DataPropertyName = "Browser";
+            this.browserDataGridViewTextBoxColumn.HeaderText = "Browser";
+            this.browserDataGridViewTextBoxColumn.Name = "browserDataGridViewTextBoxColumn";
+            this.browserDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // activeScriptsDataGridViewCheckBoxColumn
+            // 
+            this.activeScriptsDataGridViewCheckBoxColumn.DataPropertyName = "ActiveScripts";
+            this.activeScriptsDataGridViewCheckBoxColumn.HeaderText = "ActiveScripts";
+            this.activeScriptsDataGridViewCheckBoxColumn.Name = "activeScriptsDataGridViewCheckBoxColumn";
+            this.activeScriptsDataGridViewCheckBoxColumn.ReadOnly = true;
             // 
             // Main
             // 
@@ -151,6 +198,7 @@
             this.MainToolStrip.PerformLayout();
             this.tableLayoutPanel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.ProjectsDataGridView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.projectBindingSource)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -165,5 +213,10 @@
         private System.Windows.Forms.DataGridView ProjectsDataGridView;
         private System.Windows.Forms.ToolStripButton AddToolStripButton;
         private System.Windows.Forms.ToolStripButton EditToolStripButton;
+        private System.Windows.Forms.DataGridViewTextBoxColumn nameDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn descriptionDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn browserDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn activeScriptsDataGridViewCheckBoxColumn;
+        private System.Windows.Forms.BindingSource projectBindingSource;
     }
 }

@@ -168,7 +168,7 @@ namespace AutoBrowser.Core.Actions
                 return;
             }
 
-            Index = Library.Math.Calculate(Index.ToString());
+            Index =SharedLibrary.Math.Calculate(Index.ToString());
         }
 
         public override string GetDescription()

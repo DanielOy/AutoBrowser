@@ -67,7 +67,7 @@ namespace AutoBrowser.Core.Actions
                 throw new ArgumentNullException(nameof(AttributeName));
             }
 
-            return browser.Document.DocumentNode.GetAttributeValue(AttributeName,null);
+            return browser.Document.DocumentNode.GetAttributeValue(AttributeName,null)?.Trim();
         }
 
         public object Perform(HtmlNode element)
@@ -86,7 +86,7 @@ namespace AutoBrowser.Core.Actions
                 return element.InnerText?.Trim();
             }
 
-            return element.GetAttributeValue(AttributeName, null);
+            return element.GetAttributeValue(AttributeName, null)?.Trim();
         }
 
         public object Perform(List<HtmlNode> elements)

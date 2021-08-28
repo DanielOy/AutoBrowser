@@ -1,18 +1,109 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Reflection;
 using System.Xml.Serialization;
 
 namespace AutoBrowser.Core
 {
     public class Project
     {
-        private string _logFile;
+        #region Global Variables
+        private string _filepath;
+        #endregion
 
-        public void Execute(string fileName)
+        #region Enums
+        public enum Browsers
         {
+            WebBrowser = 0,
+            WebView = 1
+        }
+        #endregion
+
+        #region Properties
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public List<Actions.BaseAction> Actions { get; set; }
+        public Browsers Browser { get; set; }
+        public bool ActiveScripts { get; set; }
+        #endregion
+
+        #region Constructors
+        public Project()
+        {
+        }
+
+        public Project(string filePath)
+        {
+            _filepath = filePath;
+            if (File.Exists(filePath))
+            {
+                Load();
+            }
+        }
+        #endregion
+
+        #region Functions
+        public void Save()
+        {
+            if (string.IsNullOrEmpty(_filepath))
+            {
+                string fileName = (Name ?? $"Temp{DateTime.Now.ToString("hhmmss")}") + Global.FileExtension;
+                _filepath = Path.Combine(Environment.CurrentDirectory, "Projects", fileName);
+                _filepath =SharedLibrary.File.FormatValidFileName(_filepath);
+            }
+
+            Save(_filepath);
+        }
+
+        public void Save(string fileName)
+        {
+            if (File.Exists(fileName))
+            {
+                File.Delete(fileName);
+            }
+
+            XmlSerializer xs = new XmlSerializer(GetType(), GetSubClasses());
+            FileStream fs = new FileStream(fileName, FileMode.OpenOrCreate);
+
+            xs.Serialize(fs, this);
+            fs.Close();
+        }
+
+        public string GetFilePath()
+        {
+            return _filepath;
+        }
+
+        private void Load()
+        {
+            XmlSerializer xs = new XmlSerializer(GetType(), GetSubClasses());
+            FileStream fs = new FileStream(_filepath, FileMode.Open);
+
+            var project = (Project)xs.Deserialize(fs);
+            fs.Close();
+
+            Name = project.Name;
+            Description = project.Description;
+            Actions = project.Actions;
+            Browser = project.Browser;
+            ActiveScripts = project.ActiveScripts;
+
+            Actions.ForEach(x => x.InitVariables());
+        }
+
+        private Type[] GetSubClasses()
+        {
+            var allTypes = new List<Type> { typeof(List<Actions.BaseAction>) };
+            allTypes.AddRange(Core.Actions.BaseAction.GetActions());
+            allTypes.AddRange(Core.Actions.Node.GetSubtypes());
+            return allTypes.ToArray();
+        }
+        #endregion
+
+        #region Shared
+        public static void Execute(string fileName)
+        {
+            string logFile = "";
             try
             {
                 if (!File.Exists(fileName))
@@ -20,102 +111,35 @@ namespace AutoBrowser.Core
                     return;
                 }
 
-                var actions = LoadProject(fileName);
+                var project = new Project(fileName);
 
-                var browser = new AutoWebBrowser();
-                ConfigureLog(fileName, browser);
-                browser.Run(actions);
+                var browser = new AutoWebBrowser(project.Browser, project.ActiveScripts);
+                logFile = ConfigureLog(fileName, browser);
+                browser.Run(project.Actions);
             }
             catch (Exception ex)
             {
-                Library.File.WriteOnFile($"[{DateTime.Now.ToLongTimeString()}] ERROR:\n{ex.Message}\n{ex.StackTrace}", _logFile);
+               SharedLibrary.File.WriteOnFile($"[{DateTime.Now.ToLongTimeString()}] ERROR:\n{ex.Message}\n{ex.StackTrace}", logFile);
             }
         }
 
-        private void ConfigureLog(string fileName, AutoWebBrowser browser)
+        private static string ConfigureLog(string fileName, AutoWebBrowser browser)
         {
-            _logFile = $"{fileName.Replace(Global.FileExtension, "")}_{DateTime.Now.ToString("yyMMdd_hhmmss")}.log";
-            Library.File.WriteOnFile($"[{DateTime.Now.ToLongTimeString()}] PROCESS STARTING.", _logFile);
+            string logFile = $"{fileName.Replace(Global.FileExtension, "")}.log";
+           SharedLibrary.File.WriteOnFile($"[{DateTime.Now.ToLongTimeString()}] PROCESS STARTING.", logFile);
 
             browser.ProgressChanged += (s, e) =>
             {
-                Library.File.WriteOnFile($"[{DateTime.Now.ToLongTimeString()}] {e.Description}", _logFile);
+               SharedLibrary.File.WriteOnFile($"[{DateTime.Now.ToLongTimeString()}] {e.Description}", logFile);
             };
             browser.ProcessFinished += (s, e) =>
             {
-                Library.File.WriteOnFile($"[{DateTime.Now.ToLongTimeString()}] PROCESS FINISHED SUCCESSFULLY.", _logFile);
+               SharedLibrary.File.WriteOnFile($"[{DateTime.Now.ToLongTimeString()}] PROCESS FINISHED SUCCESSFULLY.", logFile);
             };
+
+            return logFile;
         }
 
-        private Type[] GetSubClasses()
-        {
-            var subTypes = Assembly
-                .GetAssembly(typeof(Actions.BaseAction))
-                .GetTypes()
-                .Where(myType => myType.IsClass && !myType.IsAbstract &&
-                (myType.IsSubclassOf(typeof(Actions.BaseAction)) || myType.IsSubclassOf(typeof(Actions.Node))))
-                .ToArray();
-
-            return subTypes;
-        }
-
-#if DEBUG
-        public List<Actions.BaseAction> LoadProject(string fileName)
-        {
-            XmlSerializer xs = new XmlSerializer(typeof(List<Actions.BaseAction>), GetSubClasses());
-            FileStream fs = new FileStream(fileName, FileMode.Open);
-
-            List<Actions.BaseAction> actions = (List<Actions.BaseAction>)xs.Deserialize(fs);
-            fs.Close();
-
-            actions.ForEach(x => x.InitVariables());
-
-            return actions;
-        }
-
-        public void SaveProject(List<Actions.BaseAction> actions, string fileName)
-        {
-            if (File.Exists(fileName))
-            {
-                File.Delete(fileName);
-            }
-
-            XmlSerializer xs = new XmlSerializer(actions.GetType(), GetSubClasses());
-            FileStream fs = new FileStream(fileName, FileMode.OpenOrCreate);
-
-            xs.Serialize(fs, actions);
-            fs.Close();
-        }
-#endif
-#if !DEBUG
-        public List<Actions.BaseAction> LoadProject(string fileName)
-        {
-            XmlSerializer xs = new XmlSerializer(typeof(List<Actions.BaseAction>), GetSubClasses());
-            string text = File.ReadAllText(fileName);
-            text = Library.AES.Decrypt(text);
-
-            byte[] byteArray = System.Text.Encoding.UTF8.GetBytes(text);
-            MemoryStream fs = new MemoryStream(byteArray);
-
-            List<Actions.BaseAction> actions = (List<Actions.BaseAction>)xs.Deserialize(fs);
-            fs.Close();
-
-            actions.ForEach(x => x.InitVariables());
-
-            return actions;
-        }
-
-        public void SaveProject(List<Actions.BaseAction> actions, string fileName)
-        {
-            XmlSerializer xs = new XmlSerializer(actions.GetType(), GetSubClasses());
-            MemoryStream fs = new MemoryStream();
-
-            xs.Serialize(fs, actions);
-            string text = System.Text.Encoding.UTF8.GetString(fs.GetBuffer());
-            text = Library.AES.Encrypt(text);
-            File.WriteAllText(fileName, text);
-            fs.Close();
-        }
-#endif
+        #endregion
     }
 }

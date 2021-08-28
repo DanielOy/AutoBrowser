@@ -3,7 +3,6 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
-using System.Windows.Forms;
 
 namespace AutoBrowser.Core.Actions
 {
@@ -39,14 +38,28 @@ namespace AutoBrowser.Core.Actions
                 throw new ArgumentNullException(nameof(Url));
             }
 
-            FileInfo fileToDownload = GetValidFileInfo();
-
-            if (fileToDownload.Exists)
+            if (!string.IsNullOrEmpty(FileName))
             {
-                return true;
-            }
+                FileInfo fileToDownload = GetValidFileInfo();
 
-            GenerateDownloadFile(Url, fileToDownload.Name, fileToDownload.DirectoryName);
+                if (fileToDownload.Exists)
+                {
+                    return true;
+                }
+
+                GenerateDownloadFile(Url, fileToDownload.Name, fileToDownload.DirectoryName);
+            }
+            else
+            {
+                if (!Directory.Exists(DownloadFolder))
+                {
+                    Directory.CreateDirectory(DownloadFolder);
+                }
+
+                string FolderPath = SharedLibrary.File.FormatValidFileName(DownloadFolder);
+
+                GenerateDownloadFile(Url, "", FolderPath);
+            }
 
             InitJdownloader2();
 
@@ -71,7 +84,7 @@ namespace AutoBrowser.Core.Actions
                 content.AppendLine($"filename = {fileName}");
             }
 
-            Library.File.WriteOnFile(content.ToString(), Path.Combine(Global.JDownloaderFilesPath, $"AutoWeb{DateTime.Now.ToString("MMdd_hh_mm_ss")}.crawljob"));
+            SharedLibrary.File.WriteOnFile(content.ToString(), Path.Combine(Global.JDownloaderFilesPath, $"AutoWeb{DateTime.Now.ToString("MMdd_hh_mm_ss")}.crawljob"));
         }
 
         private void InitJdownloader2()

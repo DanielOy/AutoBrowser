@@ -1,6 +1,6 @@
 ﻿using AutoBrowser.Core.Browsers;
+using HtmlAgilityPack;
 using System;
-using System.Windows.Forms;
 
 namespace AutoBrowser.Core.Actions
 {
@@ -33,18 +33,18 @@ namespace AutoBrowser.Core.Actions
                 throw new ArgumentNullException(nameof(browser));
             }
 
-            browser.Document.Body.InvokeMember("Click");
+            //browser.Document.Body.InvokeMember("Click");
             return true;
         }
 
-        public object Perform(HtmlElement element)
+        public object Perform(HtmlNode element)
         {
             if (element == null)
             {
                 throw new ArgumentNullException(nameof(element));
             }
 
-            element.InvokeMember("Click");
+            //element.InvokeMember("Click");
             return true;
         }
 

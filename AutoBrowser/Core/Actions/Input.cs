@@ -1,4 +1,4 @@
-﻿using AutoBrowser.Library.Forms;
+﻿using SharedLibrary.Forms;
 using System.Windows.Forms;
 
 namespace AutoBrowser.Core.Actions
@@ -38,8 +38,7 @@ namespace AutoBrowser.Core.Actions
         {
             string description = string.IsNullOrEmpty(Description) ? "Input" : Description;
 
-            string input = "";
-            if (InputBox.Show($"Please insert a value for [{description}]", description, out input) == DialogResult.OK)
+            if (InputBox.Show($"Please insert a value for [{description}]", description, out string input) == DialogResult.OK)
             {
                 return FormatString(input);
             }
@@ -50,7 +49,7 @@ namespace AutoBrowser.Core.Actions
         {
             switch (Format)
             {
-                case SpecialFormat.URLEncoding: return Library.TextFormat.URLEnconde(input);
+                case SpecialFormat.URLEncoding: return SharedLibrary.TextFormat.URLEnconde(input);
                 default: return input;
             }
         }

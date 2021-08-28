@@ -31,7 +31,7 @@
 
         public void Perform()
         {
-            Library.File.WriteOnFile(Text, FileName);
+           SharedLibrary.File.WriteOnFile(Text, FileName);
         }
 
         internal override void InitVariables()

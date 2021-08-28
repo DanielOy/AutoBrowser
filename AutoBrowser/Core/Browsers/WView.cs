@@ -15,8 +15,16 @@ namespace AutoBrowser.Core.Browsers
         private bool documentLoaded;
         private bool cookiesLoaded;
         private List<CoreWebView2Cookie> cookies;
+        private readonly bool _activeScripts;
 
-        public WView(WebView2 view)
+        public WView(bool activeScripts)
+        {
+            _view = new WebView2();
+            _activeScripts = activeScripts;
+            _view.NavigationStarting += _view_NavigationStarting;
+        }
+
+        public WView(WebView2 view, bool activeScripts)
         {
             _view = view;
             _view.NavigationStarting += _view_NavigationStarting;
@@ -42,7 +50,7 @@ namespace AutoBrowser.Core.Browsers
             }
             else
             {
-                Library.File.WriteOnFile($"{new Uri(e.Uri).Host}|{e.Uri}", "Pages.dat");
+               SharedLibrary.File.WriteOnFile($"{new Uri(e.Uri).Host}|{e.Uri}", "Pages.dat");
             }
         }
 
@@ -141,7 +149,7 @@ namespace AutoBrowser.Core.Browsers
             {
                 _view.CoreWebView2.Navigate(url);
                 _view.CoreWebView2.NewWindowRequested += CoreWebView2_NewWindowRequested;
-                _view.CoreWebView2.Settings.IsScriptEnabled = false;
+                _view.CoreWebView2.Settings.IsScriptEnabled = _activeScripts;
             }
 
             if (timeOut > 0)

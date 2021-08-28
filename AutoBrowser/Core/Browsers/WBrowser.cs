@@ -12,7 +12,7 @@ namespace AutoBrowser.Core.Browsers
         #region Properties
         public override Uri Url => _browser?.Url;
 
-        public override string Cookies => Library.Web.GetCookie(Url?.AbsoluteUri);
+        public override string Cookies =>SharedLibrary.Web.GetCookie(Url?.AbsoluteUri);
 
         public override HtmlAgilityPack.HtmlDocument Document => GetDocument();
 
@@ -99,7 +99,7 @@ namespace AutoBrowser.Core.Browsers
             }
             else
             {
-                Library.File.WriteOnFile($"{e.Url.Host}|{e.Url.AbsoluteUri}", "Pages.dat");
+               SharedLibrary.File.WriteOnFile($"{e.Url.Host}|{e.Url.AbsoluteUri}", "Pages.dat");
             }
         }
 

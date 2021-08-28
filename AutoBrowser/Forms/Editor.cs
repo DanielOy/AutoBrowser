@@ -12,6 +12,7 @@ namespace AutoBrowser.Forms
     public partial class Editor : Form
     {
         #region Global Variables
+        private Project _project;
         private string fileName;
         private bool isEdit = false;
         private TreeNode currentNode;
@@ -35,7 +36,9 @@ namespace AutoBrowser.Forms
         #endregion
 
         #region Properties
-        public string FileName { get => fileName; set { fileName = value; isEdit = true; } }
+        //public string FileName { get => fileName; set { fileName = value; isEdit = true; } }
+
+        public Project Project { get => _project; set { _project = value; isEdit = true; } }
         #endregion
 
         #region Constructor
@@ -48,7 +51,7 @@ namespace AutoBrowser.Forms
         #region Functions
         private void LoadProject()
         {
-            var actions = new Project().LoadProject(fileName);
+            var actions = Project.Actions;
             StepsTreeView.Nodes.AddRange(ActionsToNodes(actions));
         }
 
@@ -349,11 +352,7 @@ namespace AutoBrowser.Forms
             try
             {
                 FormButtonsEnabled(false);
-                if (string.IsNullOrEmpty(fileName))
-                {
-                    fileName = "Temp" + DateTime.Now.ToString("yyMMdd");
-                }
-                else
+                if (Project != null)
                 {
                     LoadProject();
                     StepsTreeView.ExpandAll();
@@ -508,21 +507,41 @@ namespace AutoBrowser.Forms
                     return;
                 }
 
+                //Request project name
+                string projectN = isEdit ? Project.Name : "";
+                var nameResult =SharedLibrary.Forms.InputBox.Show("Please insert the name of the project to save", "Project Name", out string projectName, projectN);
+                if (nameResult != DialogResult.OK) { return; }
 
                 if (!isEdit)
                 {
-                    var result = Library.Forms.InputBox.Show("Please insert the name of the project to save", "Project Name", out string projectName);
-                    if (result != DialogResult.OK)
-                    {
-                        return;
-                    }
                     fileName = projectName.Replace(" ", "_") + Global.FileExtension;
+                    _project = new Project(fileName);
+                }
+                Project.Name = projectName;
+
+                //Request the project description
+                var desResult =SharedLibrary.Forms.InputBox.Show("Please insert a description for the current project", "Description", out string projectDes, Project.Description);
+                if (desResult == DialogResult.OK) { Project.Description = projectDes; }
+
+                //Request browser to use
+                var browserResult = MessageBox.Show("Do you want to use the WebView instead of the WebBrowser?\nBetter compatibility with new web technologies", "Information", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                Project.Browser = browserResult == DialogResult.Yes ? Project.Browsers.WebView : Project.Browsers.WebBrowser;
+
+                if (Project.Browser == Project.Browsers.WebView)
+                {
+                    //Request for active scripts
+                    var scriptResult = MessageBox.Show("Do you want to active scripts?", "Information", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                    Project.ActiveScripts = scriptResult == DialogResult.Yes;
+                }
+                else
+                {
+                    Project.ActiveScripts = false;
                 }
 
-                List<BaseAction> actions = NodesToActions(StepsTreeView.Nodes);
+                Project.Actions = NodesToActions(StepsTreeView.Nodes);
 
-                (new Project()).SaveProject(actions, fileName);
-                MessageBox.Show("Project saved successfully", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Project.Save();
+                MessageBox.Show($"Project {(isEdit ? "updated" : "saved")} successfully", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 DialogResult = DialogResult.OK;
                 Close();
             }
@@ -543,9 +562,10 @@ namespace AutoBrowser.Forms
 
                 if (File.Exists(tempFile)) { File.Delete(tempFile); }
 
-                Project.SaveProject(originalActions, tempFile);
-                List<BaseAction> actions = Project.LoadProject(tempFile);
-                actions.ForEach(x => x.InitVariables());
+                Project.Actions = originalActions;
+                Project.Save(tempFile);
+
+                List<BaseAction> actions = new Project(tempFile)?.Actions;
 
                 if (File.Exists(tempFile)) { File.Delete(tempFile); }
 
