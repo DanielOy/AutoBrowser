@@ -176,7 +176,7 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\SharedLibrary\SharedLibrary\SharedLibrary.csproj">
+    <ProjectReference Include="..\SharedLibrary\SharedLibrary.csproj">
       <Project>{460c6d6b-e932-4c53-960a-22fccc3a2352}</Project>
       <Name>SharedLibrary</Name>
     </ProjectReference>

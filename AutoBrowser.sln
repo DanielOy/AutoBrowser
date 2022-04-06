@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.28307.1433
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoBrowser", "AutoBrowser\AutoBrowser.csproj", "{9D5CD081-011D-4D6A-9B9C-A0E7E3161E10}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedLibrary", "..\SharedLibrary\SharedLibrary\SharedLibrary.csproj", "{460C6D6B-E932-4C53-960A-22FCCC3A2352}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedLibrary", "SharedLibrary\SharedLibrary.csproj", "{460C6D6B-E932-4C53-960A-22FCCC3A2352}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
