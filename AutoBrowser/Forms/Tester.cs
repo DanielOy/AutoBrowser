@@ -70,6 +70,7 @@ namespace AutoBrowser.Forms
                     autoWeb = new AutoWebBrowser(formView);
                 }
 
+                autoWeb.AuxButton = btnHidden;
                 autoWeb.ProgressChanged += (s, ev) => this.Text = ev.Description;
                 autoWeb.ProcessFinished += (s, ev) =>
                 {

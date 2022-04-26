@@ -3,7 +3,7 @@ using AutoBrowser.Core.Browsers;
 using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
-
+using System.Windows.Forms;
 
 namespace AutoBrowser.Core
 {
@@ -25,6 +25,7 @@ namespace AutoBrowser.Core
         public delegate void ProcessFinishedEventHandler(object sender, EventArgs e);
         public event ProgressChangedEventHandler ProgressChanged;
         public event ProcessFinishedEventHandler ProcessFinished;
+        public Button AuxButton { get; set; }
 
         public AutoWebBrowser()
         {
@@ -118,9 +119,14 @@ namespace AutoBrowser.Core
                         PerformProgressChangedEvent($"Perform click on {click.Variable} element");
                         click.Perform(GetNode(click.Variable));
                         break;
+                    case Wait wait:
+                        PerformProgressChangedEvent($"Performing {wait.GetDescription()}");
+                        wait.ProgressChanged += ProgressChanged;
+                        wait.Perform(_browser, AuxButton);
+                        break;
                     case WebAction web:
                         PerformProgressChangedEvent($"Performing: {web.GetDescription()}");
-                        result = web.Perform(_browser);
+                        web.Perform(_browser);
                         break;
                     case Input input:
                         PerformProgressChangedEvent($"Waiting for user input");

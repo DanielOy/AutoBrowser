@@ -31,20 +31,23 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Tester));
             this.MaintableLayout = new System.Windows.Forms.TableLayoutPanel();
             this.btnStart = new System.Windows.Forms.Button();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.btnHidden = new System.Windows.Forms.Button();
             this.MaintableLayout.SuspendLayout();
+            this.flowLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // MaintableLayout
             // 
             this.MaintableLayout.ColumnCount = 1;
-            this.MaintableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.MaintableLayout.Controls.Add(this.btnStart, 0, 0);
+            this.MaintableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.MaintableLayout.Controls.Add(this.flowLayoutPanel1, 0, 0);
             this.MaintableLayout.Dock = System.Windows.Forms.DockStyle.Fill;
             this.MaintableLayout.Location = new System.Drawing.Point(0, 0);
             this.MaintableLayout.Name = "MaintableLayout";
             this.MaintableLayout.RowCount = 2;
-            this.MaintableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 7.322654F));
-            this.MaintableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 92.67735F));
+            this.MaintableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.MaintableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.MaintableLayout.Size = new System.Drawing.Size(689, 437);
             this.MaintableLayout.TabIndex = 0;
             // 
@@ -61,6 +64,26 @@
             this.btnStart.UseVisualStyleBackColor = true;
             this.btnStart.Click += new System.EventHandler(this.BtnStart_Click);
             // 
+            // flowLayoutPanel1
+            // 
+            this.flowLayoutPanel1.Controls.Add(this.btnStart);
+            this.flowLayoutPanel1.Controls.Add(this.btnHidden);
+            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 3);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(683, 29);
+            this.flowLayoutPanel1.TabIndex = 2;
+            // 
+            // btnHidden
+            // 
+            this.btnHidden.Location = new System.Drawing.Point(84, 3);
+            this.btnHidden.Name = "btnHidden";
+            this.btnHidden.Size = new System.Drawing.Size(75, 23);
+            this.btnHidden.TabIndex = 2;
+            this.btnHidden.Text = "button1";
+            this.btnHidden.UseVisualStyleBackColor = true;
+            this.btnHidden.Visible = false;
+            // 
             // Tester
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -73,6 +96,7 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Tester_FormClosing);
             this.Shown += new System.EventHandler(this.FrmTEST_Shown);
             this.MaintableLayout.ResumeLayout(false);
+            this.flowLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -81,6 +105,8 @@
 
         private System.Windows.Forms.TableLayoutPanel MaintableLayout;
         private System.Windows.Forms.Button btnStart;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
+        private System.Windows.Forms.Button btnHidden;
     }
 }
 

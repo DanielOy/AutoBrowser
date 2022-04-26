@@ -1,16 +1,23 @@
 ﻿using AutoBrowser.Core.Browsers;
+using System;
 using System.Windows.Forms;
+using static AutoBrowser.Core.AutoWebBrowser;
 
 namespace AutoBrowser.Core.Actions
 {
     public class Wait : WebAction
     {
         private string _originalElement;
+        private bool _canContinue;
+        private Button _button;
+
+        public event ProgressChangedEventHandler ProgressChanged;
 
         public enum WaitFunctions
         {
             NoSeconds = 0,
             LoadElement = 1,
+            User = 2
         }
 
         public WaitFunctions SpecialFunction { get; set; } = WaitFunctions.NoSeconds;
@@ -27,6 +34,14 @@ namespace AutoBrowser.Core.Actions
 
         public override object Perform(BaseBrowser browser)
         {
+            return Perform(browser, null);
+        }
+
+        public object Perform(BaseBrowser browser, Button auxButton)
+        {
+            _button = auxButton;
+            _canContinue = false;
+
             if (SpecialFunction == WaitFunctions.NoSeconds)
             {
                 Wait(TimeOut);
@@ -35,7 +50,30 @@ namespace AutoBrowser.Core.Actions
             {
                 WaitLoadElement(browser);
             }
+            else if (SpecialFunction == WaitFunctions.User)
+            {
+                _button.Text = "Continue";
+                _button.Visible = true;
+                _button.Click += (s, e) => _canContinue = true;
+
+                WaitForUser(TimeOut);
+
+                _button.Text = "";
+                _button.Visible = false;
+            }
             return true;
+        }
+
+        private void WaitForUser(int seconds)
+        {
+            DateTime finalTime = DateTime.Now.AddSeconds(seconds);
+
+            while (finalTime > DateTime.Now && !_canContinue)
+            {
+                int secondsRemaining = (int)(finalTime - DateTime.Now).TotalSeconds;
+                ProgressChanged?.Invoke(this, new ProgressChangedArgs($"Waiting, {secondsRemaining} seconds remaining"));
+                Application.DoEvents();
+            }
         }
 
         private void WaitLoadElement(BaseBrowser browser)
@@ -51,7 +89,7 @@ namespace AutoBrowser.Core.Actions
             }
 
             secondsWaited = 0;
-            while (browser.Document==null && browser.Document.GetElementbyId(Element) == null && TimeOut > secondsWaited)
+            while (browser.Document == null && browser.Document.GetElementbyId(Element) == null && TimeOut > secondsWaited)
             {
                 Wait(1);
                 secondsWaited++;
