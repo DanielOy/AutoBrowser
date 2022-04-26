@@ -1,5 +1,6 @@
 ﻿using AutoBrowser.Core;
 using AutoBrowser.Forms;
+using Microsoft.Toolkit.Uwp.Notifications;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -17,6 +18,7 @@ namespace AutoBrowser
         [STAThread]
         static void Main()
         {
+            SuscribeNotifications();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.ThreadException += new ThreadExceptionEventHandler(Application_ThreadException);
@@ -25,6 +27,17 @@ namespace AutoBrowser
             SharedLibrary.Web.ConfigureIEBrowserEmulator(Process.GetCurrentProcess().ProcessName);
             SharedLibrary.WinRegistry.SetFileAsocciation(Global.FileExtension, Application.ExecutablePath);
             ChooseProcess();
+        }
+
+        private static void SuscribeNotifications()
+        {
+            ToastNotificationManagerCompat.OnActivated += toastArgs =>
+            {
+                ToastArguments args = ToastArguments.Parse(toastArgs.Argument);
+
+                if (!string.IsNullOrEmpty(args.Get("process")))
+                    Process.Start(args.Get("process"));
+            };
         }
 
         static void Application_ThreadException(object sender, ThreadExceptionEventArgs e)

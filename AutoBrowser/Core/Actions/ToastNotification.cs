@@ -8,11 +8,13 @@ namespace AutoBrowser.Core.Actions
         #region Global Variables
         private string _originalTitle;
         private string _originalBody;
+        private string _originalProcess;
         #endregion
 
         #region Properties
         public string Title { get; set; }
         public string Body { get; set; }
+        public string Process { get; set; }
         #endregion
 
         #region Constructors
@@ -28,6 +30,13 @@ namespace AutoBrowser.Core.Actions
             Title = _originalTitle = title;
             Body = _originalBody = body;
         }
+
+        public ToastNotification(string title, string body, string process)
+        {
+            Title = _originalTitle = title;
+            Body = _originalBody = body;
+            Process = _originalProcess = process;
+        }
         #endregion
 
         #region Functions
@@ -36,6 +45,7 @@ namespace AutoBrowser.Core.Actions
             new ToastContentBuilder()
                 .AddArgument("action", "viewConversation")
                 .AddArgument("conversationId", 9813)
+                .AddArgument("process", Process)
                 .AddText(Title)
                 .AddText(Body)
                 .Show();
