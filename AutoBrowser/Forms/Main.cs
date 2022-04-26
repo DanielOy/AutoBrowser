@@ -1,8 +1,10 @@
 ﻿using AutoBrowser.Core;
+using AutoBrowser.Core.Actions;
+using SharedLibrary;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace AutoBrowser.Forms
@@ -10,28 +12,37 @@ namespace AutoBrowser.Forms
     public partial class Main : Form
     {
         #region Global Variables
-        private string projectPath;
+        private string _projectsPath;
         #endregion
 
         #region Constructor
         public Main()
         {
             InitializeComponent();
+            InitEnvironment();
         }
         #endregion
 
-        #region Methods
-        private void LoadProjects()
+        #region Functions
+        private void InitEnvironment()
         {
-            if (string.IsNullOrEmpty(projectPath))
-            {
-                projectPath = Path.Combine(Environment.CurrentDirectory, "Projects");
-                Environment.CurrentDirectory = projectPath;
-            }
+            _projectsPath = Path.Combine(Environment.CurrentDirectory, "Projects");
+            Environment.CurrentDirectory = _projectsPath;
+        }
 
-            var files = new DirectoryInfo(projectPath).GetFiles($"*{Global.FileExtension}", SearchOption.TopDirectoryOnly);
+        private SortableList<Project> LoadProjects()
+        {
+            SetStatusMessage("Loading projects");
+            List<Project> projects = GetProjects();
+            SetStatusMessage(string.Empty);
 
+            return new SortableList<Project>(projects);
+        }
+
+        private List<Project> GetProjects()
+        {
             List<Project> projects = new List<Project>();
+            var files = GetProjectFiles();
 
             if (files != null && files.Length != 0)
             {
@@ -41,12 +52,20 @@ namespace AutoBrowser.Forms
                 }
             }
 
-            projectBindingSource.DataSource = projects;
+            return projects;
         }
-        #endregion
 
-        #region Functions
+        private FileInfo[] GetProjectFiles()
+        {
+            var projectFolder = new DirectoryInfo(_projectsPath);
 
+            return projectFolder.GetFiles($"*{Global.FileExtension}", SearchOption.TopDirectoryOnly);
+        }
+
+        private void SetStatusMessage(string message)
+        {
+            StatusLabel.Text = message;
+        }
         #endregion
 
         #region Events
@@ -54,11 +73,12 @@ namespace AutoBrowser.Forms
         {
             try
             {
-                var selected = ((Project)ProjectsDataGridView.SelectedRows[0].DataBoundItem);
-                
+                var projectSelected = ((Project)ProjectsDataGridView.SelectedRows[0].DataBoundItem);
+                var copyActions = BaseAction.Copy(projectSelected.Actions);
+
                 using (var frm = new Tester())
                 {
-                    frm.Actions = selected.Actions;
+                    frm.Actions = copyActions;
                     frm.ShowDialog();
                 }
             }
@@ -68,11 +88,11 @@ namespace AutoBrowser.Forms
             }
         }
 
-        private void Main_Shown(object sender, EventArgs e)
+        private async void Main_Shown(object sender, EventArgs e)
         {
             try
             {
-                LoadProjects();
+                projectBindingSource.DataSource = await Task.Run(() => LoadProjects());
             }
             catch (Exception ex)
             {
@@ -80,7 +100,7 @@ namespace AutoBrowser.Forms
             }
         }
 
-        private void AddToolStripButton_Click(object sender, EventArgs e)
+        private async void AddToolStripButton_Click(object sender, EventArgs e)
         {
             try
             {
@@ -88,7 +108,7 @@ namespace AutoBrowser.Forms
                 {
                     if (frm.ShowDialog() == DialogResult.OK)
                     {
-                        LoadProjects();
+                        projectBindingSource.DataSource = await Task.Run(() => LoadProjects());
                     }
                 }
             }
@@ -102,11 +122,11 @@ namespace AutoBrowser.Forms
         {
             try
             {
-                var selected = ((Project)ProjectsDataGridView.SelectedRows[0].DataBoundItem);
+                var projectSelected = ((Project)ProjectsDataGridView.SelectedRows[0].DataBoundItem);
 
                 using (var frm = new Editor())
                 {
-                    frm.Project = selected;
+                    frm.Project = projectSelected;
                     frm.ShowDialog();
                 }
                 ProjectsDataGridView.Refresh();
@@ -116,6 +136,45 @@ namespace AutoBrowser.Forms
                 MessageBox.Show(ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void ScheduletoolStripButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var projectSelected = ((Project)ProjectsDataGridView.SelectedRows[0].DataBoundItem);
+
+                //Scheduler scheduler = new Scheduler();
+                //string fileFullPath = new FileInfo(projectSelected.GetFilePath()).FullName;
+                //scheduler.AddTask(projectSelected.Name, fileFullPath, Scheduler.Frecuency.EachHour);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private async void DeleteToolStripButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var projectSelected = ((Project)ProjectsDataGridView.SelectedRows[0].DataBoundItem);
+
+                string msg = $"Are you sure want to delete the project <{projectSelected.Name}>?" +
+                    $"\nThis action can not be undone.";
+
+                if (MessageBox.Show(msg, "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
+                {
+                    System.IO.File.Delete(projectSelected.GetFilePath());
+
+                    projectBindingSource.DataSource = await Task.Run(() => LoadProjects());
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message + "\n" + ex.StackTrace, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         #endregion
     }
 }

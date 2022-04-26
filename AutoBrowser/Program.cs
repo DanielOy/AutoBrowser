@@ -21,9 +21,9 @@ namespace AutoBrowser
             Application.SetCompatibleTextRenderingDefault(false);
             Application.ThreadException += new ThreadExceptionEventHandler(Application_ThreadException);
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
-            
-           SharedLibrary.Web.ConfigureIEBrowserEmulator(Process.GetCurrentProcess().ProcessName);
-           SharedLibrary.WinRegistry.SetFileAsocciation(Global.FileExtension, Application.ExecutablePath);
+
+            SharedLibrary.Web.ConfigureIEBrowserEmulator(Process.GetCurrentProcess().ProcessName);
+            SharedLibrary.WinRegistry.SetFileAsocciation(Global.FileExtension, Application.ExecutablePath);
             ChooseProcess();
         }
 
@@ -31,14 +31,14 @@ namespace AutoBrowser
         {
             // Log the exception, display it, etc
             Debug.WriteLine(e.Exception.Message);
-           SharedLibrary.File.WriteOnFile($"{e.Exception.Message}\n{e.Exception.StackTrace}", "Error.log");
+            SharedLibrary.File.WriteOnFile($"{e.Exception.Message}\n{e.Exception.StackTrace}", "Error.log");
         }
 
         static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             // Log the exception, display it, etc
             Debug.WriteLine((e.ExceptionObject as Exception).Message);
-           SharedLibrary.File.WriteOnFile($"{(e.ExceptionObject as Exception).Message}\n{(e.ExceptionObject as Exception).StackTrace}", "Error.log");
+            SharedLibrary.File.WriteOnFile($"{(e.ExceptionObject as Exception).Message}\n{(e.ExceptionObject as Exception).StackTrace}", "Error.log");
         }
 
         private static void ChooseProcess()
@@ -46,7 +46,7 @@ namespace AutoBrowser
             List<string> ParametersList = Environment.GetCommandLineArgs().ToList();
             if (ParametersList.Count == 1)
             {
-                Application.Run(new Main()); 
+                Application.Run(new Main());
             }
             else if (ParametersList[1].EndsWith(Global.FileExtension))
             {

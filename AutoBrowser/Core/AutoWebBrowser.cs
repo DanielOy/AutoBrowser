@@ -8,9 +8,11 @@ using System.Collections.Generic;
 namespace AutoBrowser.Core
 {
     //TODO: V2: Implements sqlite or nosql
-    //TODO: V2: Improve notifications
+    //TODO: V2: Improve notifications (images/actions)
     //TODO: V2: Allow user to generate a task in task scheduler
-    //TODO: Make the process async
+    //TODO: V2: Make the main process async
+    //TODO: Check the integration with MyAnime
+    //TODO: Improve design and creation project assistance 
 
     public class AutoWebBrowser
     {

@@ -33,17 +33,6 @@ namespace AutoBrowser.Core.Actions
         #region Functions
         public void Perform()
         {
-            //NotifyIcon notify = new NotifyIcon
-            //{
-            //    Icon = System.Drawing.Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetExecutingAssembly().Location),
-            //    Visible = true
-            //};
-
-            //notify.ShowBalloonTip(3000,
-            //    Title,
-            //    Body,
-            //    ToolTipIcon.Info);
-
             new ToastContentBuilder()
                 .AddArgument("action", "viewConversation")
                 .AddArgument("conversationId", 9813)

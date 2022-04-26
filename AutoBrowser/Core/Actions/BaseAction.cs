@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
@@ -36,7 +37,7 @@ namespace AutoBrowser.Core.Actions
                 {
                     string propValue = propertie.GetValue(this)?.ToString();
 
-                    if (propValue!=null && propValue.Contains($"[{variable.Key}]"))
+                    if (propValue != null && propValue.Contains($"[{variable.Key}]"))
                     {
                         propertie.SetValue(this, propValue.Replace($"[{variable.Key}]", variable.Value.ToString()));
                     }
@@ -71,6 +72,28 @@ namespace AutoBrowser.Core.Actions
             return GetActions()
                 .Select(x => x.Name)
                 .ToArray();
+        }
+
+        public static List<BaseAction> Copy(List<BaseAction> actions)
+        {
+            string tempFile = "TempFile.aweb";
+            DeleteFile(tempFile);
+
+            var Project = new Project { Actions = actions };
+            Project.Save(tempFile);
+
+            var copyActions = new Project(tempFile)?.Actions;
+            DeleteFile(tempFile);
+
+            return copyActions;
+        }
+
+        private static void DeleteFile(string tempFile)
+        {
+            if (File.Exists(tempFile))
+            {
+                File.Delete(tempFile);
+            }
         }
     }
 }

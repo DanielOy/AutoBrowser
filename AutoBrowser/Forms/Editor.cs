@@ -2,7 +2,6 @@
 using AutoBrowser.Core.Actions;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
@@ -13,10 +12,10 @@ namespace AutoBrowser.Forms
     {
         #region Global Variables
         private Project _project;
-        private string fileName;
-        private bool isEdit = false;
-        private TreeNode currentNode;
-        private bool? isEditNode = null;
+        private TreeNode _currentNode;
+        private string _fileName;
+        private bool _isEdit = false;
+        private bool? _isEditNode = null;
 
         private enum TreeIcons
         {
@@ -36,9 +35,7 @@ namespace AutoBrowser.Forms
         #endregion
 
         #region Properties
-        //public string FileName { get => fileName; set { fileName = value; isEdit = true; } }
-
-        public Project Project { get => _project; set { _project = value; isEdit = true; } }
+        public Project Project { get => _project; set { _project = value; _isEdit = true; } }
         #endregion
 
         #region Constructor
@@ -60,30 +57,43 @@ namespace AutoBrowser.Forms
             List<TreeNode> nodes = new List<TreeNode>();
             foreach (var action in actions)
             {
-                TreeNode node = null;
-                switch (action)
-                {
-                    case ExtractElement e:
-                        node = new TreeNode(action.GetDescription()) { Tag = action };
-                        e.NodePath.ForEach(n => node.Nodes.Add(new TreeNode(n.GetDescription()) { Tag = n }));
-                        break;
-                    case Repeat r:
-                        node = new TreeNode(action.GetDescription()) { Tag = action };
-                        node.Nodes.AddRange(ActionsToNodes(r.Actions));
-                        break;
-                    case Conditional c:
-                        node = new TreeNode(action.GetDescription()) { Tag = action };
-                        node.Nodes.AddRange(ActionsToNodes(c.Actions));
-                        break;
-                    default:
-                        node = new TreeNode(action.GetDescription()) { Tag = action };
-                        break;
-                }
-                node.ImageIndex = GetIconIndex(action);
-                node.SelectedImageIndex = GetIconIndex(action);
+                TreeNode node = ActionToNote(action);
                 nodes.Add(node);
             }
             return nodes.ToArray();
+        }
+
+        private TreeNode ActionToNote(BaseAction action)
+        {
+            TreeNode node;
+            switch (action)
+            {
+                case ExtractElement extractElement:
+                    node = new TreeNode(action.GetDescription()) { Tag = action };
+                    extractElement.NodePath.ForEach(n => node.Nodes.Add(new TreeNode(n.GetDescription()) { Tag = n }));
+                    break;
+                case Repeat repeat:
+                    node = new TreeNode(action.GetDescription()) { Tag = action };
+                    node.Nodes.AddRange(ActionsToNodes(repeat.Actions));
+                    break;
+                case Conditional conditional:
+                    node = new TreeNode(action.GetDescription()) { Tag = action };
+                    node.Nodes.AddRange(ActionsToNodes(conditional.Actions));
+                    break;
+                default:
+                    node = new TreeNode(action.GetDescription()) { Tag = action };
+                    break;
+            }
+
+            SetNodeIcon(node, action);
+
+            return node;
+        }
+
+        private void SetNodeIcon(TreeNode node, BaseAction action)
+        {
+            node.ImageIndex = GetIconIndex(action);
+            node.SelectedImageIndex = GetIconIndex(action);
         }
 
         private int GetIconIndex(BaseAction action)
@@ -94,19 +104,18 @@ namespace AutoBrowser.Forms
                 case Repeat r: return (int)TreeIcons.Repeat;
                 case Redirect re: return (int)TreeIcons.Navigate;
                 case Click c: return (int)TreeIcons.Click;
-                case Download d: return (int)TreeIcons.Download;
+                case BaseDownload d: return (int)TreeIcons.Download;
                 case ExtractElement e: return (int)TreeIcons.Html;
                 case Input i: return (int)TreeIcons.Input;
                 case ToastNotification t: return (int)TreeIcons.Notification;
                 case WriteFile w: return (int)TreeIcons.WriteFile;
                 case Wait wt: return (int)TreeIcons.Wait;
                 case ExternalProcess ep: return (int)TreeIcons.Process;
+                default: return (int)TreeIcons.Default;
             }
-
-            return (int)TreeIcons.Default;
         }
 
-        private Type GetTypeByName(string action)
+        private Type GetActionTypeByName(string action)
         {
             if (Node.GetSubtypeNames().Contains(action))
             {
@@ -125,9 +134,10 @@ namespace AutoBrowser.Forms
                .ToList()?[0];
         }
 
-        private void CreateControls(Type type, object action)
+        //TODO: clean the code
+        private void CreateControls(Type actionType, object action)
         {
-            PropertyInfo[] properties = type.GetProperties().Where(x => x.PropertyType != typeof(List<BaseAction>) && x.PropertyType != typeof(List<Node>)).ToArray();
+            PropertyInfo[] properties = actionType.GetProperties().Where(x => x.PropertyType != typeof(List<BaseAction>) && x.PropertyType != typeof(List<Node>)).ToArray();
             ClearFormInputs();
 
             int rowCount = ControlsTableLayoutPanel.RowStyles.Count;
@@ -192,7 +202,7 @@ namespace AutoBrowser.Forms
             ControlsTableLayoutPanel.Controls.Clear();
         }
 
-        private void TreeButtonsEnabled(bool enabled)
+        private void SetTreeButtonsEnabled(bool enabled)
         {
             AddButton.Enabled = enabled;
             DeleteButton.Enabled = enabled;
@@ -210,10 +220,11 @@ namespace AutoBrowser.Forms
             CancelButton.Enabled = enabled;
         }
 
+        //TODO: Clean the code
         private TreeNode FormToNode()
         {
             string actionName = ActionsComboBox.SelectedItem.ToString();
-            Type type = GetTypeByName(actionName);
+            Type type = GetActionTypeByName(actionName);
             object instance = Activator.CreateInstance(type);
 
             foreach (Control control in ControlsTableLayoutPanel.Controls)
@@ -335,7 +346,7 @@ namespace AutoBrowser.Forms
         private void InitActionsComboItems()
         {
             ActionsComboBox.Items.Clear();
-            if ((currentNode?.Tag is ExtractElement && !(isEditNode ?? false)) || currentNode?.Tag is Node)
+            if ((_currentNode?.Tag is ExtractElement && !(_isEditNode ?? false)) || _currentNode?.Tag is Node)
             {
                 ActionsComboBox.Items.AddRange(Node.GetSubtypeNames());
             }
@@ -368,13 +379,15 @@ namespace AutoBrowser.Forms
         {
             try
             {
-                TreeButtonsEnabled(false);
+                SetTreeButtonsEnabled(false);
                 FormButtonsEnabled(true);
                 ClearFormInputs();
 
-                currentNode = StepsTreeView.SelectedNode;
-                Text = $"Editor [{currentNode?.FullPath?.Replace("\\", " -> ")}] -> NewAction";
-                isEditNode = false;
+                //TODO:Clean the code, levels of abstraction
+                _currentNode = StepsTreeView.SelectedNode;
+                _isEditNode = false;
+
+                Text = $"Editor [{_currentNode?.FullPath?.Replace("\\", " -> ")}] -> NewAction";
 
                 InitActionsComboItems();
             }
@@ -384,15 +397,16 @@ namespace AutoBrowser.Forms
             }
         }
 
+        //TODO: Clean the code, function length
         private void Editbutton_Click(object sender, EventArgs e)
         {
             try
             {
                 FormButtonsEnabled(true);
-                TreeButtonsEnabled(false);
-                isEditNode = true;
+                SetTreeButtonsEnabled(false);
+                _isEditNode = true;
 
-                currentNode = StepsTreeView.SelectedNode;
+                _currentNode = StepsTreeView.SelectedNode;
                 string action = StepsTreeView.SelectedNode?.Tag?.GetType()?.Name;
 
                 if (!string.IsNullOrEmpty(action))
@@ -401,9 +415,9 @@ namespace AutoBrowser.Forms
                     ActionsComboBox.Enabled = false;
                     ActionsComboBox.SelectedItem = action;
 
-                    Text = $"Editor [{currentNode.FullPath.Replace("\\", " -> ")}]";
+                    Text = $"Editor [{_currentNode.FullPath.Replace("\\", " -> ")}]";
 
-                    Type type = GetTypeByName(action);
+                    Type type = GetActionTypeByName(action);
                     if (type == null) { type = Node.GetSubtypes().ToList().Find(x => x.Name == action); }
                     CreateControls(type, StepsTreeView.SelectedNode.Tag);
                 }
@@ -423,12 +437,12 @@ namespace AutoBrowser.Forms
         {
             try
             {
-                string action = ActionsComboBox.SelectedItem.ToString();
+                string selectedActionName = ActionsComboBox.SelectedItem.ToString();
 
-                if (!string.IsNullOrEmpty(action))
+                if (!string.IsNullOrEmpty(selectedActionName))
                 {
-                    Type type = GetTypeByName(action);
-                    CreateControls(type, null);
+                    var actionType = GetActionTypeByName(selectedActionName);
+                    CreateControls(actionType, null);
                 }
             }
             catch (Exception ex)
@@ -437,50 +451,51 @@ namespace AutoBrowser.Forms
             }
         }
 
+        //TODO: Clean the code, functions length
         private void SaveButton_Click(object sender, EventArgs e)
         {
             try
             {
                 TreeNode node = FormToNode();
 
-                if (isEditNode == true)
+                if (_isEditNode == true)
                 {
-                    this.currentNode.Tag = node.Tag;
-                    this.currentNode.Text = node.Text;
+                    this._currentNode.Tag = node.Tag;
+                    this._currentNode.Text = node.Text;
                 }
-                else if (isEditNode == false)
+                else if (_isEditNode == false)
                 {
-                    if (this.currentNode == null)
+                    if (this._currentNode == null)
                     {
                         StepsTreeView.Nodes.Add(node);
                     }
-                    else if (this.currentNode.Tag.GetType() == typeof(Repeat) || StepsTreeView.SelectedNode.Tag.GetType() == typeof(Conditional))
+                    else if (this._currentNode.Tag.GetType() == typeof(Repeat) || StepsTreeView.SelectedNode.Tag.GetType() == typeof(Conditional))
                     {
-                        this.currentNode.Nodes.Add(node);
+                        this._currentNode.Nodes.Add(node);
                     }
-                    else if (this.currentNode.Tag.GetType() == typeof(ExtractElement))
+                    else if (this._currentNode.Tag.GetType() == typeof(ExtractElement))
                     {
-                        this.currentNode.Nodes.Add(node);
+                        this._currentNode.Nodes.Add(node);
                     }
                     else
                     {
-                        if (this.currentNode.Parent == null)
+                        if (this._currentNode.Parent == null)
                         {
                             StepsTreeView.Nodes.Add(node);
                         }
                         else
                         {
-                            this.currentNode.Parent.Nodes.Add(node);
+                            this._currentNode.Parent.Nodes.Add(node);
                         }
                     }
                 }
 
-                TreeButtonsEnabled(true);
+                SetTreeButtonsEnabled(true);
                 FormButtonsEnabled(false);
                 ActionsComboBox.Text = "";
                 ClearFormInputs();
-                isEditNode = null;
-                this.currentNode = null;
+                _isEditNode = null;
+                this._currentNode = null;
             }
             catch (Exception ex)
             {
@@ -490,13 +505,16 @@ namespace AutoBrowser.Forms
 
         private void CancelButton_Click(object sender, EventArgs e)
         {
-            currentNode = null;
+            //TODO: Clean the code, levels of abstraction
+            _currentNode = null;
             ClearFormInputs();
-            TreeButtonsEnabled(true);
+            SetTreeButtonsEnabled(true);
             FormButtonsEnabled(false);
             ActionsComboBox.Text = "";
         }
 
+
+        //TODO: Clean the code, functions length
         private void SaveToolStripButton_Click(object sender, EventArgs e)
         {
             try
@@ -508,19 +526,19 @@ namespace AutoBrowser.Forms
                 }
 
                 //Request project name
-                string projectN = isEdit ? Project.Name : "";
-                var nameResult =SharedLibrary.Forms.InputBox.Show("Please insert the name of the project to save", "Project Name", out string projectName, projectN);
+                string projectN = _isEdit ? Project.Name : "";
+                var nameResult = SharedLibrary.Forms.InputBox.Show("Please insert the name of the project to save", "Project Name", out string projectName, projectN);
                 if (nameResult != DialogResult.OK) { return; }
 
-                if (!isEdit)
+                if (!_isEdit)
                 {
-                    fileName = projectName.Replace(" ", "_") + Global.FileExtension;
-                    _project = new Project(fileName);
+                    _fileName = projectName.Replace(" ", "_") + Global.FileExtension;
+                    _project = new Project(_fileName);
                 }
                 Project.Name = projectName;
 
                 //Request the project description
-                var desResult =SharedLibrary.Forms.InputBox.Show("Please insert a description for the current project", "Description", out string projectDes, Project.Description);
+                var desResult = SharedLibrary.Forms.InputBox.Show("Please insert a description for the current project", "Description", out string projectDes, Project.Description);
                 if (desResult == DialogResult.OK) { Project.Description = projectDes; }
 
                 //Request browser to use
@@ -541,7 +559,7 @@ namespace AutoBrowser.Forms
                 Project.Actions = NodesToActions(StepsTreeView.Nodes);
 
                 Project.Save();
-                MessageBox.Show($"Project {(isEdit ? "updated" : "saved")} successfully", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show($"Project {(_isEdit ? "updated" : "saved")} successfully", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 DialogResult = DialogResult.OK;
                 Close();
             }
@@ -555,23 +573,12 @@ namespace AutoBrowser.Forms
         {
             try
             {
-                List<BaseAction> originalActions = NodesToActions(StepsTreeView.Nodes);
-
-                var Project = new Project();
-                string tempFile = "TempFile.aweb";
-
-                if (File.Exists(tempFile)) { File.Delete(tempFile); }
-
-                Project.Actions = originalActions;
-                Project.Save(tempFile);
-
-                List<BaseAction> actions = new Project(tempFile)?.Actions;
-
-                if (File.Exists(tempFile)) { File.Delete(tempFile); }
+                var originalActions = NodesToActions(StepsTreeView.Nodes);
+                var copyActions = BaseAction.Copy(originalActions);
 
                 using (var frm = new Tester())
                 {
-                    frm.Actions = actions;
+                    frm.Actions = copyActions;
                     frm.IsAuto = false;
                     frm.ShowDialog();
                 }
@@ -582,34 +589,35 @@ namespace AutoBrowser.Forms
             }
         }
 
+        //TODO: Clean the code, functions length
         private void UpButton_Click(object sender, EventArgs e)
         {
             try
             {
-                currentNode = StepsTreeView.SelectedNode;
-                if (currentNode == null)
+                _currentNode = StepsTreeView.SelectedNode;
+                if (_currentNode == null)
                 {
                     return;
                 }
 
-                TreeNode parent = currentNode.Parent;
-                TreeView view = currentNode.TreeView;
+                TreeNode parent = _currentNode.Parent;
+                TreeView view = _currentNode.TreeView;
                 if (parent != null)
                 {
-                    int index = parent.Nodes.IndexOf(currentNode);
+                    int index = parent.Nodes.IndexOf(_currentNode);
                     if (index > 0)
                     {
                         parent.Nodes.RemoveAt(index);
-                        parent.Nodes.Insert(index - 1, currentNode);
+                        parent.Nodes.Insert(index - 1, _currentNode);
                     }
                 }
-                else if (currentNode.TreeView.Nodes.Contains(currentNode)) //root node
+                else if (_currentNode.TreeView.Nodes.Contains(_currentNode)) //root node
                 {
-                    int index = view.Nodes.IndexOf(currentNode);
+                    int index = view.Nodes.IndexOf(_currentNode);
                     if (index > 0)
                     {
                         view.Nodes.RemoveAt(index);
-                        view.Nodes.Insert(index - 1, currentNode);
+                        view.Nodes.Insert(index - 1, _currentNode);
                     }
                 }
             }
@@ -619,34 +627,35 @@ namespace AutoBrowser.Forms
             }
         }
 
+        //TODO: Clean the code, functions length
         private void DownButton_Click(object sender, EventArgs e)
         {
             try
             {
-                currentNode = StepsTreeView.SelectedNode;
-                if (currentNode == null)
+                _currentNode = StepsTreeView.SelectedNode;
+                if (_currentNode == null)
                 {
                     return;
                 }
 
-                TreeNode parent = currentNode.Parent;
-                TreeView view = currentNode.TreeView;
+                TreeNode parent = _currentNode.Parent;
+                TreeView view = _currentNode.TreeView;
                 if (parent != null)
                 {
-                    int index = parent.Nodes.IndexOf(currentNode);
+                    int index = parent.Nodes.IndexOf(_currentNode);
                     if (index < parent.Nodes.Count - 1)
                     {
                         parent.Nodes.RemoveAt(index);
-                        parent.Nodes.Insert(index + 1, currentNode);
+                        parent.Nodes.Insert(index + 1, _currentNode);
                     }
                 }
-                else if (view != null && view.Nodes.Contains(currentNode)) //root node
+                else if (view != null && view.Nodes.Contains(_currentNode)) //root node
                 {
-                    int index = view.Nodes.IndexOf(currentNode);
+                    int index = view.Nodes.IndexOf(_currentNode);
                     if (index < view.Nodes.Count - 1)
                     {
                         view.Nodes.RemoveAt(index);
-                        view.Nodes.Insert(index + 1, currentNode);
+                        view.Nodes.Insert(index + 1, _currentNode);
                     }
                 }
             }

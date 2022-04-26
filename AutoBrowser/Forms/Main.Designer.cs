@@ -32,18 +32,22 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.MainStatusStrip = new System.Windows.Forms.StatusStrip();
+            this.StatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.MainToolStrip = new System.Windows.Forms.ToolStrip();
             this.ExecuteToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.AddToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.EditToolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.ScheduletoolStripButton = new System.Windows.Forms.ToolStripButton();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.ProjectsDataGridView = new System.Windows.Forms.DataGridView();
-            this.projectBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.nameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.descriptionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.browserDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.activeScriptsDataGridViewCheckBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.projectBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.DeleteToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.tableLayoutPanel1.SuspendLayout();
+            this.MainStatusStrip.SuspendLayout();
             this.MainToolStrip.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ProjectsDataGridView)).BeginInit();
@@ -69,18 +73,27 @@
             // 
             // MainStatusStrip
             // 
+            this.MainStatusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.StatusLabel});
             this.MainStatusStrip.Location = new System.Drawing.Point(0, 319);
             this.MainStatusStrip.Name = "MainStatusStrip";
             this.MainStatusStrip.Size = new System.Drawing.Size(524, 22);
             this.MainStatusStrip.TabIndex = 0;
             this.MainStatusStrip.Text = "statusStrip1";
             // 
+            // StatusLabel
+            // 
+            this.StatusLabel.Name = "StatusLabel";
+            this.StatusLabel.Size = new System.Drawing.Size(0, 17);
+            // 
             // MainToolStrip
             // 
             this.MainToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ExecuteToolStripButton,
             this.AddToolStripButton,
-            this.EditToolStripButton});
+            this.EditToolStripButton,
+            this.DeleteToolStripButton,
+            this.ScheduletoolStripButton});
             this.MainToolStrip.Location = new System.Drawing.Point(0, 0);
             this.MainToolStrip.Name = "MainToolStrip";
             this.MainToolStrip.Size = new System.Drawing.Size(524, 25);
@@ -113,6 +126,15 @@
             this.EditToolStripButton.Size = new System.Drawing.Size(47, 22);
             this.EditToolStripButton.Text = "Edit";
             this.EditToolStripButton.Click += new System.EventHandler(this.EditToolStripButton_Click);
+            // 
+            // ScheduletoolStripButton
+            // 
+            this.ScheduletoolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("ScheduletoolStripButton.Image")));
+            this.ScheduletoolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.ScheduletoolStripButton.Name = "ScheduletoolStripButton";
+            this.ScheduletoolStripButton.Size = new System.Drawing.Size(75, 22);
+            this.ScheduletoolStripButton.Text = "Schedule";
+            this.ScheduletoolStripButton.Click += new System.EventHandler(this.ScheduletoolStripButton_Click);
             // 
             // tableLayoutPanel2
             // 
@@ -149,10 +171,6 @@
             this.ProjectsDataGridView.Size = new System.Drawing.Size(512, 279);
             this.ProjectsDataGridView.TabIndex = 0;
             // 
-            // projectBindingSource
-            // 
-            this.projectBindingSource.DataSource = typeof(AutoBrowser.Core.Project);
-            // 
             // nameDataGridViewTextBoxColumn
             // 
             this.nameDataGridViewTextBoxColumn.DataPropertyName = "Name";
@@ -181,6 +199,20 @@
             this.activeScriptsDataGridViewCheckBoxColumn.Name = "activeScriptsDataGridViewCheckBoxColumn";
             this.activeScriptsDataGridViewCheckBoxColumn.ReadOnly = true;
             // 
+            // projectBindingSource
+            // 
+            this.projectBindingSource.DataSource = typeof(AutoBrowser.Core.Project);
+            this.projectBindingSource.Sort = "Name";
+            // 
+            // DeleteToolStripButton
+            // 
+            this.DeleteToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("DeleteToolStripButton.Image")));
+            this.DeleteToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.DeleteToolStripButton.Name = "DeleteToolStripButton";
+            this.DeleteToolStripButton.Size = new System.Drawing.Size(60, 22);
+            this.DeleteToolStripButton.Text = "Delete";
+            this.DeleteToolStripButton.Click += new System.EventHandler(this.DeleteToolStripButton_Click);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -194,6 +226,8 @@
             this.Shown += new System.EventHandler(this.Main_Shown);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
+            this.MainStatusStrip.ResumeLayout(false);
+            this.MainStatusStrip.PerformLayout();
             this.MainToolStrip.ResumeLayout(false);
             this.MainToolStrip.PerformLayout();
             this.tableLayoutPanel2.ResumeLayout(false);
@@ -218,5 +252,8 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn browserDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewCheckBoxColumn activeScriptsDataGridViewCheckBoxColumn;
         private System.Windows.Forms.BindingSource projectBindingSource;
+        private System.Windows.Forms.ToolStripButton ScheduletoolStripButton;
+        private System.Windows.Forms.ToolStripStatusLabel StatusLabel;
+        private System.Windows.Forms.ToolStripButton DeleteToolStripButton;
     }
 }
