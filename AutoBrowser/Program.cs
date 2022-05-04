@@ -19,6 +19,12 @@ namespace AutoBrowser
         static void Main()
         {
             SuscribeNotifications();
+
+            if (ToastNotificationManagerCompat.WasCurrentProcessToastActivated())
+            {
+                Application.DoEvents();
+            }
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.ThreadException += new ThreadExceptionEventHandler(Application_ThreadException);
