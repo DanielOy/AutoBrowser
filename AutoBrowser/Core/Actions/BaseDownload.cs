@@ -49,7 +49,9 @@ namespace AutoBrowser.Core.Actions
                 Directory.CreateDirectory(DownloadFolder);
             }
 
-            string FullPath = Path.Combine(new DirectoryInfo(DownloadFolder).FullName, FileName);
+            string FullPath = Path.Combine(
+                new DirectoryInfo(DownloadFolder).FullName,
+                SharedLibrary.File.RemoveInvalidCharactersFile(FileName));
 
             FullPath = SharedLibrary.File.FormatValidFileName(FullPath);
 
