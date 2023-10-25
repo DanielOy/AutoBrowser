@@ -141,9 +141,9 @@ namespace AutoBrowser.Core.Actions
                     {
                         var elements = browser.Document.DocumentNode?.Descendants(multi.Value)?.ToList();
 
-                        elements = elements?
-                            .Where(x => x.GetAttributeValue(Enums.HtmlAttribute.ClassName.Value, "").Contains(multi.ClassName.ToString()))?
-                            .ToList();
+                        elements = multi.ExactMatch
+                            ? elements?.Where(x => x.GetAttributeValue(Enums.HtmlAttribute.ClassName.Value, "").Equals(multi.ClassName.ToString()))?.ToList()
+                            : elements?.Where(x => x.GetAttributeValue(Enums.HtmlAttribute.ClassName.Value, "").Contains(multi.ClassName.ToString()))?.ToList();
 
                         return elements;
 
@@ -153,9 +153,9 @@ namespace AutoBrowser.Core.Actions
                         int i = Convert.ToInt32(multi.Index);
 
                         var elements = browser.Document.DocumentNode?.Descendants(multi.Value)?.ToList();
-                        elements = elements?
-                            .Where(x => x.GetAttributeValue(Enums.HtmlAttribute.ClassName.Value, "").Contains(multi.ClassName.ToString()))?
-                            .ToList();
+                        elements = multi.ExactMatch 
+                            ? elements?.Where(x => x.GetAttributeValue(Enums.HtmlAttribute.ClassName.Value, "").Equals(multi.ClassName.ToString()))?.ToList()
+                            : elements?.Where(x => x.GetAttributeValue(Enums.HtmlAttribute.ClassName.Value, "").Contains(multi.ClassName.ToString()))?.ToList();
 
                         return elements?[i];
                     }

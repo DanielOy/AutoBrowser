@@ -244,6 +244,10 @@ namespace AutoBrowser.Forms
                     {
                         prop.SetValue(instance, Convert.ToInt32(textBox.Text.Trim()));
                     }
+                    else if (prop.PropertyType == typeof(bool))
+                    {
+                        prop.SetValue(instance, Convert.ToBoolean(textBox.Text.Trim()));
+                    }
                 }
                 else if (control is ComboBox combo)
                 {

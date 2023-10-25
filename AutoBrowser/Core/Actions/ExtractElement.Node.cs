@@ -89,6 +89,7 @@ namespace AutoBrowser.Core.Actions
         public MultiNodeType From { get; set; }
         public object Index { get; set; }
         public object ClassName { get; set; }
+        public bool ExactMatch { get; set; }
         #endregion
 
         #region Constructors
@@ -100,6 +101,7 @@ namespace AutoBrowser.Core.Actions
             Value = _originalValue = tag.Value;
             Index = _originalIndex = "";
             ClassName = _originalClassName = "";
+            ExactMatch = false;
         }
 
         public MultiNode(HtmlTag tag, object index)
@@ -108,6 +110,7 @@ namespace AutoBrowser.Core.Actions
             Value = _originalValue = tag.Value;
             Index = _originalIndex = index;
             ClassName = _originalClassName = "";
+            ExactMatch = false;
         }
 
         public MultiNode(HtmlTag tag, object className, object index)
@@ -116,6 +119,7 @@ namespace AutoBrowser.Core.Actions
             Value = _originalValue = tag.Value;
             ClassName = _originalClassName = className;
             Index = _originalIndex = index;
+            ExactMatch = false;
         }
         #endregion
 
